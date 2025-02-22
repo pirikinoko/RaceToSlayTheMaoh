@@ -1,0 +1,14 @@
+.indicator-bar__icon {
+    background-image: url("project://database/Assets/Images/UI/Heart.png?fileID=2800000&guid=0f5d6ec6e752cd642a751d505ff10273&type=3#Heart");
+    width: 120px;
+    height: 120px;
+    align-self: center;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.indicator-bar__progress {
+    background-image: url("project://database/Assets/Images/UI/HealthBar-Progress.png?fileID=2800000&guid=92fd65ac06f63d24382b627b42424abb&type=3#HealthBar-Progress");
+    height: 90%;
+    align-self: center;
+    left: 15px;
+}

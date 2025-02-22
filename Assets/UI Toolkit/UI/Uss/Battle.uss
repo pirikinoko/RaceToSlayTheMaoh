@@ -1,0 +1,25 @@
+.IndicatorBar {
+    width: 400px;
+    height: 50px;
+}
+
+.entity {
+    width: 200px;
+}
+
+.button {
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    align-self: auto;
+    width: 350px;
+    height: 125px;
+    background-image: url("project://database/Assets/Images/UI/ActionFrame.png?fileID=2800000&guid=232f03a15e769c542903107880f17b17&type=3#ActionFrame");
+}
+
+.button:hover {
+    transition-property: scale;
+    transition-duration: 0.1s;
+    scale: 1.1 1.1;
+    transition-timing-function: ease;
+}

@@ -1,0 +1,29 @@
+.indicator-bar__container {
+    flex-direction: row;
+    align-items: center;
+    align-self: auto;
+    align-content: center;
+}
+
+.indicator-bar {
+    background-image: url("project://database/Assets/Images/UI/HealthBar-Background.png?fileID=2800000&guid=7c7c82795a2a76742b26e0b676018490&type=3#HealthBar-Background");
+    width: 800px;
+    margin-left: 20px;
+    flex-direction: row;
+    align-self: auto;
+    height: auto;
+    align-items: auto;
+    align-content: flex-start;
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.indicator-bar__label {
+    -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
+    font-size: 100px;
+    color: rgb(255, 255, 255);
+    left: 50px;
+    -unity-font-style: normal;
+    align-self: center;
+    display: flex;
+    visibility: hidden;
+}

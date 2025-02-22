@@ -1,4 +1,5 @@
 .label {
     -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    font-size: 60px;
 }

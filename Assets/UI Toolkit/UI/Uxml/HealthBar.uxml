@@ -1,0 +1,7 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/HealthBar.uss?fileID=7433441132597879392&amp;guid=975a00ba7ff6a4e46a15d9eb606146c6&amp;type=3#HealthBar" />
+    <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/IndicatorBar.uss?fileID=7433441132597879392&amp;guid=bd68759010d80e54a9dc0d6cf70267b6&amp;type=3#IndicatorBar" />
+    <engine:VisualElement style="flex-grow: 1; height: 1406px;">
+        <UIToolkit.IndicatorBarComponent />
+    </engine:VisualElement>
+</engine:UXML>
