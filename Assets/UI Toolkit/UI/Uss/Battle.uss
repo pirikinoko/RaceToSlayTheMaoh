@@ -7,7 +7,7 @@
     width: 200px;
 }
 
-.button {
+.actionbutton {
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(255, 255, 255);
     background-color: rgba(0, 0, 0, 0);
@@ -17,9 +17,34 @@
     background-image: url("project://database/Assets/Images/UI/ActionFrame.png?fileID=2800000&guid=232f03a15e769c542903107880f17b17&type=3#ActionFrame");
 }
 
-.button:hover {
+.actionbutton:hover {
     transition-property: scale;
     transition-duration: 0.1s;
     scale: 1.1 1.1;
+    transition-timing-function: ease;
+}
+
+.skillbutton {
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    align-self: auto;
+    width: 350px;
+    height: 95px;
+    background-image: url("project://database/Assets/Images/UI/ActionFrame.png?fileID=2800000&guid=232f03a15e769c542903107880f17b17&type=3#ActionFrame");
+    padding-top: 10px;
+    padding-right: 12px;
+    padding-bottom: 10px;
+    padding-left: 12px;
+    margin-top: 15px;
+    margin-right: 4px;
+    margin-bottom: 0;
+    margin-left: 4px;
+}
+
+.skillbutton:hover {
+    transition-property: scale;
+    transition-duration: 0.2s;
+    scale: 1.05 1.05;
     transition-timing-function: ease;
 }
