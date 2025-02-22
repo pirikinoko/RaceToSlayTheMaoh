@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 
 public class PlayerController : MonoBehaviour
 {
-    public List<Player> _playerList = new();
+    public List<Entity> _playerList = new();
 
     async void Start()
     {
@@ -16,10 +16,10 @@ public class PlayerController : MonoBehaviour
     private async UniTask InitializePlayersAsync()
     {
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
-        var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.Id == EntityIdentifier.Player);
-        var player = await Addressables.LoadAssetAsync<Player>(Constants.AssetReferencePlayer).Task;
+        var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.Id == EntityType.Player);
+        var player = await Addressables.LoadAssetAsync<Entity>(Constants.AssetReferencePlayer).Task;
 
-        player.SetParameter(parameter);
+        player.Initialize(parameter);
         _playerList.Add(player);
         Instantiate(player, Constants.PlayerSpownPosition, Quaternion.identity);
     }

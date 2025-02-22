@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FieldController : MonoBehaviour
@@ -24,14 +25,23 @@ public class FieldController : MonoBehaviour
 
     private void CheckEncount()
     {
-        foreach (var enemy in _enemyController._enemyList)
+        var allEntity = new List<Entity>();
+        allEntity.AddRange(_playerController._playerList);
+        allEntity.AddRange(_enemyController._enemyList);
+
+        foreach (var entityLeft in allEntity)
         {
-            foreach (var player in _playerController._playerList)
+            foreach (var entityRight in allEntity)
             {
-                if (Vector3.Distance(enemy.transform.position, player.transform.position) == 0)
+                if (entityLeft == entityRight)
+                {
+                    continue;
+                }
+
+                if (Vector3.Distance(entityLeft.transform.position, entityRight.transform.position) == 0)
                 {
                     _stateController.ChangeState(State.Battle);
-                    _battleController.StartBattle(player, enemy);
+                    _battleController.StartBattle(entityLeft, entityRight);
                 }
             }
         }

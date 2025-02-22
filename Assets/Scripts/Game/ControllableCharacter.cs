@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class ControllableCharacter : MonoBehaviour
 {
     // 移動関連
     [SerializeField]
@@ -12,9 +12,6 @@ public class Player : MonoBehaviour
     private bool _isReadyToMove;
 
     private bool _isMoving;
-
-    // ステータス関連
-    private Parameter _parameter;
 
     async void Start()
     {
@@ -62,15 +59,5 @@ public class Player : MonoBehaviour
         });
 
         _isMoving = false;
-    }
-
-    public void SetParameter(Parameter parameter)
-    {
-        _parameter = parameter;
-    }
-
-    private void ReceiveDamage(int damage)
-    {
-        _parameter.Hp -= damage;
     }
 }
