@@ -22,15 +22,20 @@
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="LogView" style="flex-grow: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 1100px; background-size: 100% 100%; background-position-x: center 0; align-self: flex-end;">
-            <engine:VisualElement name="Image-Log-Frame" style="flex-grow: 1; transform-origin: center; background-image: url(&quot;project://database/Assets/Images/UI/ChatLogFrame.png?fileID=2800000&amp;guid=a60409d8e79f63947b7a94fbc2b6b0e2&amp;type=3#ChatLogFrame&quot;); -unity-background-scale-mode: scale-to-fit; background-position-x: center 0; background-position-y: center 0; align-items: center; justify-content: space-around; align-self: auto; align-content: auto; margin-top: 0; width: auto; height: auto;">
-                <engine:Label text="Label" name="Label-Log" class="label" style="overflow: visible; position: relative; font-size: 50px; -unity-text-align: middle-center; color: rgb(255, 255, 255); align-content: auto;" />
+            <engine:VisualElement name="Image-Log-Frame" style="flex-grow: 1; transform-origin: center; background-image: url(&quot;project://database/Assets/Images/UI/ChatLogFrame.png?fileID=2800000&amp;guid=a60409d8e79f63947b7a94fbc2b6b0e2&amp;type=3#ChatLogFrame&quot;); -unity-background-scale-mode: scale-to-fit; background-position-x: center 0; background-position-y: center 0; align-items: center; justify-content: space-around; align-self: auto; align-content: auto; margin-top: 0; width: auto; height: 80px;">
+                <engine:Label text="プレイヤー○○がプレイヤー○○を攻撃しました" name="Label-Log" class="label" style="overflow: visible; position: relative; font-size: 60px; -unity-text-align: upper-center; color: rgb(255, 255, 255); align-content: auto; width: 800px; flex-wrap: nowrap; flex-direction: column; white-space: normal;" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="CommandView" style="flex-grow: 1; visibility: visible; display: flex; overflow: visible; align-self: flex-start; justify-content: center; align-content: auto; position: absolute; width: auto; height: auto; top: 600px; background-image: none; flex-direction: column; left: 225px;">
-            <engine:Button text="攻撃" name="Button-Attack" class="button label" style="color: rgb(255, 255, 255);" />
-            <engine:Button text="防御" name="Button-Deffence" class="button label" />
-            <engine:Button text="特技" name="Button-Skill" class="button label" />
+            <engine:Button text="攻撃" name="Button-Attack" class="label actionbutton" style="color: rgb(255, 255, 255);" />
+            <engine:Button text="防御" name="Button-Deffence" class="label actionbutton" />
+            <engine:Button text="特技" name="Button-Skill" class="label actionbutton" />
         </engine:VisualElement>
-        <engine:ScrollView name="ScrollView" touch-scroll-type="Elastic" style="background-image: url(&quot;project://database/Assets/Images/UI/ScrollFrame.png?fileID=2800000&amp;guid=7a753ba99631d744f918089649e2cdf4&amp;type=3#ScrollFrame&quot;); -unity-background-scale-mode: scale-to-fit; width: 400px; height: 400px; position: absolute; top: auto; left: 200px; bottom: 100px;" />
+        <engine:ScrollView name="ScrollView" touch-scroll-type="Elastic" style="background-image: url(&quot;project://database/Assets/Images/UI/ScrollFrame.png?fileID=2800000&amp;guid=7a753ba99631d744f918089649e2cdf4&amp;type=3#ScrollFrame&quot;); -unity-background-scale-mode: scale-to-fit; width: 400px; height: 400px; position: absolute; top: auto; left: 200px; bottom: 100px;">
+            <engine:Button text="特技名" name="Button-Skill-1" class="label skillbutton" style="background-image: url(&quot;project://database/Assets/Images/UI/SkillFrame.png?fileID=2800000&amp;guid=b5cc0e8efecef034689bcd9f0bc9531a&amp;type=3#SkillFrame&quot;); align-self: center;" />
+            <engine:Button text="特技名" name="Button-Skill-1" class="label skillbutton" style="background-image: url(&quot;project://database/Assets/Images/UI/SkillFrame.png?fileID=2800000&amp;guid=b5cc0e8efecef034689bcd9f0bc9531a&amp;type=3#SkillFrame&quot;); align-self: center;" />
+            <engine:Button text="特技名" name="Button-Skill-1" class="label skillbutton" style="background-image: url(&quot;project://database/Assets/Images/UI/SkillFrame.png?fileID=2800000&amp;guid=b5cc0e8efecef034689bcd9f0bc9531a&amp;type=3#SkillFrame&quot;); align-self: center;" />
+            <engine:Button text="特技名" name="Button-Skill-1" class="label skillbutton" style="background-image: url(&quot;project://database/Assets/Images/UI/SkillFrame.png?fileID=2800000&amp;guid=b5cc0e8efecef034689bcd9f0bc9531a&amp;type=3#SkillFrame&quot;); align-self: center;" />
+        </engine:ScrollView>
     </engine:VisualElement>
 </engine:UXML>
