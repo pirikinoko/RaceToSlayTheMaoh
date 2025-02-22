@@ -7,7 +7,7 @@ using UnityEngine.AddressableAssets;
 
 public class EnemyController : MonoBehaviour
 {
-    public List<Enemy> _enemyList = new();
+    public List<Entity> _enemyList = new();
 
     [SerializeField]
     private Transform _staticEnemiesParent;
@@ -17,33 +17,33 @@ public class EnemyController : MonoBehaviour
 
     async void Start()
     {
-        var allEnemiesToRandomize = _enemiesToRandomizeParent.GetComponentsInChildren<Enemy>();
+        var allEnemiesToRandomize = _enemiesToRandomizeParent.GetComponentsInChildren<Entity>();
         foreach (var enemy in allEnemiesToRandomize)
         {
             await InitializeEnemiesAsync(enemy, GetRandomEntityIdentifier());
             _enemyList.Add(enemy);
         }
 
-        var allStaticEnemies = _staticEnemiesParent.GetComponentsInChildren<Enemy>();
+        var allStaticEnemies = _staticEnemiesParent.GetComponentsInChildren<Entity>();
         foreach (var enemy in allStaticEnemies)
         {
-            await InitializeEnemiesAsync(enemy, enemy.Identifier);
+            await InitializeEnemiesAsync(enemy, enemy.EntityType);
             _enemyList.Add(enemy);
         }
     }
 
-    private async UniTask InitializeEnemiesAsync(Enemy target, EntityIdentifier identifier)
+    private async UniTask InitializeEnemiesAsync(Entity target, EntityType identifier)
     {
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.Id == identifier);
 
-        target.SetParameter(parameter);
+        target.Initialize(parameter);
     }
 
-    private EntityIdentifier GetRandomEntityIdentifier()
+    private EntityType GetRandomEntityIdentifier()
     {
-        Array values = Enum.GetValues(typeof(EntityIdentifier));
+        Array values = Enum.GetValues(typeof(EntityType));
         int randomIndex = UnityEngine.Random.Range(1, values.Length);
-        return (EntityIdentifier)values.GetValue(randomIndex);
+        return (EntityType)values.GetValue(randomIndex);
     }
 }

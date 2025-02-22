@@ -6,22 +6,37 @@ public class BattleController : MonoBehaviour
     [SerializeField]
     private StateController _stateController;
 
-    private Player _player;
-    private Enemy _enemy;
+    private Entity _leftEntity;
+    private Entity _rightEntity;
 
     private void Start()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
+
+        root.Q<Button>("Button-Attack").clicked += Attack;
+        root.Q<Button>("Button-Deffence").clicked += Deffence;
+        root.Q<Button>("Button-Skill").clicked += UseSkill;
     }
 
-    public void StartBattle(Player player, Enemy enemy)
+    public void StartBattle(Entity left, Entity right)
     {
-        _player = player;
-        _enemy = enemy;
+        _leftEntity = left;
+        _rightEntity = right;
     }
 
     private void EndBattle()
     {
         _stateController.ChangeState(State.Field);
+    }
+
+
+    private void Attack()
+    {
+    }
+    private void Deffence()
+    {
+    }
+    private void UseSkill()
+    {
     }
 }

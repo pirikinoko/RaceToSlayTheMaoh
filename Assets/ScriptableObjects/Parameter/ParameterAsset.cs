@@ -11,7 +11,7 @@ public class ParameterAsset : ScriptableObject
 [System.Serializable]
 public class Parameter
 {
-    public EntityIdentifier Id;
+    public EntityType Id;
     public string Name;
     public int Hp;
     public int Atk;

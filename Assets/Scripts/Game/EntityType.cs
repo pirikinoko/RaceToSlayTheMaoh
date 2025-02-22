@@ -1,4 +1,4 @@
-public enum EntityIdentifier
+public enum EntityType
 {
     Player,
     Axe,
