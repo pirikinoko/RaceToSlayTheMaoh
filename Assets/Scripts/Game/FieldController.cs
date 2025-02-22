@@ -12,16 +12,6 @@ public class FieldController : MonoBehaviour
     [SerializeField]
     private BattleController _battleController;
 
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     private void CheckEncount()
     {
@@ -41,10 +31,15 @@ public class FieldController : MonoBehaviour
                 if (Vector3.Distance(entityLeft.transform.position, entityRight.transform.position) == 0)
                 {
                     _stateController.ChangeState(State.Battle);
+
+                    // プレイヤーと敵が戦う場合はプレイヤーを左側にする
+                    if (entityLeft.EntityType != EntityType.Player && entityRight.EntityType == EntityType.Player)
+                    {
+                        _battleController.StartBattle(entityRight, entityLeft);
+                    }
                     _battleController.StartBattle(entityLeft, entityRight);
                 }
             }
         }
     }
-
 }

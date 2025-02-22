@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,12 +12,7 @@ public class Parameter
 {
     public EntityType Id;
     public string Name;
-    public int Hp;
-    public int Atk;
+    public int HitPoint;
+    public int Power;
     public Texture2D Icon;
-
-    internal object FirstOrDefault(Func<object, bool> value)
-    {
-        throw new NotImplementedException();
-    }
 }
