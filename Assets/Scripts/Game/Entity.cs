@@ -6,6 +6,7 @@ public class Entity : MonoBehaviour
 
     private int _id;
     private Parameter _parameter;
+    private AbnormalCondition _abnormalCondition;
     private SpriteRenderer _spriteRenderer;
 
     private void Awake()
@@ -20,8 +21,19 @@ public class Entity : MonoBehaviour
         _spriteRenderer.sprite = Sprite.Create(parameter.Icon, new Rect(0, 0, parameter.Icon.width, parameter.Icon.height), Vector2.zero);
     }
 
-    private void ReceiveDamage(int damage)
+    // こちらからのアクション
+    public void Attack(Entity target)
     {
-        _parameter.Hp -= damage;
+        target.TakeDamage(_parameter.Power + _abnormalCondition.PowerGain);
+    }
+
+    public void UseSkill()
+    {
+    }
+
+    // 相手からのアクションを受け取る
+    public void TakeDamage(int damage)
+    {
+        _parameter.HitPoint -= damage;
     }
 }
