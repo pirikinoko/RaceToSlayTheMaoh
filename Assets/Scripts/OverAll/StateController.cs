@@ -1,67 +1,115 @@
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class StateController : MonoBehaviour
 {
     public State CurrentState { get; private set; }
 
     [SerializeField]
-    private GameObject _titleUi;
+    private MainContrller _mainController;
 
     [SerializeField]
-    private GameObject _fieldUi;
+    private UIDocument _overAllUi;
 
     [SerializeField]
-    private GameObject _battleUi;
+    private UIDocument _titleUi;
 
     [SerializeField]
-    private GameObject _resultUi;
+    private UIDocument _fieldUi;
+
+    [SerializeField]
+    private UIDocument _battleUi;
+
+    [SerializeField]
+    private UIDocument _resultUi;
+
+    private VisualElement _overAllroot;
+    private VisualElement _titleRoot;
+    private VisualElement _fieldRoot;
+    private VisualElement _battleRoot;
+    private VisualElement _resultRoot;
+
+    private Color _blackoutColor = new Color(0f, 0f, 0f, 0.8f);
+
+    private VisualElement _colorEffectPanel;
+
+    private void Start()
+    {
+        _overAllroot = _overAllUi.rootVisualElement;
+        _titleRoot = _titleUi.rootVisualElement;
+        _fieldRoot = _fieldUi.rootVisualElement;
+        _battleRoot = _battleUi.rootVisualElement;
+        _resultRoot = _resultUi.rootVisualElement;
+
+        _overAllroot.style.display = DisplayStyle.Flex;
+        _titleRoot.style.display = DisplayStyle.None;
+        _fieldRoot.style.display = DisplayStyle.None;
+        _battleRoot.style.display = DisplayStyle.None;
+        _resultRoot.style.display = DisplayStyle.None;
+
+        _colorEffectPanel = _overAllroot.Q<VisualElement>("ColorEffectPanel");
+
+        ChangeState(State.Title);
+    }
 
     public void ChangeState(State state)
     {
         CurrentState = state;
 
-        _titleUi.SetActive(false);
-        _fieldUi.SetActive(false);
-        _battleUi.SetActive(false);
-        _resultUi.SetActive(false);
+        _titleRoot.style.display = DisplayStyle.None;
+        _fieldRoot.style.display = DisplayStyle.None;
+        _battleRoot.style.display = DisplayStyle.None;
+        _resultRoot.style.display = DisplayStyle.None;
 
         switch (state)
         {
             case State.Title:
-                InitializeTitle();
+                SwitchTitleState();
                 break;
             case State.Field:
-                InitializeField();
+                SwitchFieldState();
                 break;
             case State.Battle:
-                InitializeBattle();
+                SwitchBattleState();
                 break;
             case State.Result:
-                InitializeResult();
+                SwitchResultState();
                 break;
         }
     }
 
-    private void InitializeTitle()
+    private void SwitchTitleState()
     {
-        _titleUi.gameObject.SetActive(true);
-        Debug.Log("InitializeTitle");
+        _titleRoot.style.display = DisplayStyle.Flex;
+        BlackoutField();
     }
 
-    private void InitializeField()
+    private void SwitchFieldState()
     {
-        _fieldUi.gameObject.SetActive(true);
-        Debug.Log("InitializeGame");
+        _fieldRoot.style.display = DisplayStyle.Flex;
+        RevealField();
+        _mainController.StartTurn().Forget();
     }
-    private void InitializeBattle()
+    private void SwitchBattleState()
     {
-        _battleUi.gameObject.SetActive(true);
-        Debug.Log("InitializeGame");
+        _battleRoot.style.display = DisplayStyle.Flex;
+        BlackoutField();
     }
 
-    private void InitializeResult()
+    private void SwitchResultState()
     {
-        _resultUi.gameObject.SetActive(true);
-        Debug.Log("InitializeResult");
+        _resultRoot.style.display = DisplayStyle.Flex;
+        BlackoutField();
+    }
+
+    public void BlackoutField()
+    {
+        _colorEffectPanel.style.backgroundColor = new StyleColor(_blackoutColor);
+    }
+
+    public void RevealField()
+    {
+        _colorEffectPanel.style.backgroundColor = new Color(0, 0, 0, 0);
     }
 }

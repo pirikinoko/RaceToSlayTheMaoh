@@ -4,18 +4,18 @@ using UnityEngine;
 public class ControllableCharacter : MonoBehaviour
 {
     // ˆÚ“®ŠÖ˜A
-    [SerializeField]
     private StateController _stateController;
 
     private Transform _transform;
 
-    private bool _isReadyToMove;
+    private bool _isReadyToMove = true;
 
     private bool _isMoving;
 
     async void Start()
     {
         _transform = GetComponent<Transform>();
+        _stateController = FindObjectOfType<StateController>();
     }
 
     private void Update()

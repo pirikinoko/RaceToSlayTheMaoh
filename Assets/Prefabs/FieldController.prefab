@@ -88,12 +88,44 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2129902130521694203, guid: ea9745f152e4c8c4c870a6616ec1648d, type: 3}
+      propertyPath: sourceAsset
+      value: 
+      objectReference: {fileID: 9197481963319205126, guid: c14a19ca25e41d9489c455140d4b4361, type: 3}
+    - target: {fileID: 2129902130521694203, guid: ea9745f152e4c8c4c870a6616ec1648d, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 0030f903bd95b6b42a2239d45b3a1df1, type: 2}
     - target: {fileID: 6856652680515323493, guid: ea9745f152e4c8c4c870a6616ec1648d, type: 3}
       propertyPath: m_Name
-      value: UI
+      value: FieldController
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4253324646759272716, guid: ea9745f152e4c8c4c870a6616ec1648d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4052416524511643516}
   m_SourcePrefab: {fileID: 100100000, guid: ea9745f152e4c8c4c870a6616ec1648d, type: 3}
+--- !u!1 &3409198446632140357 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4253324646759272716, guid: ea9745f152e4c8c4c870a6616ec1648d, type: 3}
+  m_PrefabInstance: {fileID: 1461769748870229833}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4052416524511643516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3409198446632140357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 009b3f4fad3c92041b87fd2b264cc049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateController: {fileID: 0}
+  _enemyController: {fileID: 0}
+  _playerController: {fileID: 0}
+  _battleController: {fileID: 0}

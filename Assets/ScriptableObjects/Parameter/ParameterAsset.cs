@@ -10,9 +10,11 @@ public class ParameterAsset : ScriptableObject
 [System.Serializable]
 public class Parameter
 {
-    public EntityType Id;
+    public EntityType EntityType;
     public string Name;
     public int HitPoint;
+    public int ManaPoint;
     public int Power;
-    public Texture2D Icon;
+    public List<Skill> Skills;
+    public Sprite IconSprite;
 }

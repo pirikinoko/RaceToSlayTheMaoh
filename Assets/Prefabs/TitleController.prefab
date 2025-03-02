@@ -93,6 +93,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9197481963319205126, guid: fc91fdeb68d40ed4793932160f0a3f31, type: 3}
     - target: {fileID: 2129902130521694203, guid: ea9745f152e4c8c4c870a6616ec1648d, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2129902130521694203, guid: ea9745f152e4c8c4c870a6616ec1648d, type: 3}
       propertyPath: m_PanelSettings
       value: 
       objectReference: {fileID: 11400000, guid: 0030f903bd95b6b42a2239d45b3a1df1, type: 2}

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,11 +13,18 @@ public class FieldController : MonoBehaviour
     [SerializeField]
     private BattleController _battleController;
 
-
+    private async UniTask Start()
+    {
+        while (true)
+        {
+            await UniTask.Delay(1000);
+            CheckEncount();
+        }
+    }
     private void CheckEncount()
     {
         var allEntity = new List<Entity>();
-        allEntity.AddRange(_playerController._playerList);
+        allEntity.AddRange(_playerController.PlayerList);
         allEntity.AddRange(_enemyController._enemyList);
 
         foreach (var entityLeft in allEntity)
@@ -28,8 +36,9 @@ public class FieldController : MonoBehaviour
                     continue;
                 }
 
-                if (Vector3.Distance(entityLeft.transform.position, entityRight.transform.position) == 0)
+                if (Vector3.Distance(entityLeft.transform.position, entityRight.transform.position) < 3)
                 {
+                    Debug.Log("Encount");
                     _stateController.ChangeState(State.Battle);
 
                     // プレイヤーと敵が戦う場合はプレイヤーを左側にする
