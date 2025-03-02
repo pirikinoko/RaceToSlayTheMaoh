@@ -15,28 +15,34 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private Transform _enemiesToRandomizeParent;
 
-    async void Start()
+    private ParameterAsset _parameterAsset;
+
+    /// <summary>
+    /// ‚·‚×‚Ä‚Ì“G‚ğ‰Šú‰»‚µ‚Ü‚·B
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask InitializeAllEnemiesAsync()
     {
+        _parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
+
         var allEnemiesToRandomize = _enemiesToRandomizeParent.GetComponentsInChildren<Entity>();
         foreach (var enemy in allEnemiesToRandomize)
         {
-            await InitializeEnemiesAsync(enemy, GetRandomEntityIdentifier());
+            InitializeEnemies(enemy, GetRandomEntityIdentifier());
             _enemyList.Add(enemy);
         }
 
         var allStaticEnemies = _staticEnemiesParent.GetComponentsInChildren<Entity>();
         foreach (var enemy in allStaticEnemies)
         {
-            await InitializeEnemiesAsync(enemy, enemy.EntityType);
+            InitializeEnemies(enemy, enemy.EntityType);
             _enemyList.Add(enemy);
         }
     }
 
-    private async UniTask InitializeEnemiesAsync(Entity target, EntityType identifier)
+    private void InitializeEnemies(Entity target, EntityType entityType)
     {
-        var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
-        var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.Id == identifier);
-
+        var parameter = _parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == entityType);
         target.Initialize(parameter);
     }
 
