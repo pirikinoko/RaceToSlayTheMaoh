@@ -5,13 +5,37 @@ namespace UIToolkit
 {
     public class IndicatorBarComponent : VisualElement
     {
+        public enum BarType
+        {
+            Health,
+            Mana,
+        }
+
         private static class ClassNames
         {
             public static string IndicatorBarContainer = "indicator-bar__container";
-            public static string IndicatorBarIcon = "indicator-bar__icon";
             public static string IndicatorBar = "indicator-bar";
-            public static string IndicatorBarProgress = "indicator-bar__progress";
             public static string IndicatorBarLabel = "indicator-bar__label";
+        }
+
+        private string GetIconClassNameByBarType(BarType barType)
+        {
+            return barType switch
+            {
+                BarType.Health => "indicator-bar__icon__health",
+                BarType.Mana => "indicator-bar__icon__mana",
+                _ => string.Empty,
+            };
+        }
+
+        private string GetProglessClassNameByBarType(BarType barType)
+        {
+            return barType switch
+            {
+                BarType.Health => "indicator-bar__progress__health",
+                BarType.Mana => "indicator-bar__progress__mana",
+                _ => string.Empty,
+            };
         }
 
         public new class UxmlFactory : UxmlFactory<IndicatorBarComponent, UxmlTraits>
@@ -20,6 +44,9 @@ namespace UIToolkit
 
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
+            readonly UxmlEnumAttributeDescription<BarType> _barType = new UxmlEnumAttributeDescription<BarType>
+            { name = "barType", defaultValue = BarType.Health };
+
             readonly UxmlIntAttributeDescription _currentValue = new UxmlIntAttributeDescription
             { name = "currentValue", defaultValue = 50 };
 
@@ -33,6 +60,8 @@ namespace UIToolkit
             {
                 base.Init(ve, bag, cc);
                 var indicatorBar = (IndicatorBarComponent)ve;
+
+                indicatorBar.IndicatorBarType = _barType.GetValueFromBag(bag, cc);
                 indicatorBar.CurrentValue = _currentValue.GetValueFromBag(bag, cc);
                 indicatorBar.MinimumValue = _minimumValue.GetValueFromBag(bag, cc);
                 indicatorBar.MaximumValue = _maximumValue.GetValueFromBag(bag, cc);
@@ -40,6 +69,7 @@ namespace UIToolkit
         }
 
         // データが正しくリンクされ、ビルダーに表示されるようにするために、定義された Traits と同じ名前のプロパティを持つ必要があります
+        private BarType _barType;
         private int _currentValue;
         private int _minimumValue;
         private int _maximumValue;
@@ -47,6 +77,30 @@ namespace UIToolkit
         private VisualElement _indicatorBar;
         private VisualElement _progress;
         private VisualElement _icon;
+
+        public BarType IndicatorBarType
+        {
+            get => _barType;
+            set
+            {
+                if (_barType == value)
+                {
+                    return;
+                }
+
+                // 以前のクラスを削除
+                if (_barType != null)
+                {
+                    _icon.RemoveFromClassList(GetIconClassNameByBarType(_barType));
+                    _progress.RemoveFromClassList(GetProglessClassNameByBarType(_barType));
+                }
+
+                // 新しいクラスを追加
+                _barType = value;
+                _icon.AddToClassList(GetIconClassNameByBarType(_barType));
+                _progress.AddToClassList(GetProglessClassNameByBarType(_barType));
+            }
+        }
 
         public int CurrentValue
         {
@@ -88,7 +142,7 @@ namespace UIToolkit
             AddToClassList(ClassNames.IndicatorBarContainer);
 
             _icon = new VisualElement { name = "IndicatorBarIcon" };
-            _icon.AddToClassList(ClassNames.IndicatorBarIcon);
+            _icon.AddToClassList(GetIconClassNameByBarType(_barType));
             Add(_icon);
 
             _indicatorBar = new VisualElement { name = "IndicatorBar" };
@@ -96,7 +150,7 @@ namespace UIToolkit
             Add(_indicatorBar);
 
             _progress = new VisualElement { name = "IndicatorBarProgress" };
-            _progress.AddToClassList(ClassNames.IndicatorBarProgress);
+            _progress.AddToClassList(GetProglessClassNameByBarType(_barType));
             _indicatorBar.Add(_progress);
 
             _valueStat = new Label() { name = "IndicatorBarStat" };
