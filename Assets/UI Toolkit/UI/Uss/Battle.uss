@@ -49,3 +49,13 @@
     scale: 1.05 1.05;
     transition-timing-function: ease;
 }
+
+.rewordButton {
+    background-image: url("project://database/Assets/Images/UI/RewordFrame.png?fileID=2800000&guid=37a8e662ae2bf0d42b090a448ffb85a2&type=3#RewordFrame");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(255, 255, 255, 0);
+    width: 400px;
+}
+
+.rewordButton:hover {
+}
