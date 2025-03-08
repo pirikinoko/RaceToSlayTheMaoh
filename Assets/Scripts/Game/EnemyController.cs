@@ -43,7 +43,8 @@ public class EnemyController : MonoBehaviour
     private void InitializeEnemies(Entity target, EntityType entityType)
     {
         var parameter = _parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == entityType);
-        target.Initialize(parameter);
+        var clonedParameter = parameter.Clone();
+        target.Initialize(clonedParameter);
     }
 
     private EntityType GetRandomEntityIdentifier()
