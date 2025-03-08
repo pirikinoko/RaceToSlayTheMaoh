@@ -31,12 +31,12 @@ public class FieldController : MonoBehaviour
         {
             foreach (var entityRight in allEntity)
             {
-                if (entityLeft == entityRight)
+                if (entityLeft == entityRight || (entityLeft.EntityType != EntityType.Player && entityRight.EntityType != EntityType.Player))
                 {
                     continue;
                 }
 
-                if (Vector3.Distance(entityLeft.transform.position, entityRight.transform.position) < 3)
+                if (Vector2.Distance(entityLeft.transform.position, entityRight.transform.position) < 1)
                 {
                     Debug.Log("Encount");
                     _stateController.ChangeState(State.Battle);
