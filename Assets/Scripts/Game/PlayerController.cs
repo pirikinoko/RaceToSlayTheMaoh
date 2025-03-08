@@ -18,16 +18,16 @@ public class PlayerController : MonoBehaviour
 
     public async UniTask InitializePlayersAsync()
     {
+        // パラメーターアセットをロード
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
-        var playerGameObject = await Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferencePlayer).Task;
+        var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferencePlayer).Task;
+
+        var playerGameObject = Instantiate(playerPrefab, Constants.PlayerSpownPosition, Quaternion.identity, _playerParent);
         var player = playerGameObject.GetComponent<Entity>();
-
         player.Initialize(parameter);
-        PlayerList.Add(player);
 
-        player.gameObject.transform.position = Constants.PlayerSpownPosition;
-        Instantiate(player, Constants.PlayerSpownPosition, Quaternion.identity, _playerParent);
+        PlayerList.Add(player);
         _onPlayersInitialized.OnNext(PlayerList);
     }
 }
