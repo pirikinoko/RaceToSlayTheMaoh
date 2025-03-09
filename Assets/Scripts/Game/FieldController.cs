@@ -18,9 +18,16 @@ public class FieldController : MonoBehaviour
         while (true)
         {
             await UniTask.Delay(1000);
+
+            if (_stateController.CurrentState != State.Field)
+            {
+                await UniTask.Delay(3000);
+                continue;
+            }
             CheckEncount();
         }
     }
+
     private void CheckEncount()
     {
         var allEntity = new List<Entity>();
@@ -36,9 +43,8 @@ public class FieldController : MonoBehaviour
                     continue;
                 }
 
-                if (Vector2.Distance(entityLeft.transform.position, entityRight.transform.position) < 1)
+                if (Vector2.Distance(entityLeft.transform.position, entityRight.transform.position) < 0.1f)
                 {
-                    Debug.Log("Encount");
                     _stateController.ChangeState(State.Battle);
 
                     // プレイヤーと敵が戦う場合はプレイヤーを左側にする
@@ -47,6 +53,7 @@ public class FieldController : MonoBehaviour
                         _battleController.StartBattle(entityRight, entityLeft);
                     }
                     _battleController.StartBattle(entityLeft, entityRight);
+                    return;
                 }
             }
         }

@@ -13,14 +13,15 @@ public class Entity : MonoBehaviour
 
     public void Initialize(Parameter parameter)
     {
+        Parameter = new Parameter(parameter);
+
         Id = EntityMaster.AssignId();
-        Parameter = parameter;
         gameObject.name = parameter.Name;
 
         _abnormalCondition = new AbnormalCondition();
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = parameter.IconSprite;
+        _spriteRenderer.sprite = Parameter.IconSprite;
     }
 
     // ‚±‚¿‚ç‚©‚ç‚ÌƒAƒNƒVƒ‡ƒ“
