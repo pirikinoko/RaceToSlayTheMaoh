@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ParameterAsset", menuName = "ScriptableObjects/ParameterAsset")]
@@ -12,12 +11,13 @@ public class ParameterAsset : ScriptableObject
 public class Parameter
 {
     public EntityType EntityType;
+    public Sprite IconSprite;
     public string Name;
     public int HitPoint;
     public int ManaPoint;
     public int Power;
-    public List<Skill> Skills;
-    public Sprite IconSprite;
+    public List<SkillList.SkillType> SkillTypes = new();
+    public List<Skill> Skills = new();
 
     // コピーコンストラクタ
     public Parameter(Parameter original)
@@ -27,14 +27,14 @@ public class Parameter
         HitPoint = original.HitPoint;
         ManaPoint = original.ManaPoint;
         Power = original.Power;
-
         // スキルのディープコピー
-        Skills = original.Skills.Select(skill => new Skill(skill.Name, skill.EffectId)).ToList();
-
+        foreach (var skillType in original.SkillTypes)
+        {
+            Skills.Add(new Skill(SkillList.GetSkill(skillType).Name, SkillList.GetSkill(skillType).Action));
+        }
         IconSprite = original.IconSprite;
     }
 
-    // クローンメソッド
     public Parameter Clone()
     {
         return new Parameter(this);

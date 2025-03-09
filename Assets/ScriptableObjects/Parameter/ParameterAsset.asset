@@ -15,49 +15,57 @@ MonoBehaviour:
   ParameterList:
   - EntityType: 0
     Name: Player
-    HitPoint: 5
+    HitPoint: 15
     ManaPoint: 15
     Power: 3
+    SkillTypes: 01000000
     IconSprite: {fileID: 21300000, guid: fe5fe608913d1b749baf641cc1d6acac, type: 3}
   - EntityType: 1
     Name: "\u6728\u3053\u308A"
     HitPoint: 15
     ManaPoint: 15
     Power: 1
+    SkillTypes: 0100000002000000
     IconSprite: {fileID: 21300000, guid: bf0dad1f62408524fa7c854516e3fec2, type: 3}
   - EntityType: 2
     Name: "\u708E\u306E\u30B5\u30E0\u30E9\u30A4"
     HitPoint: 15
     ManaPoint: 15
     Power: 1
+    SkillTypes: 0100000002000000
     IconSprite: {fileID: 21300000, guid: b4c56ca07096ce8479d0f3b95edc6658, type: 3}
   - EntityType: 3
     Name: "\u6599\u7406\u4EBA"
     HitPoint: 15
     ManaPoint: 15
     Power: 1
+    SkillTypes: 0100000002000000
     IconSprite: {fileID: 21300000, guid: 1ea9fa4e92244ca469c752748b3cf923, type: 3}
   - EntityType: 4
     Name: "\u9B54\u6CD5\u4F7F\u3044"
     HitPoint: 15
     ManaPoint: 15
     Power: 1
+    SkillTypes: 01000000
     IconSprite: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
   - EntityType: 5
     Name: "\u30B7\u30FC\u30EB\u30C9"
     HitPoint: 15
     ManaPoint: 15
     Power: 1
+    SkillTypes: 01000000
     IconSprite: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
   - EntityType: 6
     Name: "\u30C7\u30E5\u30E9\u30CF\u30F3"
-    HitPoint: 3
+    HitPoint: 15
     ManaPoint: 15
     Power: 1
+    SkillTypes: 01000000
     IconSprite: {fileID: 21300000, guid: 119dca6699aa14f459693b0905e3d7d1, type: 3}
   - EntityType: 7
     Name: "\u9B54\u738B"
     HitPoint: 15
     ManaPoint: 15
     Power: 1
+    SkillTypes: 01000000
     IconSprite: {fileID: 21300000, guid: 51deeebefef47cf478d93159728eb67d, type: 3}
