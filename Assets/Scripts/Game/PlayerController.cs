@@ -21,11 +21,12 @@ public class PlayerController : MonoBehaviour
         // パラメーターアセットをロード
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
+        var clonedParameter = parameter.Clone();
         var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferencePlayer).Task;
 
         var playerGameObject = Instantiate(playerPrefab, Constants.PlayerSpownPosition, Quaternion.identity, _playerParent);
         var player = playerGameObject.GetComponent<Entity>();
-        player.Initialize(parameter);
+        player.Initialize(clonedParameter);
 
         PlayerList.Add(player);
         _onPlayersInitialized.OnNext(PlayerList);

@@ -91,8 +91,6 @@ public class BattleController : MonoBehaviour
         rootLeftElement.Q<Label>("Label-EntityName").text = _leftEntity.name;
         _healthBarLeft = rootLeftElement.Q<IndicatorBarComponent>("HealthBar");
         _manaBarLeft = rootLeftElement.Q<IndicatorBarComponent>("ManaBar");
-        Debug.Log($"_healBarLeft: {_healthBarLeft}");
-        Debug.Log($"_manaBarLeft: {_manaBarLeft}");
 
         var rootRightElement = _root.Q<VisualElement>("Element-Right");
         rootRightElement.Q<VisualElement>("Image-Entity").style.backgroundImage = _rightEntity.Parameter.IconSprite.texture;
