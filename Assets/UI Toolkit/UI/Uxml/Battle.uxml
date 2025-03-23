@@ -22,8 +22,8 @@
                 </engine:VisualElement>
                 <engine:VisualElement name="RewardElement" style="flex-grow: 1; flex-direction: row; align-content: auto; justify-content: space-evenly; align-items: stretch; display: flex;">
                     <engine:Button text="Button" name="RewardButton1" class="rewardButton">
-                        <engine:Label text="ステータス" name="Label-RewardTitle" class="label rewardTitle" style="top: 35px; align-content: auto;" />
-                        <engine:Label text="HPを5回復する" name="Label-RewardDescription" class="label" style="top: 35px; height: 220px; align-content: auto; font-size: 40px; white-space: normal;" />
+                        <engine:Label text="ステータス" name="Label-RewardTitle" class="label rewardTitle" />
+                        <engine:Label name="Label-RewardDescription" text="プレイヤーのHPが5回復" class="label rewardDescription" />
                     </engine:Button>
                 </engine:VisualElement>
             </engine:VisualElement>

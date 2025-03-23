@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using R3;
 using System.Collections.Generic;
-using System.Linq;
 using UIToolkit;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -42,7 +41,6 @@ public class BattleController : MonoBehaviour
 
     private Button _closeSkillScrollViewButton;
     private List<(Button, int)> _skillButtons = new();
-    private Button[] _rewardButtons = new Button[3];
 
     private IndicatorBarComponent _healthBarLeft;
     private IndicatorBarComponent _manaBarLeft;
@@ -55,16 +53,19 @@ public class BattleController : MonoBehaviour
         InitializeBattleLogController();
     }
 
+    public static class ClassNames
+    {
+        public const string RewardButton = "rewardButton";
+        public const string RewardTitle = "rewardTitle";
+        public const string RewardDescription = "rewardDescription";
+    }
+
     private void InitializeUIElements()
     {
         _root = GetComponent<UIDocument>().rootVisualElement;
 
         _battleElement = _root.Q<VisualElement>("BattleElement");
         _rewardElement = _root.Q<VisualElement>("RewardElement");
-        _rewardButtons = _rewardElement.Children().OfType<Button>().ToArray();
-        _rewardButtons.Select(b => b.style.display = DisplayStyle.None).ToArray();
-        _rewardButtons.ToList().ForEach(b => b.clicked += CloseRewardView);
-        _rewardButtons.ToList().ForEach(b => b.clicked += () => _battleStatus = BattleStatus.Ending);
 
         _commanndView = _root.Q<VisualElement>("CommandView");
         _turnCountLabel = _root.Q<Label>("Label-TurnCount");
@@ -350,21 +351,21 @@ public class BattleController : MonoBehaviour
 
     private void SetRewards()
     {
-        // すべての報酬ボタンを非表示にする
-        foreach (var button in _rewardButtons)
-        {
-            button.style.display = DisplayStyle.None;
-        }
+        _rewardElement.Clear();
+        var rewardButtons = new List<Button>();
 
         // ステータス報酬のセット
-        _rewardButtons[0].style.display = DisplayStyle.Flex;
         var reward = new Reward();
-        _rewardButtons[0].Q<Label>("Label-RewordTitle").text = reward.Description;
-        _rewardButtons[0].clicked += () =>
+        var statusRewardButton = new Button(() =>
         {
             string result = reward.Execute(_winnerEntity);
             _battleLogController.AddLog(result);
-        };
+        });
+        statusRewardButton.AddToClassList(ClassNames.RewardButton);
+
+        statusRewardButton.Add(CreateNewLabelWithDetails(ClassNames.RewardTitle, Constants.GetStatusRewardTitle(Settings.Language)));
+        statusRewardButton.Add(CreateNewLabelWithDetails(ClassNames.RewardDescription, reward.Description));
+        rewardButtons.Add(statusRewardButton);
 
         // スキル報酬のセット
         List<Skill> loserSkills = _loserEntity.Parameter.Skills;
@@ -373,15 +374,33 @@ public class BattleController : MonoBehaviour
         for (int i = 0; i < rewardSelectedSkills.Count; i++)
         {
             int index = i;
-            _rewardButtons[index + 1].style.display = DisplayStyle.Flex;
-            _rewardButtons[index + 1].Q<Label>("Label-RewordTitle").text = rewardSelectedSkills[index].Name;
-            _rewardButtons[index + 1].Q<Label>("Label-RewordDecscription").text = rewardSelectedSkills[index].Description;
-            _rewardButtons[index + 1].clicked += () =>
+            var skillRewardButton = new Button();
+            skillRewardButton.AddToClassList(ClassNames.RewardButton);
+            skillRewardButton.clicked += () =>
             {
                 AddSkillToMyEntity(rewardSelectedSkills[index], out string log);
                 _battleLogController.AddLog(log);
             };
+
+            skillRewardButton.Add(CreateNewLabelWithDetails(ClassNames.RewardTitle, rewardSelectedSkills[index].Name));
+            skillRewardButton.Add(CreateNewLabelWithDetails(ClassNames.RewardDescription, rewardSelectedSkills[index].Description));
+            rewardButtons.Add(skillRewardButton);
         }
+
+        foreach (var button in rewardButtons)
+        {
+            button.clicked += CloseRewardView;
+            button.clicked += () => _battleStatus = BattleStatus.Ending;
+            _rewardElement.Add(button);
+        }
+    }
+
+    private Label CreateNewLabelWithDetails(string className, string text)
+    {
+        var label = new Label();
+        label.AddToClassList(className);
+        label.text = text;
+        return label;
     }
 
     private List<T> GetListOfRandomTwoElementsFromList<T>(List<T> list)
