@@ -193,4 +193,18 @@ public class Constants
         }
     }
     public static string HealCaption = "Heal";
+
+    // ******* Reward *******
+    public static string GetStatusRewardTitle(Language language)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return "ステータス";
+            case Language.English:
+                return "Status";
+            default:
+                return "Status";
+        }
+    }
 }

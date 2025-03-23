@@ -58,9 +58,22 @@
     -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
     font-size: 66px;
     height: 120px;
+    -unity-text-align: middle-center;
+    margin-top: 35px;
+    align-self: center;
+    color: rgb(255, 255, 255);
 }
 
 .rewardDescription {
+    -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
+    color: rgb(255, 255, 255);
+    font-size: 50px;
+    width: 350px;
+    height: 250px;
+    -unity-text-align: middle-center;
+    white-space: pre-wrap;
+    margin-top: 15px;
+    align-self: center;
 }
 
 .rewardButton {
