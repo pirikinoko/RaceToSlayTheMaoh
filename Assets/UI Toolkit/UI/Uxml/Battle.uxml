@@ -5,43 +5,36 @@
     <engine:VisualElement name="Root" style="flex-grow: 1; width: auto; height: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 100px; padding-right: 100px; padding-bottom: 100px; padding-left: 100px; background-color: rgba(0, 0, 0, 0.39);">
         <engine:VisualElement name="BattleView" style="flex-grow: 1; height: 500px; margin-bottom: 30px;">
             <engine:VisualElement name="Image-Battle-Frame" style="flex-grow: 1; flex-direction: row; background-image: url(&quot;project://database/Assets/Images/UI/BattleFrame.png?fileID=2800000&amp;guid=58084651486787a4daa2fdf340cc98dd&amp;type=3#BattleFrame&quot;); height: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-background-scale-mode: scale-to-fit; background-size: 100% 100%; flex-shrink: 1;">
-                <engine:VisualElement name="BattleElement" style="flex-grow: 1; flex-direction: row; display: flex;">
+                <engine:VisualElement name="BattleElement" style="flex-grow: 1; flex-direction: row; display: none;">
                     <engine:VisualElement name="Element-Left" style="flex-grow: 1; align-content: center; flex-shrink: 1; align-items: flex-start; align-self: auto; justify-content: flex-start; width: 0;">
                         <engine:Label text="Label" name="Label-EntityName" display-tooltip-when-elided="true" class="label entity-name__label" style="color: rgb(255, 255, 255); right: 100px; align-self: center; margin-top: 10px;" />
-                        <UIToolkit.IndicatorBarComponent currentValue="100" minimumValue="0" name="HealthBar" />
-                        <UIToolkit.IndicatorBarComponent barType="Mana" currentValue="100" name="ManaBar" />
+                        <UIToolkit.IndicatorBarComponent currentValue="30" minimumValue="0" name="HealthBar" maximumValue="50" />
+                        <UIToolkit.IndicatorBarComponent barType="Mana" currentValue="10" name="ManaBar" maximumValue="30" />
                         <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Images/Player/Player1.png?fileID=2800000&amp;guid=fe5fe608913d1b749baf641cc1d6acac&amp;type=3#Player1&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: 200px; bottom: 30px;" />
                     </engine:VisualElement>
                     <engine:Label text="Turn:1" emoji-fallback-support="true" name="Label-TurnCount" class="label" style="color: rgb(255, 255, 255); font-size: 60px; margin-top: 10px;" />
                     <engine:VisualElement name="Element-Right" style="flex-grow: 1; align-content: center; flex-shrink: 1; align-items: flex-end; align-self: auto; justify-content: flex-start; width: 0; flex-direction: column;">
                         <engine:Label text="Label" name="Label-EntityName" display-tooltip-when-elided="true" class="label entity-name__label" style="color: rgb(255, 255, 255); left: 100px; align-self: center; margin-top: 10px;" />
-                        <UIToolkit.IndicatorBarComponent currentValue="100" minimumValue="0" name="HealthBar" />
-                        <UIToolkit.IndicatorBarComponent barType="Mana" currentValue="100" name="ManaBar" />
+                        <UIToolkit.IndicatorBarComponent currentValue="100" minimumValue="0" name="HealthBar" style="flex-direction: row; margin-right: 0;" />
+                        <UIToolkit.IndicatorBarComponent barType="Mana" currentValue="50" name="ManaBar" maximumValue="50" style="margin-right: 0;" />
                         <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Images/Enemy/AxeMan.png?fileID=2800000&amp;guid=bf0dad1f62408524fa7c854516e3fec2&amp;type=3#AxeMan&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: auto; bottom: 30px; right: 200px;" />
                     </engine:VisualElement>
                 </engine:VisualElement>
-                <engine:VisualElement name="RewordElement" style="flex-grow: 1; flex-direction: row; align-content: auto; justify-content: space-evenly; align-items: stretch; display: none;">
-                    <engine:Button text="Button" name="RewordButton1" class="rewordButton" style="justify-content: space-around;">
-                        <engine:Label text="体力とマナを少し回復" name="Label-RewordTitle" class="label" style="top: auto; height: 120px; align-content: auto; white-space: normal;" />
-                    </engine:Button>
-                    <engine:Button text="Button" name="RewordButton2" class="rewordButton">
-                        <engine:Label text="ドレイン" name="Label-RewordTitle" class="label" style="top: 35px; height: 120px; align-content: auto; white-space: normal;" />
-                        <engine:Label text="敵から体力を吸い取る" name="Label-RewordDecscription" class="label" style="top: 35px; height: 220px; align-content: auto; font-size: 40px; white-space: normal;" />
-                    </engine:Button>
-                    <engine:Button text="Button" name="RewordButton3" class="rewordButton" style="display: flex;">
-                        <engine:Label text="ドレイン" name="Label-RewordTitle" class="label" style="top: 35px; height: 120px; align-content: auto; white-space: normal;" />
-                        <engine:Label text="敵から体力を吸い取る" name="Label-RewordDecscription" class="label" style="top: 35px; height: 220px; align-content: auto; font-size: 40px; white-space: normal;" />
+                <engine:VisualElement name="RewardElement" style="flex-grow: 1; flex-direction: row; align-content: auto; justify-content: space-evenly; align-items: stretch; display: flex;">
+                    <engine:Button text="Button" name="RewardButton1" class="rewardButton">
+                        <engine:Label text="ステータス" name="Label-RewardTitle" class="label rewardTitle" style="top: 35px; align-content: auto;" />
+                        <engine:Label text="HPを5回復する" name="Label-RewardDescription" class="label" style="top: 35px; height: 220px; align-content: auto; font-size: 40px; white-space: normal;" />
                     </engine:Button>
                 </engine:VisualElement>
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="BottomView" style="flex-grow: 1; flex-direction: row; flex-wrap: wrap-reverse;">
-            <engine:VisualElement name="CommandView" style="flex-grow: 1; visibility: visible; display: flex; overflow: visible; align-self: center; justify-content: center; align-content: auto; position: relative; width: auto; height: auto; top: auto; background-image: none; flex-direction: column; left: auto;">
+            <engine:VisualElement name="CommandView" style="flex-grow: 1; visibility: visible; display: none; overflow: visible; align-self: center; justify-content: center; align-content: auto; position: relative; width: auto; height: auto; top: auto; background-image: none; flex-direction: column; left: auto;">
                 <engine:Button text="攻撃" name="Button-Attack" class="label actionbutton" style="color: rgb(255, 255, 255);" />
                 <engine:Button text="特技" name="Button-Skill" class="label actionbutton" />
             </engine:VisualElement>
-            <engine:VisualElement name="SkillView" style="flex-grow: 1; flex-direction: row; align-items: auto; justify-content: flex-start; position: relative; left: auto; bottom: auto; display: none; align-content: auto; flex-shrink: 1; flex-wrap: nowrap; width: auto; height: auto; align-self: center; visibility: visible; overflow: visible;">
-                <engine:ScrollView name="SkillScrollView" touch-scroll-type="Elastic" enabled="true" style="background-image: url(&quot;project://database/Assets/Images/UI/ScrollFrame.png?fileID=2800000&amp;guid=7a753ba99631d744f918089649e2cdf4&amp;type=3#ScrollFrame&quot;); -unity-background-scale-mode: scale-to-fit; width: 450px; height: 400px; position: relative; top: auto; left: 0; bottom: 0; display: flex; align-content: flex-start; align-items: flex-start; align-self: auto; justify-content: flex-start; right: auto;">
+            <engine:VisualElement name="SkillView" style="flex-grow: 1; flex-direction: row; align-items: auto; justify-content: flex-start; position: relative; left: auto; bottom: auto; display: flex; align-content: auto; flex-shrink: 1; flex-wrap: nowrap; width: auto; height: auto; align-self: center; visibility: visible; overflow: visible;">
+                <engine:ScrollView name="SkillScrollView" touch-scroll-type="Elastic" enabled="true" style="background-image: url(&quot;project://database/Assets/Images/UI/ScrollFrame.png?fileID=2800000&amp;guid=7a753ba99631d744f918089649e2cdf4&amp;type=3#ScrollFrame&quot;); -unity-background-scale-mode: scale-to-fit; width: 450px; height: 380px; position: relative; top: auto; left: 0; bottom: 0; display: flex; align-content: flex-start; align-items: flex-start; align-self: auto; justify-content: flex-start; right: auto;">
                     <engine:Button text="特技名" name="Button-Skill-1" class="label skillbutton" style="background-image: url(&quot;project://database/Assets/Images/UI/SkillFrame.png?fileID=2800000&amp;guid=b5cc0e8efecef034689bcd9f0bc9531a&amp;type=3#SkillFrame&quot;); align-self: center;" />
                     <engine:Button text="特技名" name="Button-Skill-1" class="label skillbutton" style="background-image: url(&quot;project://database/Assets/Images/UI/SkillFrame.png?fileID=2800000&amp;guid=b5cc0e8efecef034689bcd9f0bc9531a&amp;type=3#SkillFrame&quot;); align-self: center;" />
                     <engine:Button text="特技名" name="Button-Skill-1" class="label skillbutton" style="background-image: url(&quot;project://database/Assets/Images/UI/SkillFrame.png?fileID=2800000&amp;guid=b5cc0e8efecef034689bcd9f0bc9531a&amp;type=3#SkillFrame&quot;); align-self: center;" />

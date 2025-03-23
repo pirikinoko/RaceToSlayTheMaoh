@@ -70,6 +70,7 @@ namespace UIToolkit
 
         // データが正しくリンクされ、ビルダーに表示されるようにするために、定義された Traits と同じ名前のプロパティを持つ必要があります
         private BarType _barType;
+        private const int DefaultBarLengthPixel = 550;
         private int _currentValue;
         private int _minimumValue;
         private int _maximumValue;
@@ -164,6 +165,7 @@ namespace UIToolkit
             if (maxValue > 0)
             {
                 float w = Mathf.Clamp((float)currentValue / maxValue * 100, 0f, 100f);
+                _indicatorBar.style.width = new StyleLength(DefaultBarLengthPixel * (float)(maxValue / 100f));
                 _progress.style.width = new StyleLength(Length.Percent(w));
             }
         }

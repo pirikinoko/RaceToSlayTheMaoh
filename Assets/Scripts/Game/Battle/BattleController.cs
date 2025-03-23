@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using R3;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,9 @@ public class BattleController : MonoBehaviour
     [SerializeField]
     private BattleLogController _battleLogController;
     [SerializeField]
-    private Settings _settings;
+    private PlayerController _playerController;
+    [SerializeField]
+    private EnemyController _enemyController;
 
     private BattleStatus _battleStatus;
 
@@ -25,16 +28,21 @@ public class BattleController : MonoBehaviour
     private Entity _winnerEntity;
     private Entity _loserEntity;
 
-    private int _turn = 1;
+    private int _turnCount = 0;
+    private bool _hasActionEnded;
 
     private VisualElement _root;
     private VisualElement _battleElement;
     private VisualElement _rewardElement;
     private VisualElement _commanndView;
     private VisualElement _skillScrollView;
+    private VisualElement _skillContainer;
+
+    private Label _turnCountLabel;
 
     private Button _closeSkillScrollViewButton;
-    private Button[] _rewordButtons = new Button[3];
+    private List<(Button, int)> _skillButtons = new();
+    private Button[] _rewardButtons = new Button[3];
 
     private IndicatorBarComponent _healthBarLeft;
     private IndicatorBarComponent _manaBarLeft;
@@ -43,35 +51,47 @@ public class BattleController : MonoBehaviour
 
     private void Start()
     {
+        InitializeUIElements();
+        InitializeBattleLogController();
+    }
+
+    private void InitializeUIElements()
+    {
         _root = GetComponent<UIDocument>().rootVisualElement;
 
         _battleElement = _root.Q<VisualElement>("BattleElement");
-        _rewardElement = _root.Q<VisualElement>("RewordElement");
-        _rewordButtons = _rewardElement.Children().OfType<Button>().ToArray();
-        _rewordButtons.Select(b => b.style.display = DisplayStyle.None).ToArray();
+        _rewardElement = _root.Q<VisualElement>("RewardElement");
+        _rewardButtons = _rewardElement.Children().OfType<Button>().ToArray();
+        _rewardButtons.Select(b => b.style.display = DisplayStyle.None).ToArray();
+        _rewardButtons.ToList().ForEach(b => b.clicked += CloseRewardView);
+        _rewardButtons.ToList().ForEach(b => b.clicked += () => _battleStatus = BattleStatus.Ending);
 
         _commanndView = _root.Q<VisualElement>("CommandView");
-        _root.Q<Label>("Label-TurnCount").text = $"{_turn}/{Constants.MaxTurn}";
+        _turnCountLabel = _root.Q<Label>("Label-TurnCount");
         _skillScrollView = _root.Q<VisualElement>("SkillScrollView");
-        _skillScrollView.Clear();
+        _skillContainer = _root.Q<VisualElement>("unity-content-container");
 
         _root.Q<Button>("Button-Attack").clicked += Attack;
         _root.Q<Button>("Button-Skill").clicked += OnOpenSkillScrollClicked;
         _closeSkillScrollViewButton = _root.Q<Button>("Button-CloseSkillScroll");
         _closeSkillScrollViewButton.clicked += OnCloseSkillScrollClicked;
+    }
 
+    private void InitializeBattleLogController()
+    {
         _battleLogController.Initialize(_root.Q<Label>("Label-Log"));
         _battleLogController.OnAllLogsRead.Subscribe(_ =>
         {
-            if (_battleStatus == BattleStatus.InProgess)
+            if (_battleStatus == BattleStatus.AfterAction || _turnCount == 0)
             {
-                StartNextTurn();
+                StartNewTurn();
             }
-            else if (_battleStatus != BattleStatus.Result)
+            else if (_battleStatus is BattleStatus.LeftWin or BattleStatus.RightWin
+            or BattleStatus.TurnOver or BattleStatus.BothDied)
             {
-                EndBattle();
+                GoToNextStatus();
             }
-            else if (_battleStatus == BattleStatus.Result)
+            else if (_battleStatus == BattleStatus.SelectReword)
             {
                 HideBattleElement();
                 OpenRewardView();
@@ -92,37 +112,60 @@ public class BattleController : MonoBehaviour
         _healthBarLeft = rootLeftElement.Q<IndicatorBarComponent>("HealthBar");
         _manaBarLeft = rootLeftElement.Q<IndicatorBarComponent>("ManaBar");
 
+        _healthBarLeft.CurrentValue = _leftEntity.Parameter.HitPoint;
+        _healthBarLeft.MaximumValue = Constants.MaxHitPoint;
+        _manaBarLeft.CurrentValue = _rightEntity.Parameter.ManaPoint;
+        _manaBarLeft.MaximumValue = Constants.MaxManaPoint;
+
         var rootRightElement = _root.Q<VisualElement>("Element-Right");
         rootRightElement.Q<VisualElement>("Image-Entity").style.backgroundImage = _rightEntity.Parameter.IconSprite.texture;
         rootRightElement.Q<Label>("Label-EntityName").text = _rightEntity.name;
         _healthBarRight = rootRightElement.Q<IndicatorBarComponent>("HealthBar");
         _manaBarRight = rootRightElement.Q<IndicatorBarComponent>("ManaBar");
+
+        _healthBarRight.CurrentValue = _rightEntity.Parameter.HitPoint;
+        _healthBarRight.MaximumValue = Constants.MaxHitPoint;
+        _manaBarRight.CurrentValue = _rightEntity.Parameter.ManaPoint;
+        _manaBarRight.MaximumValue = Constants.MaxManaPoint;
     }
 
     private void SetSkillButtons()
     {
+        _skillButtons.Clear();
+        _skillContainer.Clear();
+
         foreach (var skill in _userController.MyEntity.Parameter.Skills)
         {
             var skillButton = new Button(() =>
             {
                 UseSkill(skill.Name);
                 CloseSkillScroll();
-                StartNextTurn();
+                StartNewTurn();
             })
             {
                 text = skill.Name
             };
             skillButton.AddToClassList("skillbutton");
-            _skillScrollView.Add(skillButton);
+            _skillContainer.Add(skillButton);
+            _skillButtons.Add((skillButton, skill.ManaCost));
         }
     }
 
+    private void ToggleSkillButonClickable()
+    {
+        foreach (var (button, manaCost) in _skillButtons)
+        {
+            button.SetEnabled(_userController.MyEntity.Parameter.ManaPoint >= manaCost);
+        }
+    }
 
     public void StartBattle(Entity left, Entity right)
     {
-        _battleStatus = BattleStatus.InProgess;
+        _turnCount = 0;
+        _battleStatus = BattleStatus.BeforeAction;
 
         DisplayBattleElement();
+        CloseCommandView();
         CloseSkillScroll();
         CloseRewardView();
 
@@ -132,61 +175,96 @@ public class BattleController : MonoBehaviour
         SetEntities();
         SetSkillButtons();
 
-        _healthBarLeft.CurrentValue = left.Parameter.HitPoint;
-        _manaBarLeft.CurrentValue = left.Parameter.ManaPoint;
+        _battleLogController.AddLog(Constants.GetSentenceWhenStartBattle(Settings.Language.ToString(), _leftEntity.name, _rightEntity.name));
     }
 
-    private void StartNextTurn()
+    private void StartNewTurn()
     {
-        Entity tmp = _currentTurnEntity;
-        _currentTurnEntity = _waitingTurnEntity;
-        _waitingTurnEntity = tmp;
-        _turn++;
+        ApplyCurrentBattleStatus(false);
+        bool isFirstTurn = _turnCount == 0;
+        if (!isFirstTurn)
+        {
+            Entity tmp = _currentTurnEntity;
+            _currentTurnEntity = _waitingTurnEntity;
+            _waitingTurnEntity = tmp;
+        }
 
         if (_currentTurnEntity == _userController.MyEntity)
         {
             OpenCommandView();
+            ToggleSkillButonClickable();
         }
-        _battleLogController.SetText(Constants.GetSentenceWhileWaitingAction(_settings.Language.ToString(), _currentTurnEntity.name));
+
+        if (_currentTurnEntity.Parameter.EntityType == EntityType.Player)
+        {
+            _battleLogController.SetText(Constants.GetSentenceWhileWaitingAction(Settings.Language.ToString(), _currentTurnEntity.name));
+        }
+        else
+        {
+            EnemyActer.Act(this, _currentTurnEntity).Forget();
+        }
+
+        _turnCount++;
+        _turnCountLabel.text = $"{_turnCount}/{Constants.MaxTurn}";
     }
 
-    private void EndBattle()
+    private void GoToNextStatus()
     {
         switch (_battleStatus)
         {
             case BattleStatus.LeftWin:
                 _winnerEntity = _leftEntity;
-                _battleLogController.AddLog(Constants.GetResultSentence(_settings.Language, _leftEntity.name, _rightEntity.name));
+                _loserEntity = _rightEntity;
+                if (_winnerEntity.EntityType == EntityType.Player)
+                {
+                    _battleStatus = BattleStatus.SelectReword;
+                }
+                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _leftEntity.name, _rightEntity.name));
                 break;
             case BattleStatus.RightWin:
                 _winnerEntity = _rightEntity;
-                _battleLogController.AddLog(Constants.GetResultSentence(_settings.Language, _rightEntity.name, _leftEntity.name));
+                _loserEntity = _leftEntity;
+                if (_winnerEntity.EntityType == EntityType.Player)
+                {
+                    _battleStatus = BattleStatus.SelectReword;
+                }
+                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _rightEntity.name, _leftEntity.name));
+                break;
+            case BattleStatus.SelectReword:
+                _battleStatus = BattleStatus.Ending;
                 break;
             case BattleStatus.BothDied:
-                _battleLogController.AddLog(Constants.GetSentenceWhenBothDied(_settings.Language));
+                _battleStatus = BattleStatus.Ending;
+                _battleLogController.AddLog(Constants.GetSentenceWhenBothDied(Settings.Language));
                 break;
             case BattleStatus.TurnOver:
-                _battleLogController.AddLog(Constants.GetSentenceWhenTurnOver(_settings.Language));
+                _battleStatus = BattleStatus.Ending;
+                _battleLogController.AddLog(Constants.GetSentenceWhenTurnOver(Settings.Language));
                 break;
         }
     }
 
     private void BackToField()
     {
+        RemoveEntity(_loserEntity);
         _stateController.ChangeState(State.Field);
     }
 
-    private void Attack()
+    public void Attack()
     {
-        _currentTurnEntity.Attack(_waitingTurnEntity);
-        _battleLogController.AddLog(Constants.GetAttackSentence(_settings.Language, _currentTurnEntity.name));
+        _battleLogController.AddLog(Constants.GetAttackSentence(Settings.Language, _currentTurnEntity.name));
+
+        int damage = _currentTurnEntity.Attack(_waitingTurnEntity);
+
+        _battleLogController.AddLog(Constants.GetAttackResultSentence(Settings.Language, _waitingTurnEntity.name, damage));
+
         OnActionEnded();
     }
 
-    private void UseSkill(string name)
+    public void UseSkill(string name)
     {
         string[] result = _currentTurnEntity.UseSkill(name, _currentTurnEntity, _waitingTurnEntity);
-        _battleLogController.AddLog(Constants.GetSkillSentence(_settings.Language, _currentTurnEntity.name, name));
+        _battleLogController.AddLog(Constants.GetSkillSentence(Settings.Language, _currentTurnEntity.name, name));
         foreach (var log in result)
         {
             _battleLogController.AddLog(log);
@@ -208,6 +286,7 @@ public class BattleController : MonoBehaviour
 
     private void OnActionEnded()
     {
+        _hasActionEnded = true;
         CloseCommandView();
         _healthBarLeft.CurrentValue = _leftEntity.Parameter.HitPoint;
         _manaBarLeft.CurrentValue = _leftEntity.Parameter.ManaPoint;
@@ -215,21 +294,24 @@ public class BattleController : MonoBehaviour
         _manaBarRight.CurrentValue = _rightEntity.Parameter.ManaPoint;
 
         ApplyCurrentBattleStatus(false);
+
         switch (_battleStatus)
         {
-            case BattleStatus.InProgess:
+            case BattleStatus.BeforeAction:
+                return;
+            case BattleStatus.AfterAction:
                 return;
             case BattleStatus.LeftWin:
-                _battleLogController.AddLog(Constants.GetResultSentence(_settings.Language, _leftEntity.name, _rightEntity.name));
+                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _leftEntity.name, _rightEntity.name));
                 break;
             case BattleStatus.RightWin:
-                _battleLogController.AddLog(Constants.GetResultSentence(_settings.Language, _rightEntity.name, _leftEntity.name));
+                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _rightEntity.name, _leftEntity.name));
                 break;
             case BattleStatus.BothDied:
-                _battleLogController.AddLog(Constants.GetSentenceWhenBothDied(_settings.Language));
+                _battleLogController.AddLog(Constants.GetSentenceWhenBothDied(Settings.Language));
                 break;
             case BattleStatus.TurnOver:
-                _battleLogController.AddLog(Constants.GetSentenceWhenTurnOver(_settings.Language));
+                _battleLogController.AddLog(Constants.GetSentenceWhenTurnOver(Settings.Language));
                 break;
         }
     }
@@ -238,7 +320,7 @@ public class BattleController : MonoBehaviour
     {
         if (isInResult)
         {
-            _battleStatus = BattleStatus.Result;
+            _battleStatus = BattleStatus.SelectReword;
         }
         else if (_leftEntity.Parameter.HitPoint <= 0 && _rightEntity.Parameter.HitPoint <= 0)
         {
@@ -252,54 +334,91 @@ public class BattleController : MonoBehaviour
         {
             _battleStatus = BattleStatus.LeftWin;
         }
-        else if (_turn > Constants.MaxTurn)
+        else if (_turnCount > Constants.MaxTurn)
         {
             _battleStatus = BattleStatus.TurnOver;
         }
+        else if (!_hasActionEnded)
+        {
+            _battleStatus = BattleStatus.BeforeAction;
+        }
         else
         {
-            _battleStatus = BattleStatus.InProgess;
+            _battleStatus = BattleStatus.AfterAction;
         }
     }
 
     private void SetRewards()
     {
-        // ステータス報酬のセット
-        _rewordButtons[0].style.display = DisplayStyle.Flex;
-        _rewordButtons[0].clicked += () =>
+        // すべての報酬ボタンを非表示にする
+        foreach (var button in _rewardButtons)
         {
-            string result = new Reword().Execute(_winnerEntity);
+            button.style.display = DisplayStyle.None;
+        }
+
+        // ステータス報酬のセット
+        _rewardButtons[0].style.display = DisplayStyle.Flex;
+        var reward = new Reward();
+        _rewardButtons[0].Q<Label>("Label-RewordTitle").text = reward.Description;
+        _rewardButtons[0].clicked += () =>
+        {
+            string result = reward.Execute(_winnerEntity);
             _battleLogController.AddLog(result);
         };
 
         // スキル報酬のセット
-        List<Skill> loserSkills = _winnerEntity.Parameter.Skills;
-        List<Skill> rewordSelectedSkills = new List<Skill>();
+        List<Skill> loserSkills = _loserEntity.Parameter.Skills;
+        List<Skill> rewardSelectedSkills = GetListOfRandomTwoElementsFromList(loserSkills);
 
-        int index1 = Random.Range(0, loserSkills.Count);
-        rewordSelectedSkills.Add(loserSkills[index1]);
-        loserSkills.RemoveAt(index1);
-
-        int index2;
-        if (loserSkills.Count != 0)
+        for (int i = 0; i < rewardSelectedSkills.Count; i++)
         {
-            index2 = Random.Range(0, loserSkills.Count);
-            rewordSelectedSkills.Add(loserSkills[index2]);
-        }
-
-        for (int i = 0; i < _winnerEntity.Parameter.Skills.Count; i++)
-        {
-            _rewordButtons[i + 1].style.display = DisplayStyle.Flex;
-            _rewordButtons[i + 1].text = _winnerEntity.Parameter.Skills[i].Name;
-            _rewordButtons[i + 1].clicked += () => GetSkill(rewordSelectedSkills[i]);
+            int index = i;
+            _rewardButtons[index + 1].style.display = DisplayStyle.Flex;
+            _rewardButtons[index + 1].Q<Label>("Label-RewordTitle").text = rewardSelectedSkills[index].Name;
+            _rewardButtons[index + 1].Q<Label>("Label-RewordDecscription").text = rewardSelectedSkills[index].Description;
+            _rewardButtons[index + 1].clicked += () =>
+            {
+                AddSkillToMyEntity(rewardSelectedSkills[index], out string log);
+                _battleLogController.AddLog(log);
+            };
         }
     }
 
+    private List<T> GetListOfRandomTwoElementsFromList<T>(List<T> list)
+    {
+        List<T> result = new List<T>();
+        if (list.Count > 0)
+        {
+            int index1 = Random.Range(0, list.Count);
+            result.Add(list[index1]);
+            list.RemoveAt(index1);
+        }
+        if (list.Count > 0)
+        {
+            int index2 = Random.Range(0, list.Count);
+            result.Add(list[index2]);
+        }
+        return result;
+    }
 
-    private void GetSkill(Skill skill)
+    private void AddSkillToMyEntity(Skill skill, out string log)
     {
         _userController.MyEntity.Parameter.Skills.Add(skill);
-        _battleLogController.AddLog(string.Format(Constants.GetSkillGetSentence(_settings.Language), _userController.MyEntity, skill.Name));
+        log = string.Format(Constants.GetSkillGetSentence(Settings.Language), _userController.MyEntity.name, skill.Name);
+    }
+
+    private void RemoveEntity(Entity entity)
+    {
+        Destroy(entity.gameObject);
+        switch (entity.EntityType)
+        {
+            case EntityType.Player:
+                _playerController.PlayerList.Remove(entity);
+                break;
+            default:
+                _enemyController._enemyList.Remove(entity);
+                break;
+        }
     }
 
     private void DisplayBattleElement()
@@ -326,12 +445,14 @@ public class BattleController : MonoBehaviour
     {
         _skillScrollView.style.display = DisplayStyle.Flex;
         _closeSkillScrollViewButton.style.display = DisplayStyle.Flex;
+        _commanndView.style.display = DisplayStyle.None;
     }
 
     private void CloseSkillScroll()
     {
         _skillScrollView.style.display = DisplayStyle.None;
         _closeSkillScrollViewButton.style.display = DisplayStyle.None;
+        _commanndView.style.display = DisplayStyle.Flex;
     }
 
     private void OpenRewardView()

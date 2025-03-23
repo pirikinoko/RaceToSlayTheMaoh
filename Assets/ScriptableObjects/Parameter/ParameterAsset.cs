@@ -30,7 +30,8 @@ public class Parameter
         // スキルのディープコピー
         foreach (var skillType in original.SkillTypes)
         {
-            Skills.Add(new Skill(SkillList.GetSkill(skillType).Name, SkillList.GetSkill(skillType).Action));
+            var skill = SkillList.GetSkill(skillType);
+            Skills.Add(new Skill(skill.Name, skill.Description, skill.ManaCost, skill.Action));
         }
         IconSprite = original.IconSprite;
     }

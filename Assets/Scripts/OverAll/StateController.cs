@@ -68,7 +68,7 @@ public class StateController : MonoBehaviour
                 SwitchTitleState();
                 break;
             case State.Field:
-                SwitchFieldState();
+                SwitchFieldState().Forget();
                 break;
             case State.Battle:
                 SwitchBattleState();
@@ -85,12 +85,17 @@ public class StateController : MonoBehaviour
         BlackoutField();
     }
 
-    private void SwitchFieldState()
+    private async UniTask SwitchFieldState()
     {
         _fieldRoot.style.display = DisplayStyle.Flex;
         RevealField();
-        _mainController.StartTurn().Forget();
+        if (_mainController.TurnCount == 0)
+        {
+            await _mainController.InitializeGame();
+        }
+        _mainController.StartNewTurn().Forget();
     }
+
     private void SwitchBattleState()
     {
         _battleRoot.style.display = DisplayStyle.Flex;

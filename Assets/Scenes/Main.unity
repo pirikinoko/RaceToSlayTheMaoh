@@ -264,14 +264,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 704762096159928498, guid: 0d9ff3347fd252e419bb7016f3698045, type: 3}
-      propertyPath: sourceAsset
-      value: 
-      objectReference: {fileID: 9197481963319205126, guid: c14a19ca25e41d9489c455140d4b4361, type: 3}
-    - target: {fileID: 704762096159928498, guid: 0d9ff3347fd252e419bb7016f3698045, type: 3}
-      propertyPath: m_PanelSettings
-      value: 
-      objectReference: {fileID: 11400000, guid: 0030f903bd95b6b42a2239d45b3a1df1, type: 2}
     - target: {fileID: 1608728847837375416, guid: 0d9ff3347fd252e419bb7016f3698045, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -370,7 +362,7 @@ PrefabInstance:
       objectReference: {fileID: 1659839508}
     - target: {fileID: 5435429819528177964, guid: 0d9ff3347fd252e419bb7016f3698045, type: 3}
       propertyPath: m_Name
-      value: FieldUi
+      value: FieldController
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -950,51 +942,6 @@ Transform:
   - {fileID: 1370764928}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &928531535
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 928531537}
-  - component: {fileID: 928531536}
-  m_Layer: 0
-  m_Name: Settings
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &928531536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 928531535}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06d33a870574ea249bba7d12b11acc0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Language: 0
---- !u!4 &928531537
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 928531535}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.7984324, y: 1.5563595, z: -0.058066517}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &943923461
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1083,13 +1030,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2138056103008628461, guid: 65017bbca7a855a45bb7ee081add56e6, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6846229313665120115, guid: 65017bbca7a855a45bb7ee081add56e6, type: 3}
       propertyPath: m_Name
-      value: ResultUi
+      value: ResultController
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8667,41 +8610,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1200181005879504887, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
-      propertyPath: sourceAsset
-      value: 
-      objectReference: {fileID: 9197481963319205126, guid: 176badab809a6fb4691729bf70f51032, type: 3}
-    - target: {fileID: 1200181005879504887, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1200181005879504887, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
-      propertyPath: m_PanelSettings
-      value: 
-      objectReference: {fileID: 11400000, guid: 0030f903bd95b6b42a2239d45b3a1df1, type: 2}
-    - target: {fileID: 3005845974978898801, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
-      propertyPath: _settings
-      value: 
-      objectReference: {fileID: 928531536}
-    - target: {fileID: 3005845974978898801, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
-      propertyPath: _mainController
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 3005845974978898801, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
       propertyPath: _userController
       value: 
       objectReference: {fileID: 1491222406}
     - target: {fileID: 3005845974978898801, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
+      propertyPath: _enemyController
+      value: 
+      objectReference: {fileID: 1004462709}
+    - target: {fileID: 3005845974978898801, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
       propertyPath: _stateController
       value: 
       objectReference: {fileID: 118952727}
+    - target: {fileID: 3005845974978898801, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
+      propertyPath: _playerController
+      value: 
+      objectReference: {fileID: 1659839508}
     - target: {fileID: 3005845974978898801, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
       propertyPath: _battleLogController
       value: 
       objectReference: {fileID: 1129187586}
     - target: {fileID: 5912858794879170153, guid: 59f75593a4d11dc4485b4df92902d224, type: 3}
       propertyPath: m_Name
-      value: BattleUi
+      value: BattleController
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8851,19 +8782,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1011726410292263810, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
       propertyPath: m_Name
-      value: TitleUi
-      objectReference: {fileID: 0}
-    - target: {fileID: 2933432933183976493, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 519420031}
-    - target: {fileID: 2933432933183976493, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5522266589079446044, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
+      value: TitleController
       objectReference: {fileID: 0}
     - target: {fileID: 5996405521774950678, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
       propertyPath: m_Pivot.x
@@ -8949,9 +8868,7 @@ PrefabInstance:
       propertyPath: _stateContoller
       value: 
       objectReference: {fileID: 118952727}
-    m_RemovedComponents:
-    - {fileID: 6275596794649547155, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
-    - {fileID: 2933432933183976493, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -9236,10 +9153,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 704762096159928498, guid: 90f91397ad05e84479af4e30d1b05517, type: 3}
-      propertyPath: m_SortingOrder
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1608728847837375416, guid: 90f91397ad05e84479af4e30d1b05517, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -9322,7 +9235,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5435429819528177964, guid: 90f91397ad05e84479af4e30d1b05517, type: 3}
       propertyPath: m_Name
-      value: OverAllUi
+      value: OverAllController
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9867,7 +9780,6 @@ SceneRoots:
   - {fileID: 1659839509}
   - {fileID: 1004462708}
   - {fileID: 1378039243}
-  - {fileID: 928531537}
   - {fileID: 911956934}
   - {fileID: 1932387158}
   - {fileID: 1582020578}
