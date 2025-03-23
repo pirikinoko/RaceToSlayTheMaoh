@@ -5,7 +5,7 @@
     align-content: auto;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    width: auto;
+    width: 550px;
     height: auto;
     margin-bottom: 20px;
     margin-right: 80px;

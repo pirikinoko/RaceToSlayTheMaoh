@@ -1,6 +1,4 @@
-using UnityEngine;
-
-public class Settings : MonoBehaviour
+public static class Settings
 {
-    public Language Language;
+    public static Language Language;
 }

@@ -41,6 +41,9 @@
     margin-right: 4px;
     margin-bottom: 0;
     margin-left: 25px;
+    color: rgb(255, 255, 255);
+    -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
+    font-size: 60px;
 }
 
 .skillbutton:hover {
@@ -50,12 +53,31 @@
     transition-timing-function: ease;
 }
 
-.rewordButton {
-    background-image: url("project://database/Assets/Images/UI/RewordFrame.png?fileID=2800000&guid=37a8e662ae2bf0d42b090a448ffb85a2&type=3#RewordFrame");
-    -unity-background-scale-mode: scale-to-fit;
-    background-color: rgba(255, 255, 255, 0);
+.rewardTitle {
     width: 400px;
+    -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
+    font-size: 66px;
+    height: 120px;
 }
 
-.rewordButton:hover {
+.rewardDescription {
+}
+
+.rewardButton {
+    background-image: url("project://database/Assets/Images/UI/RewordFrame.png?fileID=2800000&guid=37a8e662ae2bf0d42b090a448ffb85a2&type=3#RewordFrame");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(0, 0, 0, 0);
+    width: 400px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    display: flex;
+}
+
+.rewardButton:hover {
+    transition-property: scale;
+    transition-duration: 0.1s;
+    scale: 1.1 1.1;
 }

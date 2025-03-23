@@ -12,7 +12,10 @@ public class Constants
 
     public static float PlayerMoveSpeed = 1.5f;
 
-    // ******* Enemy *******
+    // ******* Entity *******
+
+    public static int MaxHitPoint = 50;
+    public static int MaxManaPoint = 30;
 
     // ******* Field *******
 
@@ -23,16 +26,16 @@ public class Constants
     // ******* Battle *******
     public static int MaxTurn = 20;
 
-    public static string GetSentenceWhenStartBattle(string language, string entityName)
+    public static string GetSentenceWhenStartBattle(string language, string leftEntityname, string rightEntityname)
     {
         switch (language)
         {
             case "Japanese":
-                return string.Format("{0}‚ªŒ»‚ê‚½!", entityName);
+                return string.Format("{0}‚Æ{1}‚Ì–Ú‚ª‡‚Á‚½‚æ‚¤‚¾!", leftEntityname, rightEntityname);
             case "English":
-                return string.Format("{0} Appeared!", entityName);
+                return string.Format("{0} and {1} have been faced!", leftEntityname, rightEntityname);
             default:
-                return string.Format("{0} Appeared!", entityName);
+                return string.Format("{0} and {1} have been faced!", leftEntityname, rightEntityname);
         }
     }
 
@@ -49,16 +52,29 @@ public class Constants
         }
     }
 
-    public static string GetAttackSentence(Language language, string entityName)
+    public static string GetAttackSentence(Language language, string attacker)
     {
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}‚ÌUŒ‚I", entityName);
+                return string.Format("{0}‚ÌUŒ‚I", attacker);
             case Language.English:
-                return string.Format("{0} is Attacking!", entityName);
+                return string.Format("{0} is Attacking!", attacker);
             default:
-                return string.Format("{0} is Attacking!", entityName);
+                return string.Format("{0} is Attacking!", attacker);
+        }
+    }
+
+    public static string GetAttackResultSentence(Language language, string damageReciever, int damage)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}‚É{1}‚Ìƒ_ƒ[ƒW‚ğ—^‚¦‚½I", damageReciever, damage);
+            case Language.English:
+                return string.Format("{0} has taken {1} damage!", damageReciever, damage);
+            default:
+                return string.Format("{0} has taken {1} damage!", damageReciever, damage);
         }
     }
 
