@@ -10,8 +10,8 @@ public class TitleController : MonoBehaviour
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
 
-        root.Q<Button>("Button-Start-Local").clicked += StartLocalGame;
-        root.Q<Button>("Button-Start-Online").clicked += StartOnlineGame;
+        root.Q<Button>("Button-Start_Local").clicked += StartLocalGame;
+        root.Q<Button>("Button-Start_Online").clicked += StartOnlineGame;
     }
 
     private void StartLocalGame()

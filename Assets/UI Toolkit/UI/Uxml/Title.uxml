@@ -1,6 +1,6 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/Title.uss?fileID=7433441132597879392&amp;guid=58670fe35fcc16045b1b532c6eaabb4c&amp;type=3#Title" />
-    <engine:Label text="Correct!" name="Lavel-Title" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&amp;guid=fdb8f6fb8f0532743a53412e3c61402b&amp;type=3#Nosutaru-dotMPlusH-10-Regular&quot;); font-size: 150px; -unity-text-align: upper-center; top: 10%; color: rgb(255, 255, 255);" />
+    <Style src="project://database/Assets/UI%20Toolkit/UI/StyleSheet/Title.uss?fileID=7433441132597879392&amp;guid=58670fe35fcc16045b1b532c6eaabb4c&amp;type=3#Title" />
+    <engine:Label text="CoRected" name="Lavel-Title" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&amp;guid=fdb8f6fb8f0532743a53412e3c61402b&amp;type=3#Nosutaru-dotMPlusH-10-Regular&quot;); font-size: 150px; -unity-text-align: upper-center; top: 10%;" />
     <engine:VisualElement name="VisualElement" style="justify-content: flex-start; align-self: center; margin-top: 0; width: 600px; align-content: auto; align-items: stretch; position: absolute; top: auto; bottom: 25%; left: auto; right: auto;">
         <engine:Button text="StartLocal" name="Button-Start-Local" enabled="true" class="actionButton" style="visibility: visible;" />
         <engine:Button text="StartOnline" name="Button-Start-Online" class="actionButton" style="font-size: 80px;" />

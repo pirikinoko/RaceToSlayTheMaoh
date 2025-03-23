@@ -13,7 +13,7 @@ public class Entity : MonoBehaviour
 
     public void Initialize(Parameter parameter)
     {
-        Parameter = new Parameter(parameter);
+        Parameter = parameter;
 
         Id = EntityMaster.AssignId();
         gameObject.name = parameter.Name;
@@ -25,15 +25,17 @@ public class Entity : MonoBehaviour
     }
 
     // こちらからのアクション
-    public void Attack(Entity target)
+    public int Attack(Entity target)
     {
-        target.TakeDamage(Parameter.Power + _abnormalCondition.PowerGain);
+        int damage = Parameter.Power + _abnormalCondition.PowerGain;
+        target.TakeDamage(damage);
+        return damage;
     }
 
-    public string[] UseSkill(string skillName, Entity skillUser, Entity target)
+    public string[] UseSkill(string skillName, Entity skillUser, Entity opponent)
     {
         Skill skill = Parameter.Skills.Find(s => s.Name == skillName);
-        return skill.Execute(skillUser, target);
+        return skill.Execute(skillUser, opponent);
     }
 
     // 相手からのアクションを受け取る

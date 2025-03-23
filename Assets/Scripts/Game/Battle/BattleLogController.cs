@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 public class BattleLogController : MonoBehaviour
 {
-    public bool IsFliipable = true;
     public bool HasAllLogsRead => _logs.Count == 0;
 
     public Observable<Unit> OnAllLogsRead => _onAllLogsRead;
@@ -15,6 +14,7 @@ public class BattleLogController : MonoBehaviour
     private Queue<string> _logs = new Queue<string>();
     private Label _label;
 
+    private bool isFlipable;
 
     public void Initialize(Label logLabel)
     {
@@ -23,7 +23,7 @@ public class BattleLogController : MonoBehaviour
 
     private void Update()
     {
-        if (!IsFliipable)
+        if (!isFlipable)
         {
             return;
         }
@@ -41,6 +41,7 @@ public class BattleLogController : MonoBehaviour
 
     public void AddLog(string log)
     {
+        isFlipable = true;
         _logs.Enqueue(log);
         _label.text = _logs.Peek();
     }
@@ -54,6 +55,7 @@ public class BattleLogController : MonoBehaviour
     {
         if (_logs.Count == 0)
         {
+            isFlipable = false;
             _onAllLogsRead.OnNext(Unit.Default);
             return;
         }

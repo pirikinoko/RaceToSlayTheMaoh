@@ -12,10 +12,9 @@
     -unity-background-image-tint-color: rgb(255, 255, 255);
     background-color: rgba(0, 0, 0, 0);
     align-self: auto;
-    width: 500px;
-    height: 150px;
+    width: 350px;
+    height: 125px;
     background-image: url("project://database/Assets/Images/UI/ActionFrame.png?fileID=2800000&guid=232f03a15e769c542903107880f17b17&type=3#ActionFrame");
-    margin-top: 30px;
 }
 
 .actionbutton:hover {
@@ -29,7 +28,7 @@
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(255, 255, 255);
     background-color: rgba(0, 0, 0, 0);
-    align-self: center;
+    align-self: auto;
     width: 350px;
     height: 95px;
     background-image: url("project://database/Assets/Images/UI/ActionFrame.png?fileID=2800000&guid=232f03a15e769c542903107880f17b17&type=3#ActionFrame");
@@ -40,7 +39,14 @@
     margin-top: 15px;
     margin-right: 4px;
     margin-bottom: 0;
+<<<<<<< Updated upstream
+    margin-left: 4px;
+=======
     margin-left: 25px;
+    color: rgb(255, 255, 255);
+    -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
+    font-size: 60px;
+>>>>>>> Stashed changes
 }
 
 .skillbutton:hover {
@@ -49,13 +55,35 @@
     scale: 1.05 1.05;
     transition-timing-function: ease;
 }
+<<<<<<< Updated upstream
+=======
 
-.rewordButton {
+.rewardTitle {
+    width: 400px;
+    -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
+    font-size: 66px;
+    height: 120px;
+}
+
+.rewardDescription {
+}
+
+.rewardButton {
     background-image: url("project://database/Assets/Images/UI/RewordFrame.png?fileID=2800000&guid=37a8e662ae2bf0d42b090a448ffb85a2&type=3#RewordFrame");
     -unity-background-scale-mode: scale-to-fit;
-    background-color: rgba(255, 255, 255, 0);
+    background-color: rgba(0, 0, 0, 0);
     width: 400px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    display: flex;
 }
 
-.rewordButton:hover {
+.rewardButton:hover {
+    transition-property: scale;
+    transition-duration: 0.1s;
+    scale: 1.1 1.1;
 }
+>>>>>>> Stashed changes

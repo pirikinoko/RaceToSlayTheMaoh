@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FieldController : MonoBehaviour
@@ -13,49 +11,30 @@ public class FieldController : MonoBehaviour
     [SerializeField]
     private BattleController _battleController;
 
-    private async UniTask Start()
+    void Start()
     {
-        while (true)
-        {
-            await UniTask.Delay(1000);
 
-            if (_stateController.CurrentState != State.Field)
-            {
-                await UniTask.Delay(3000);
-                continue;
-            }
-            CheckEncount();
-        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 
     private void CheckEncount()
     {
-        var allEntity = new List<Entity>();
-        allEntity.AddRange(_playerController.PlayerList);
-        allEntity.AddRange(_enemyController._enemyList);
-
-        foreach (var entityLeft in allEntity)
+        foreach (var enemy in _enemyController._enemyList)
         {
-            foreach (var entityRight in allEntity)
+            foreach (var player in _playerController._playerList)
             {
-                if (entityLeft == entityRight || (entityLeft.EntityType != EntityType.Player && entityRight.EntityType != EntityType.Player))
-                {
-                    continue;
-                }
-
-                if (Vector2.Distance(entityLeft.transform.position, entityRight.transform.position) < 0.1f)
+                if (Vector3.Distance(enemy.transform.position, player.transform.position) == 0)
                 {
                     _stateController.ChangeState(State.Battle);
-
-                    // プレイヤーと敵が戦う場合はプレイヤーを左側にする
-                    if (entityLeft.EntityType != EntityType.Player && entityRight.EntityType == EntityType.Player)
-                    {
-                        _battleController.StartBattle(entityRight, entityLeft);
-                    }
-                    _battleController.StartBattle(entityLeft, entityRight);
-                    return;
+                    _battleController.StartBattle(player, enemy);
                 }
             }
         }
     }
+
 }

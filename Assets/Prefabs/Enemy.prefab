@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8915144222258663646}
   - component: {fileID: 8189343484903758186}
-  - component: {fileID: 7518551499629143663}
+  - component: {fileID: 289969190754330846}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7518551499629143663
+--- !u!114 &289969190754330846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,7 +97,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7798725038358952894}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d1874275803736429bd229a0c7e80bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 25f8e94efe97e614faacbc9c5fe53e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Identifier: 6

@@ -1,10 +1,12 @@
 public enum BattleStatus
 {
-    InProgess,
+    Beggining,
+    BeforeAction,
+    AfterAction,
     LeftWin,
     RightWin,
     TurnOver,
     BothDied,
-    Result,
+    SelectReword,
     Ending
 }

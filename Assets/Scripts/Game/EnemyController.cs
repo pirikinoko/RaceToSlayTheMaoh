@@ -7,7 +7,7 @@ using UnityEngine.AddressableAssets;
 
 public class EnemyController : MonoBehaviour
 {
-    public List<Entity> _enemyList = new();
+    public List<Enemy> _enemyList = new();
 
     [SerializeField]
     private Transform _staticEnemiesParent;
@@ -15,42 +15,35 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private Transform _enemiesToRandomizeParent;
 
-    private ParameterAsset _parameterAsset;
-
-    /// <summary>
-    /// ‚·‚×‚Ä‚Ì“G‚ğ‰Šú‰»‚µ‚Ü‚·B
-    /// </summary>
-    /// <returns></returns>
-    public async UniTask InitializeAllEnemiesAsync()
+    async void Start()
     {
-        _parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
-
-        var allEnemiesToRandomize = _enemiesToRandomizeParent.GetComponentsInChildren<Entity>();
+        var allEnemiesToRandomize = _enemiesToRandomizeParent.GetComponentsInChildren<Enemy>();
         foreach (var enemy in allEnemiesToRandomize)
         {
-            InitializeEnemies(enemy, GetRandomEntityIdentifier());
+            await InitializeEnemiesAsync(enemy, GetRandomEntityIdentifier());
             _enemyList.Add(enemy);
         }
 
-        var allStaticEnemies = _staticEnemiesParent.GetComponentsInChildren<Entity>();
+        var allStaticEnemies = _staticEnemiesParent.GetComponentsInChildren<Enemy>();
         foreach (var enemy in allStaticEnemies)
         {
-            InitializeEnemies(enemy, enemy.EntityType);
+            await InitializeEnemiesAsync(enemy, enemy.Identifier);
             _enemyList.Add(enemy);
         }
     }
 
-    private void InitializeEnemies(Entity target, EntityType entityType)
+    private async UniTask InitializeEnemiesAsync(Enemy target, EntityIdentifier identifier)
     {
-        var parameter = _parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == entityType);
-        var clonedParameter = parameter.Clone();
-        target.Initialize(clonedParameter);
+        var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
+        var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.Id == identifier);
+
+        target.SetParameter(parameter);
     }
 
-    private EntityType GetRandomEntityIdentifier()
+    private EntityIdentifier GetRandomEntityIdentifier()
     {
-        Array values = Enum.GetValues(typeof(EntityType));
+        Array values = Enum.GetValues(typeof(EntityIdentifier));
         int randomIndex = UnityEngine.Random.Range(1, values.Length);
-        return (EntityType)values.GetValue(randomIndex);
+        return (EntityIdentifier)values.GetValue(randomIndex);
     }
 }

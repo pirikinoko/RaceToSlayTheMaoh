@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,18 +11,17 @@ public class ParameterAsset : ScriptableObject
 [System.Serializable]
 public class Parameter
 {
-    public EntityType EntityType;
-    public Sprite IconSprite;
+    public EntityIdentifier Id;
     public string Name;
-    public int HitPoint;
-    public int ManaPoint;
-    public int Power;
-    public List<SkillList.SkillType> SkillTypes = new();
-    public List<Skill> Skills = new();
+    public int Hp;
+    public int Atk;
+    public Texture2D Icon;
 
-    // コピーコンストラクタ
-    public Parameter(Parameter original)
+    internal object FirstOrDefault(Func<object, bool> value)
     {
+<<<<<<< Updated upstream
+        throw new NotImplementedException();
+=======
         EntityType = original.EntityType;
         Name = original.Name;
         HitPoint = original.HitPoint;
@@ -30,7 +30,8 @@ public class Parameter
         // スキルのディープコピー
         foreach (var skillType in original.SkillTypes)
         {
-            Skills.Add(new Skill(SkillList.GetSkill(skillType).Name, SkillList.GetSkill(skillType).Action));
+            var skill = SkillList.GetSkill(skillType);
+            Skills.Add(new Skill(skill.Name, skill.Description, skill.ManaCost, skill.Action));
         }
         IconSprite = original.IconSprite;
     }
@@ -38,6 +39,6 @@ public class Parameter
     public Parameter Clone()
     {
         return new Parameter(this);
+>>>>>>> Stashed changes
     }
 }
-
