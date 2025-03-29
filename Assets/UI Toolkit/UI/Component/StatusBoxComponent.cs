@@ -1,0 +1,154 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace UIToolkit
+{
+    public class StatusBoxComponent : VisualElement
+    {
+
+        private static class ClassNames
+        {
+            public static string StatusBoxContainer = "statusBox__container";
+            public static string StatusBoxPlayerIconContainer = "statusBox__characterIconContainer";
+            public static string StatusBoxStatusContainer = "statusBox__statusContainer";
+            public static string StatusBoxUpperContainer = "statusBox__upperContainer";
+            public static string StatusBoxLowerContainer = "statusBox__lowerContainer";
+            public static string StatusBoxCharacterIcon = "statusBox__characterIcon";
+            public static string StatusBoxStatusIcon = "statusBox__statusIcon";
+            public static string StatusBoxLabel = "statusBox__label";
+            public static string BasicLabel = "label";
+        }
+
+        public new class UxmlFactory : UxmlFactory<StatusBoxComponent, UxmlTraits>
+        {
+        }
+
+        public new class UxmlTraits : VisualElement.UxmlTraits
+        {
+            public override void Init(VisualElement visualElement, IUxmlAttributes bag, CreationContext cc)
+            {
+                base.Init(visualElement, bag, cc);
+                var statusBoxComponent = (StatusBoxComponent)visualElement;
+            }
+        }
+
+        // データが正しくリンクされ、ビルダーに表示されるようにするために、定義された Traits と同じ名前のプロパティを持つ必要があります
+        private Parameter _parameter;
+        private VisualElement _leftContainer;
+        private VisualElement _rightContainer;
+        private VisualElement _upperContainer;
+        private VisualElement _lowerContainer;
+        private VisualElement _playerIcon;
+        private VisualElement _hitPointIcon;
+        private VisualElement _manaPointIcon;
+        private VisualElement _powerIcon;
+        private Label _nameLabel;
+        private Label _hitPointLabel;
+        private Label _manaPointLabel;
+        private Label _powerLabel;
+
+        public Parameter Parameter
+        {
+            get => _parameter;
+            set => _parameter = value;
+        }
+
+        // 正直left,right, upper, lower という名前は分かりにくいです，もっと具体的な名前をつけるべきです
+        public StatusBoxComponent()
+        {
+            AddToClassList(ClassNames.StatusBoxContainer);
+            InitializeContainers();
+            InitializeElements();
+            PutContainersAndElements();
+            SetDefaultStyle();
+        }
+
+        private void InitializeContainers()
+        {
+            _leftContainer = new VisualElement();
+            _leftContainer.name = "LeftContainer";
+            _leftContainer.AddToClassList(ClassNames.StatusBoxPlayerIconContainer);
+
+
+            _rightContainer = new VisualElement();
+            _rightContainer.name = "RightContainer";
+            _rightContainer.AddToClassList(ClassNames.StatusBoxStatusContainer);
+            _upperContainer = new VisualElement();
+            _upperContainer.name = "UpperContainer";
+            _upperContainer.AddToClassList(ClassNames.StatusBoxUpperContainer);
+            _lowerContainer = new VisualElement();
+            _lowerContainer.name = "LowerContainer";
+            _lowerContainer.AddToClassList(ClassNames.StatusBoxLowerContainer);
+        }
+
+        private void InitializeElements()
+        {
+            _playerIcon = new VisualElement();
+            _playerIcon.name = "PlayerIcon";
+            _hitPointIcon = new VisualElement();
+            _hitPointIcon.name = "HitPointIcon";
+            _manaPointIcon = new VisualElement();
+            _manaPointIcon.name = "ManaPointIcon";
+            _powerIcon = new VisualElement();
+            _powerIcon.name = "PowerIcon";
+            _nameLabel = new Label();
+            _nameLabel.name = "NameLabel";
+            _hitPointLabel = new Label();
+            _hitPointLabel.name = "HitPointLabel";
+            _manaPointLabel = new Label();
+            _manaPointLabel.name = "ManaPointLabel";
+            _powerLabel = new Label();
+            _powerLabel.name = "PowerLabel";
+
+            _playerIcon.AddToClassList(ClassNames.StatusBoxCharacterIcon);
+            _hitPointIcon.AddToClassList(ClassNames.StatusBoxStatusIcon);
+            _manaPointIcon.AddToClassList(ClassNames.StatusBoxStatusIcon);
+            _powerIcon.AddToClassList(ClassNames.StatusBoxStatusIcon);
+            _nameLabel.AddToClassList(ClassNames.StatusBoxLabel);
+            _nameLabel.AddToClassList(ClassNames.BasicLabel);
+            _hitPointLabel.AddToClassList(ClassNames.StatusBoxLabel);
+            _hitPointLabel.AddToClassList(ClassNames.BasicLabel);
+            _manaPointLabel.AddToClassList(ClassNames.StatusBoxLabel);
+            _manaPointLabel.AddToClassList(ClassNames.BasicLabel);
+            _powerLabel.AddToClassList(ClassNames.StatusBoxLabel);
+            _powerLabel.AddToClassList(ClassNames.BasicLabel);
+        }
+
+        private void PutContainersAndElements()
+        {
+            Add(_leftContainer);
+            Add(_rightContainer);
+
+            _leftContainer.Add(_playerIcon);
+
+            _rightContainer.Add(_upperContainer);
+            _upperContainer.Add(_nameLabel);
+
+            _rightContainer.Add(_lowerContainer);
+            _lowerContainer.Add(_hitPointIcon);
+            _lowerContainer.Add(_hitPointLabel);
+            _lowerContainer.Add(_manaPointIcon);
+            _lowerContainer.Add(_manaPointLabel);
+            _lowerContainer.Add(_powerIcon);
+            _lowerContainer.Add(_powerLabel);
+        }
+
+        private void SetDefaultStyle()
+        {
+            _nameLabel.text = "Jonson";
+            _hitPointLabel.text = "10";
+            _manaPointLabel.text = "10";
+            _powerLabel.text = "3";
+        }
+
+        public void Initialize(Parameter parameter, Sprite heartIcon, Sprite manaIcon, Sprite powerIcon)
+        {
+            _parameter = parameter;
+            _playerIcon.style.backgroundImage = parameter.IconSprite.texture;
+            _nameLabel.text = parameter.Name;
+            _hitPointLabel.text = parameter.HitPoint.ToString();
+            _manaPointLabel.text = parameter.ManaPoint.ToString();
+            _powerLabel.text = parameter.Power.ToString();
+        }
+    }
+}
