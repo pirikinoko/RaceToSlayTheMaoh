@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BrownRock_0: 5912618953510612716
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
