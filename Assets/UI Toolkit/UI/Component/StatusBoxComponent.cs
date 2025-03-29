@@ -32,7 +32,7 @@ namespace UIToolkit
             }
         }
 
-        // ƒf[ƒ^‚ª³‚µ‚­ƒŠƒ“ƒN‚³‚êAƒrƒ‹ƒ_[‚É•\¦‚³‚ê‚é‚æ‚¤‚É‚·‚é‚½‚ß‚ÉA’è‹`‚³‚ê‚½ Traits ‚Æ“¯‚¶–¼‘O‚ÌƒvƒƒpƒeƒB‚ğ‚Â•K—v‚ª‚ ‚è‚Ü‚·
+        // ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½Aï¿½rï¿½ï¿½ï¿½_ï¿½[ï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½é‚½ï¿½ß‚ÉAï¿½ï¿½`ï¿½ï¿½ï¿½ê‚½ Traits ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ìƒvï¿½ï¿½ï¿½pï¿½eï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½Â•Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½
         private Parameter _parameter;
         private VisualElement _leftContainer;
         private VisualElement _rightContainer;
@@ -53,7 +53,7 @@ namespace UIToolkit
             set => _parameter = value;
         }
 
-        // ³’¼left,right, upper, lower ‚Æ‚¢‚¤–¼‘O‚Í•ª‚©‚è‚É‚­‚¢‚Å‚·C‚à‚Á‚Æ‹ï‘Ì“I‚È–¼‘O‚ğ‚Â‚¯‚é‚×‚«‚Å‚·
+        // ï¿½ï¿½ï¿½ï¿½left,right, upper, lower ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Í•ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Æ‹ï¿½Ì“Iï¿½È–ï¿½ï¿½Oï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½×‚ï¿½ï¿½Å‚ï¿½
         public StatusBoxComponent()
         {
             AddToClassList(ClassNames.StatusBoxContainer);
@@ -141,10 +141,14 @@ namespace UIToolkit
             _powerLabel.text = "3";
         }
 
-        public void Initialize(Parameter parameter, Sprite heartIcon, Sprite manaIcon, Sprite powerIcon)
+        public void UpdateStatuBoxElments(Entity entity, Sprite heartIcon, Sprite manaIcon, Sprite powerIcon)
         {
+            var parameter = entity.Parameter;
             _parameter = parameter;
             _playerIcon.style.backgroundImage = parameter.IconSprite.texture;
+            _hitPointIcon.style.backgroundImage = heartIcon.texture;
+            _manaPointIcon.style.backgroundImage = manaIcon.texture;
+            _powerIcon.style.backgroundImage = powerIcon.texture;
             _nameLabel.text = parameter.Name;
             _hitPointLabel.text = parameter.HitPoint.ToString();
             _manaPointLabel.text = parameter.ManaPoint.ToString();

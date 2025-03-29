@@ -22,11 +22,11 @@ public class MainContrller : MonoBehaviour
         await _enemyController.InitializeAllEnemiesAsync();
     }
 
-    public async UniTask StartNewTurn()
+    public async UniTask StartNewTurnAsync()
     {
         _currentTurnPlayerId = _currentTurnPlayerId == _playerCount ? 1 : _currentTurnPlayerId + 1;
         var player = _playerController.PlayerList.FirstOrDefault(p => p.Id == _currentTurnPlayerId);
-        await _cameraController.MoveCamera(player.transform.position);
+        await _cameraController.MoveCameraAsync(player.transform.position);
         TurnCount++;
     }
 }

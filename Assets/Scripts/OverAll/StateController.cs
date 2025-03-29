@@ -10,6 +10,12 @@ public class StateController : MonoBehaviour
     private MainContrller _mainController;
 
     [SerializeField]
+    private FieldController _fieldController;
+
+    [SerializeField]
+    private PlayerController _playerController;
+
+    [SerializeField]
     private UIDocument _overAllUi;
 
     [SerializeField]
@@ -92,8 +98,12 @@ public class StateController : MonoBehaviour
         if (_mainController.TurnCount == 0)
         {
             await _mainController.InitializeGame();
+            // ステータスボックスの表示が不完全なまま見えないように先に中身を更新しておく
+            await _fieldController.UpdateStatusBoxesAsync();
+            _fieldController.DisplayStatusBoxes();
         }
-        _mainController.StartNewTurn().Forget();
+        await _fieldController.UpdateStatusBoxesAsync();
+        await _mainController.StartNewTurnAsync();
     }
 
     private void SwitchBattleState()

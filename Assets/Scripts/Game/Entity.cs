@@ -24,7 +24,6 @@ public class Entity : MonoBehaviour
         _spriteRenderer.sprite = Parameter.IconSprite;
     }
 
-    // こちらからのアクション
     public int Attack(Entity target)
     {
         int damage = Parameter.Power + _abnormalCondition.PowerGain;
@@ -38,7 +37,7 @@ public class Entity : MonoBehaviour
         return skill.Execute(skillUser, opponent);
     }
 
-    // 相手からのアクションを受け取る
+
     public void TakeDamage(int damage)
     {
         Parameter.HitPoint -= damage;

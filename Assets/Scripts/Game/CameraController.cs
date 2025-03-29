@@ -15,10 +15,10 @@ public class CameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒJƒƒ‰‚ðŽw’è‚³‚ê‚½2DˆÊ’u‚ÉˆÚ“®‚³‚¹Az’l‚ðí‚É-10‚ÉŒÅ’è‚µ‚Ü‚·B
+    /// æŒ‡å®šã•ã‚ŒãŸ2Dä½ç½®ã«ã‚«ãƒ¡ãƒ©ã‚’ç§»å‹•ã—ã¾ã™ã€‚
     /// </summary>
-    /// <param name="targetPosition">ˆÚ“®æ‚Ì2DˆÊ’uix, yj</param>
-    public async UniTask MoveCamera(Vector2 targetPosition)
+    /// <param name="targetPosition">ç§»å‹•å…ˆã®2Dä½ç½®(x, y)</param>
+    public async UniTask MoveCameraAsync(Vector2 targetPosition)
     {
         Vector3 endPosition = new Vector3(targetPosition.x, targetPosition.y, fixedZ);
         await _camera.transform.DOMove(endPosition, cameraMoveDuration).AsyncWaitForCompletion();

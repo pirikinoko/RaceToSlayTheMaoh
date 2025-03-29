@@ -1,0 +1,18 @@
+{
+    "dotnet.preferCSharpExtension": true,
+    "editor.fontFamily": "'Consolas', 'Courier New', monospace",
+    "editor.fontSize": 21,
+    "editor.fontWeight": "normal",
+    "editor.lineHeight": 1.5,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp",
+        "editor.formatOnSave": true
+    },
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": true
+}

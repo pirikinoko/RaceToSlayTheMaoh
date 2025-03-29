@@ -236,6 +236,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainController: {fileID: 105204215}
+  _fieldController: {fileID: 1775989767}
+  _playerController: {fileID: 1659839508}
   _overAllUi: {fileID: 1701623171}
   _titleUi: {fileID: 1698258607}
   _fieldUi: {fileID: 1775989766}
@@ -9143,6 +9145,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1775989767 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4052416524511643516, guid: 0d9ff3347fd252e419bb7016f3698045, type: 3}
+  m_PrefabInstance: {fileID: 155045806}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 009b3f4fad3c92041b87fd2b264cc049, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1932387158
