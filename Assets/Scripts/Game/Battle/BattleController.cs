@@ -202,7 +202,7 @@ public class BattleController : MonoBehaviour
         }
         else
         {
-            EnemyActer.Act(this, _currentTurnEntity).Forget();
+            EnemyActer.ActAsync(this, _currentTurnEntity).Forget();
         }
 
         _turnCount++;
