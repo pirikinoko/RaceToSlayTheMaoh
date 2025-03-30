@@ -40,7 +40,6 @@ public class Entity : MonoBehaviour
         return skill.Execute(skillUser, opponent);
     }
 
-
     public void TakeDamage(int damage)
     {
         Parameter.HitPoint -= damage;
