@@ -12,5 +12,7 @@
     "[csharp]": {
         "editor.defaultFormatter": "ms-dotnettools.csharp",
         "editor.formatOnSave": true
-    }
+    },
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": true
 }

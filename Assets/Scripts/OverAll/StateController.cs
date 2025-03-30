@@ -98,6 +98,8 @@ public class StateController : MonoBehaviour
         if (_mainController.TurnCount == 0)
         {
             await _mainController.InitializeGame();
+            // ステータスボックスの表示が不完全なまま見えないように先に中身を更新しておく
+            await _fieldController.UpdateStatusBoxesAsync();
             _fieldController.DisplayStatusBoxes();
         }
         await _fieldController.UpdateStatusBoxesAsync();
