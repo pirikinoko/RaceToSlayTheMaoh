@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 
 public static class EnemyActer
 {
-    public static async UniTask Act(BattleController battleController, Entity acter)
+    public static async UniTask ActAsync(BattleController battleController, Entity acter)
     {
         // 攻撃かスキルを使用するかをランダムで決定
         int action = Random.Range(0, 2);

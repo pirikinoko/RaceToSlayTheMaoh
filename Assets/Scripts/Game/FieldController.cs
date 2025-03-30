@@ -1,6 +1,10 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
+using UIToolkit;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.UIElements;
 
 public class FieldController : MonoBehaviour
 {
@@ -13,8 +17,26 @@ public class FieldController : MonoBehaviour
     [SerializeField]
     private BattleController _battleController;
 
+    private List<StatusBoxComponent> _statusBoxComponents = new();
+
     private async UniTask Start()
     {
+        var root = GetComponent<UIDocument>().rootVisualElement;
+        var topStatusBoxComponents = root.Q<VisualElement>("TopElements").Children()
+            .Select(child => child as StatusBoxComponent)
+            .Where(component => component != null)
+            .ToArray();
+        var bottomStatusBoxComponents = root.Q<VisualElement>("BottomElements").Children()
+            .Select(child => child as StatusBoxComponent)
+            .Where(component => component != null)
+            .ToArray();
+
+        _statusBoxComponents.AddRange(topStatusBoxComponents);
+        _statusBoxComponents.AddRange(bottomStatusBoxComponents);
+
+        _statusBoxComponents.ForEach(statusBox => statusBox.style.display = DisplayStyle.None);
+
+        // ã‚¨ãƒ³ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒã‚§ãƒƒã‚¯ã—ç¶šã‘ã‚‹
         while (true)
         {
             await UniTask.Delay(1000);
@@ -47,7 +69,7 @@ public class FieldController : MonoBehaviour
                 {
                     _stateController.ChangeState(State.Battle);
 
-                    // ƒvƒŒƒCƒ„[‚Æ“G‚ªí‚¤ê‡‚ÍƒvƒŒƒCƒ„[‚ð¶‘¤‚É‚·‚é
+                    // æ•µã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒè¡çªã—ãŸå ´åˆã¯æ•µã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å¤‰æ›
                     if (entityLeft.EntityType != EntityType.Player && entityRight.EntityType == EntityType.Player)
                     {
                         _battleController.StartBattle(entityRight, entityLeft);
@@ -56,6 +78,27 @@ public class FieldController : MonoBehaviour
                     return;
                 }
             }
+        }
+    }
+
+    public void DisplayStatusBoxes()
+    {
+        _statusBoxComponents.ForEach(statusBox => statusBox.style.display = DisplayStyle.None);
+        for (int i = 0; i < _playerController.PlayerList.Count; i++)
+        {
+            _statusBoxComponents[i].style.display = DisplayStyle.Flex;
+        }
+    }
+
+    public async UniTask UpdateStatusBoxesAsync()
+    {
+        var heartIcon = await Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceHeartIcon).Task;
+        var manaIcon = await Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceManaIcon).Task;
+        var powerIcon = await Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferencePowerIcon).Task;
+
+        for (int i = 0; i < _playerController.PlayerList.Count; i++)
+        {
+            _statusBoxComponents[i].UpdateStatuBoxElments(_playerController.PlayerList[i], heartIcon, manaIcon, powerIcon);
         }
     }
 }

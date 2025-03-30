@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c8601bdc1b6354148ac5e25a07837f2e
+guid: 389c95f546e88864aaa79df0f421e734
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -316631277789107725
-    second: SkillSlot_0
+      213: -5806241264538808238
+    second: StatusFrame_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SkillSlot_0
+      name: StatusFrame_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 9
+        width: 70
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3f92a9ac7891b9bf0800000000000000
-      internalID: -316631277789107725
+      spriteID: 25013fa25561c6fa0800000000000000
+      internalID: -5806241264538808238
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SkillSlot_0: -316631277789107725
+      StatusFrame_0: -5806241264538808238
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

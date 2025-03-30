@@ -7,6 +7,10 @@ public class Constants
     public static string AssetReferenceParameter = "Parameter";
     public static string AssetReferencePlayer = "Player";
     public static string AssetReferenceEnemy = "Enemy";
+    public static string AssetReferencePlayerIcon = "PlayerIcon";
+    public static string AssetReferenceHeartIcon = "HeartIcon";
+    public static string AssetReferenceManaIcon = "ManaIcon";
+    public static string AssetReferencePowerIcon = "PowerIcon";
 
     // ******* Player *******
 
