@@ -23,17 +23,17 @@ public static class SkillList
     #region Skill Parameters
     private static class SkillParameters
     {
-        // エンティティのパラメータ依存の値には999を設定
         public static class Heal
         {
             public const int ManaCost = 3;
-            public const int EffectAmount = 10;
+            public const int HealPotential = 10;
+            public const int OffsetPercent = 50;
         }
 
         public static class Bite
         {
             public const int ManaCost = 2;
-            public const int EffectAmount = 999;
+            public const int OffsetPercent = 50;
         }
     }
     #endregion
@@ -46,8 +46,8 @@ public static class SkillList
     {
         return skillName switch
         {
-            GetSkillNameHealByLanguage() => SkillEffectType.Heal,
-            GetSkillNameBiteByLanguage() => SkillEffectType.Damage,
+            var name when name == GetSkillNameHealByLanguage() => SkillEffectType.Heal,
+            var name when name == GetSkillNameBiteByLanguage() => SkillEffectType.Damage,
             _ => throw new InvalidOperationException("Unknown skill name")
         };
     }
@@ -115,8 +115,12 @@ public static class SkillList
             action: (skillUser, opponent) =>
             {
                 skillUser.Parameter.ManaPoint -= SkillParameters.Heal.ManaCost;
-                skillUser.TakeDamage(-SkillParameters.Heal.EffectAmount);
-                return new string[] { $"{skillUser.name}は{skillUser.name}のHPを{SkillParameters.Heal.EffectAmount}回復した" };
+                int healAmount = Constants.GetRandomizedValueWithinOffset(
+                    baseValue: SkillParameters.Heal.HealPotential,
+                    offsetPercent: SkillParameters.Heal.OffsetPercent
+                );
+                skillUser.TakeDamage(-healAmount);
+                return new string[] { $"{skillUser.name}は{skillUser.name}のHPを{healAmount}回復した" };
             }
         );
     }
@@ -130,7 +134,11 @@ public static class SkillList
             action: (skillUser, opponent) =>
             {
                 skillUser.Parameter.ManaPoint -= SkillParameters.Bite.ManaCost;
-                opponent.TakeDamage(SkillParameters.Bite.EffectAmount);
+                int damageAmount = Constants.GetRandomizedValueWithinOffset(
+                    baseValue: skillUser.Parameter.Power,
+                    offsetPercent: SkillParameters.Bite.OffsetPercent
+                );
+                opponent.TakeDamage(damageAmount);
                 return new string[] { $"{skillUser.name}は{opponent.name}に噛みついた" };
             }
         );
