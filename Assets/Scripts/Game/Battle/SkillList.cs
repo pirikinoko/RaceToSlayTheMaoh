@@ -120,7 +120,10 @@ public static class SkillList
                     offsetPercent: SkillParameters.Heal.OffsetPercent
                 );
                 skillUser.TakeDamage(-healAmount);
-                return new string[] { $"{skillUser.name}は{skillUser.name}のHPを{healAmount}回復した" };
+                return new string[]
+                {
+                    $"{skillUser.name}は{skillUser.name}のHPを{healAmount}回復した"
+                };
             }
         );
     }
@@ -139,7 +142,10 @@ public static class SkillList
                     offsetPercent: SkillParameters.Bite.OffsetPercent
                 );
                 opponent.TakeDamage(damageAmount);
-                return new string[] { $"{skillUser.name}は{opponent.name}に噛みついた" };
+                return new string[]
+                {
+                      $"{opponent.name}は{damageAmount}のダメージを受けた"
+                };
             }
         );
     }

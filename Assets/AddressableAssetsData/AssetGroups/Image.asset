@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Image
+  m_EditorClassIdentifier: 
+  m_GroupName: Image
+  m_GUID: a0994da785cdaed408fc71ce79aa7912
+  m_SerializeEntries:
+  - m_GUID: 0f5d6ec6e752cd642a751d505ff10273
+    m_Address: HeartIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Icon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5919f2f91a6f9b244b463f6e55d9eed9
+    m_Address: PowerIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Icon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba13a36b835556449819f7045226e4cd
+    m_Address: ManaIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Icon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe5fe608913d1b749baf641cc1d6acac
+    m_Address: PlayerIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Icon
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c15980a2792339542b1da6f13079ad19, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 92afd1c925ab5ad4fb92a2e5d0266495, type: 2}
+    - {fileID: 11400000, guid: 1bf81846af7a9554dba023df1b26b64f, type: 2}

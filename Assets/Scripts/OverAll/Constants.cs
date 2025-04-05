@@ -11,6 +11,7 @@ public class Constants
     public static string AssetReferenceHeartIcon = "HeartIcon";
     public static string AssetReferenceManaIcon = "ManaIcon";
     public static string AssetReferencePowerIcon = "PowerIcon";
+    public static string AssetReferenceDamageNumberEffect = "DamageNumberEffect";
 
     // ******* General *******
     // 指定されたパーセンテージのオフセット内でランダムな値を返す
@@ -49,7 +50,7 @@ public class Constants
         switch (language)
         {
             case "Japanese":
-                return string.Format("{0}��{1}�̖ڂ��������悤��!", leftEntityname, rightEntityname);
+                return string.Format("{0}と{1}の熱い戦いが始まる!", leftEntityname, rightEntityname);
             case "English":
                 return string.Format("{0} and {1} have been faced!", leftEntityname, rightEntityname);
             default:
@@ -62,7 +63,7 @@ public class Constants
         switch (language)
         {
             case "Japanese":
-                return string.Format("{0}�̍s����҂��Ă���...", entityName);
+                return string.Format("{0}の動きを待っている...", entityName);
             case "English":
                 return string.Format("{0} should take an action...", entityName);
             default:
@@ -75,7 +76,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}�̍U���I", attacker);
+                return string.Format("{0}の必殺技!", attacker);
             case Language.English:
                 return string.Format("{0} is Attacking!", attacker);
             default:
@@ -88,7 +89,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}��{1}�̃_���[�W��^�����I", damageReciever, damage);
+                return string.Format("{0}に{1}のダメージが入った!", damageReciever, damage);
             case Language.English:
                 return string.Format("{0} has taken {1} damage!", damageReciever, damage);
             default:
@@ -101,7 +102,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}��{1}", entityName, skillName);
+                return string.Format("{0}の{1}が炸裂!", entityName, skillName);
             case Language.English:
                 return string.Format("{0} is using {1}", entityName, skillName);
             default:
@@ -114,7 +115,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}��{1}��|����!", winner, loser);
+                return string.Format("{0}が{1}を撃破!", winner, loser);
             case Language.English:
                 return string.Format("{0} beat {1}!", winner, loser);
             default:
@@ -127,7 +128,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return "���ғ|��Ă��܂����I";
+                return "相討ちだ!";
             case Language.English:
                 return "Both died!";
             default:
@@ -140,7 +141,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return "���̐킢�ɂ͌��������������ɂȂ�.....";
+                return "この戦いは永遠に続くのか.....";
             case Language.English:
                 return "This battle seems to be endless.....";
             default:
@@ -153,63 +154,66 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return "{0}��{1}���擾����!";
+                return "{0}が{1}を習得した!";
             case Language.English:
                 return "{0} has learned {1}!";
             default:
-                return "This battle seems to be endless.....";
+                return "{0} has learned {1}!";
         }
     }
-    // ******* RewordResult *******
+
     public static string GetHitPointSentence(Language language)
     {
         switch (language)
         {
             case Language.Japanese:
-                return "{0}��{1}HP�񕜂���!";
+                return "{0}のHPが{1}回復した!";
             case Language.English:
                 return "{0} has healed {1}HP!";
             default:
-                return "This battle seems to be endless.....";
+                return "{0} has healed {1}HP!";
         }
     }
+
     public static string GetManaSentence(Language language)
     {
         switch (language)
         {
             case Language.Japanese:
-                return "{0}��{1}MP�⋋����!";
+                return "{0}のMPが{1}回復した!";
             case Language.English:
                 return "{0} has refreshed {1}MagicPoint!";
             default:
-                return "This battle seems to be endless.....";
+                return "{0} has refreshed {1}MagicPoint!";
         }
     }
+
     public static string GetPowerSentence(Language language)
     {
         switch (language)
         {
             case Language.Japanese:
-                return "{0}��{1}���擾����!";
+                return "{0}が{1}を習得した!";
             case Language.English:
                 return "{0} has learned {1}!";
             default:
-                return "This battle seems to be endless.....";
+                return "{0} has learned {1}!";
         }
     }
-    // ******* SkillCaption *******
+
     public static string GetSkillCaption(string skillName)
     {
         switch (skillName)
         {
-            case "�q�[��":
+            case "ヒール":
                 return HealCaption;
-            case "���݂�":
+            case "噛みつく":
                 return "Bite";
             default:
                 return "Unknown";
         }
     }
+
     public static string HealCaption = "Heal";
 
     // ******* Reward *******
@@ -218,7 +222,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return "�X�e�[�^�X";
+                return "ステータス";
             case Language.English:
                 return "Status";
             default:

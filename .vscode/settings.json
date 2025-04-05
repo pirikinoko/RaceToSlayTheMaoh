@@ -1,7 +1,7 @@
 {
     "dotnet.preferCSharpExtension": true,
-    "editor.fontFamily": "'Nosutaru-dotMPlusH-10-Regular', 'Consolas', 'Courier New', monospace",
-    "editor.fontSize": 21,
+    "editor.fontFamily": "Consolas, 'Courier New', monospace",
+    "editor.fontSize": 15,
     "editor.fontWeight": "normal",
     "editor.lineHeight": 1.5,
     "editor.formatOnSave": true,
