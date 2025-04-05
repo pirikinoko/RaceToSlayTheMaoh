@@ -11,6 +11,20 @@ public class Constants
     public static string AssetReferenceHeartIcon = "HeartIcon";
     public static string AssetReferenceManaIcon = "ManaIcon";
     public static string AssetReferencePowerIcon = "PowerIcon";
+    public static string AssetReferenceDamageNumberEffect = "DamageNumberEffect";
+
+    // ******* General *******
+    // æŒ‡å®šã•ã‚ŒãŸãƒ‘ãƒ¼ã‚»ãƒ³ãƒ†ãƒ¼ã‚¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆå†…ã§ãƒ©ãƒ³ãƒ€ãƒ ãªå€¤ã‚’è¿”ã™
+    // ä¾‹: baseValue = 100, offsetPercent = 20 ã®å ´åˆ, 80ã‹ã‚‰120ã®é–“ã§ãƒ©ãƒ³ãƒ€ãƒ ãªå€¤ã‚’è¿”ã™
+    public static int GetRandomizedValueWithinOffset(int baseValue, int offsetPercent)
+    {
+        var offsetValue = (int)(baseValue * offsetPercent / 100);
+        var min = baseValue - offsetValue;
+        var max = baseValue + offsetValue;
+        var randomValue = Random.Range(min, max);
+        // æœ€ä½ã§ã‚‚1ã‚’è¿”ã™
+        return randomValue >= 1 ? randomValue : 1;
+    }
 
     // ******* Player *******
 
@@ -20,6 +34,7 @@ public class Constants
 
     public static int MaxHitPoint = 50;
     public static int MaxManaPoint = 30;
+    public static int AttackOffsetPercent = 50;
 
     // ******* Field *******
 
@@ -35,7 +50,7 @@ public class Constants
         switch (language)
         {
             case "Japanese":
-                return string.Format("{0}‚Æ{1}‚Ì–Ú‚ª‡‚Á‚½‚æ‚¤‚¾!", leftEntityname, rightEntityname);
+                return string.Format("{0}ã¨{1}ã®ç†±ã„æˆ¦ã„ãŒå§‹ã¾ã‚‹!", leftEntityname, rightEntityname);
             case "English":
                 return string.Format("{0} and {1} have been faced!", leftEntityname, rightEntityname);
             default:
@@ -48,7 +63,7 @@ public class Constants
         switch (language)
         {
             case "Japanese":
-                return string.Format("{0}‚Ìs“®‚ğ‘Ò‚Á‚Ä‚¢‚é...", entityName);
+                return string.Format("{0}ã®å‹•ãã‚’å¾…ã£ã¦ã„ã‚‹...", entityName);
             case "English":
                 return string.Format("{0} should take an action...", entityName);
             default:
@@ -61,7 +76,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}‚ÌUŒ‚I", attacker);
+                return string.Format("{0}ã®å¿…æ®ºæŠ€!", attacker);
             case Language.English:
                 return string.Format("{0} is Attacking!", attacker);
             default:
@@ -74,7 +89,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}‚É{1}‚Ìƒ_ƒ[ƒW‚ğ—^‚¦‚½I", damageReciever, damage);
+                return string.Format("{0}ã«{1}ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒå…¥ã£ãŸ!", damageReciever, damage);
             case Language.English:
                 return string.Format("{0} has taken {1} damage!", damageReciever, damage);
             default:
@@ -87,7 +102,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}‚Ì{1}", entityName, skillName);
+                return string.Format("{0}ã®{1}ãŒç‚¸è£‚!", entityName, skillName);
             case Language.English:
                 return string.Format("{0} is using {1}", entityName, skillName);
             default:
@@ -100,7 +115,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}‚Í{1}‚ğ“|‚µ‚½!", winner, loser);
+                return string.Format("{0}ãŒ{1}ã‚’æ’ƒç ´!", winner, loser);
             case Language.English:
                 return string.Format("{0} beat {1}!", winner, loser);
             default:
@@ -113,7 +128,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return "—¼Ò“|‚ê‚Ä‚µ‚Ü‚Á‚½I";
+                return "ç›¸è¨ã¡ã !";
             case Language.English:
                 return "Both died!";
             default:
@@ -126,7 +141,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return "‚±‚Ìí‚¢‚É‚ÍŒˆ’…‚ª’…‚«‚»‚¤‚É‚È‚¢.....";
+                return "ã“ã®æˆ¦ã„ã¯æ°¸é ã«ç¶šãã®ã‹.....";
             case Language.English:
                 return "This battle seems to be endless.....";
             default:
@@ -139,63 +154,66 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return "{0}‚Í{1}‚ğæ“¾‚µ‚½!";
+                return "{0}ãŒ{1}ã‚’ç¿’å¾—ã—ãŸ!";
             case Language.English:
                 return "{0} has learned {1}!";
             default:
-                return "This battle seems to be endless.....";
+                return "{0} has learned {1}!";
         }
     }
-    // ******* RewordResult *******
+
     public static string GetHitPointSentence(Language language)
     {
         switch (language)
         {
             case Language.Japanese:
-                return "{0}‚Í{1}HP‰ñ•œ‚µ‚½!";
+                return "{0}ã®HPãŒ{1}å›å¾©ã—ãŸ!";
             case Language.English:
                 return "{0} has healed {1}HP!";
             default:
-                return "This battle seems to be endless.....";
+                return "{0} has healed {1}HP!";
         }
     }
+
     public static string GetManaSentence(Language language)
     {
         switch (language)
         {
             case Language.Japanese:
-                return "{0}‚Í{1}MP•â‹‹‚µ‚½!";
+                return "{0}ã®MPãŒ{1}å›å¾©ã—ãŸ!";
             case Language.English:
                 return "{0} has refreshed {1}MagicPoint!";
             default:
-                return "This battle seems to be endless.....";
+                return "{0} has refreshed {1}MagicPoint!";
         }
     }
+
     public static string GetPowerSentence(Language language)
     {
         switch (language)
         {
             case Language.Japanese:
-                return "{0}‚Í{1}‚ğæ“¾‚µ‚½!";
+                return "{0}ãŒ{1}ã‚’ç¿’å¾—ã—ãŸ!";
             case Language.English:
                 return "{0} has learned {1}!";
             default:
-                return "This battle seems to be endless.....";
+                return "{0} has learned {1}!";
         }
     }
-    // ******* SkillCaption *******
+
     public static string GetSkillCaption(string skillName)
     {
         switch (skillName)
         {
-            case "ƒq[ƒ‹":
+            case "ãƒ’ãƒ¼ãƒ«":
                 return HealCaption;
-            case "Šš‚İ‚Â‚­":
+            case "å™›ã¿ã¤ã":
                 return "Bite";
             default:
                 return "Unknown";
         }
     }
+
     public static string HealCaption = "Heal";
 
     // ******* Reward *******
@@ -204,7 +222,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return "ƒXƒe[ƒ^ƒX";
+                return "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹";
             case Language.English:
                 return "Status";
             default:

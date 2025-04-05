@@ -16,9 +16,9 @@ MonoBehaviour:
   - EntityType: 0
     IconSprite: {fileID: 21300000, guid: fe5fe608913d1b749baf641cc1d6acac, type: 3}
     Name: Player
-    HitPoint: 30
-    ManaPoint: 15
-    Power: 5
+    HitPoint: 15
+    ManaPoint: 10
+    Power: 3
     SkillTypes: 01000000
   - EntityType: 1
     IconSprite: {fileID: 21300000, guid: bf0dad1f62408524fa7c854516e3fec2, type: 3}

@@ -1,8 +1,10 @@
 using Cysharp.Threading.Tasks;
 using R3;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UIToolkit;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
 public class BattleController : MonoBehaviour
@@ -17,6 +19,8 @@ public class BattleController : MonoBehaviour
     private PlayerController _playerController;
     [SerializeField]
     private EnemyController _enemyController;
+    [SerializeField]
+    private Canvas _overlayCanvas;
 
     private BattleStatus _battleStatus;
 
@@ -256,6 +260,7 @@ public class BattleController : MonoBehaviour
         _battleLogController.AddLog(Constants.GetAttackSentence(Settings.Language, _currentTurnEntity.name));
 
         int damage = _currentTurnEntity.Attack(_waitingTurnEntity);
+        PopDamageNumberEffect(_waitingTurnEntity, damage, Color.white);
 
         _battleLogController.AddLog(Constants.GetAttackResultSentence(Settings.Language, _waitingTurnEntity.name, damage));
 
@@ -481,5 +486,31 @@ public class BattleController : MonoBehaviour
     private void CloseRewardView()
     {
         _rewardElement.style.display = DisplayStyle.None;
+    }
+
+    private async Task PopDamageNumberEffect(Entity targetEntity, int damage, Color color)
+    {
+        var damageNumberEffect = ObjectPool.Instance.GetObject();
+
+        if (targetEntity == _leftEntity)
+        {
+            var rect = _healthBarLeft.worldBound;
+            // UIToolKitの座標はScreen座標とは異なるため、Screen座標に変換する(Screen座標は左下が原点)
+            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            var offsetToEntityImage = 150;
+            screenPos.y -= offsetToEntityImage;
+            damageNumberEffect.transform.position = screenPos;
+        }
+        else if (targetEntity == _rightEntity)
+        {
+            var rect = _healthBarRight.worldBound;
+            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            var offsetToEntityImage = 150;
+            screenPos.y -= offsetToEntityImage;
+            damageNumberEffect.transform.position = screenPos;
+        }
+
+        await damageNumberEffect.GetComponent<DamageNumberEffect>().ShowDamage(damage, color);
+        ObjectPool.Instance.ReturnObject(damageNumberEffect);
     }
 }

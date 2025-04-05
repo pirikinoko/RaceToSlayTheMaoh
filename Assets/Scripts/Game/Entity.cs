@@ -26,7 +26,10 @@ public class Entity : MonoBehaviour
 
     public int Attack(Entity target)
     {
-        int damage = Parameter.Power + _abnormalCondition.PowerGain;
+        // 攻撃力のポテンシャルを計算
+        int potential = Parameter.Power + _abnormalCondition.PowerGain;
+        // 攻撃力のポテンシャルのオフセット内でランダムな値を返す
+        int damage = Constants.GetRandomizedValueWithinOffset(potential, Constants.AttackOffsetPercent);
         target.TakeDamage(damage);
         return damage;
     }
@@ -36,7 +39,6 @@ public class Entity : MonoBehaviour
         Skill skill = Parameter.Skills.Find(s => s.Name == skillName);
         return skill.Execute(skillUser, opponent);
     }
-
 
     public void TakeDamage(int damage)
     {
