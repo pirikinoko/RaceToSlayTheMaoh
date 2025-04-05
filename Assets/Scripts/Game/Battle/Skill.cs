@@ -4,6 +4,7 @@ public class Skill
     public int ManaCost { get; private set; }
     public string Description { get; private set; } = string.Empty;
 
+    // スキルの結果のログは複数仕込むことができる(string[])
     public delegate string[] SkillAction(Entity skillUser, Entity target);
 
     public SkillAction Action { get; private set; }

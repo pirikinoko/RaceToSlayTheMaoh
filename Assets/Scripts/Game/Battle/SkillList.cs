@@ -1,36 +1,90 @@
-﻿using System;  public static class SkillList {     public enum SkillType
-    {         None,         Heal,         Bite     }      public enum SkillEffectType
+﻿using System;
+
+/// <summary>
+/// スキルの定義と管理を行うクラス
+/// </summary>
+public static class SkillList
+{
+    #region Enums
+    public enum SkillType
+    {
+        None,
+        Heal,
+        Bite
+    }
+
+    public enum SkillEffectType
     {
         Heal,
         Damage
     }
+    #endregion
 
+    #region Skill Parameters
+    private static class SkillParameters
+    {
+        public static class Heal
+        {
+            public const int ManaCost = 3;
+            public const int HealPotential = 10;
+            public const int OffsetPercent = 50;
+        }
+
+        public static class Bite
+        {
+            public const int ManaCost = 2;
+            public const int OffsetPercent = 50;
+        }
+    }
+    #endregion
+
+    #region Public Methods
+    /// <summary>
+    /// スキル名から効果タイプを取得
+    /// </summary>
     public static SkillEffectType GetSkillEffectType(string skillName)
     {
-        switch (skillName)
+        return skillName switch
         {
-            case var name when name == GetSkillNameHealByLanguage():
-                return SkillEffectType.Heal;
-            case var name when name == GetSkillNameBiteByLanguage():
-                return SkillEffectType.Damage;
-            default:
-                throw new InvalidOperationException("Unknown skill name");
-        }
-    }      public static Skill GetSkill(SkillType skillType)
-    {         return skillType switch
+            var name when name == GetSkillNameHealByLanguage() => SkillEffectType.Heal,
+            var name when name == GetSkillNameBiteByLanguage() => SkillEffectType.Damage,
+            _ => throw new InvalidOperationException("Unknown skill name")
+        };
+    }
+
+    /// <summary>
+    /// スキルタイプからスキルを取得
+    /// </summary>
+    public static Skill GetSkill(SkillType skillType)
+    {
+        return skillType switch
         {
             SkillType.None => throw new InvalidOperationException(),
-            SkillType.Heal => Heal(),
-            SkillType.Bite => Bite(),
-            _ => throw new InvalidOperationException()         };     }      public static string GetSkillNameHealByLanguage()
+            SkillType.Heal => CreateHealSkill(),
+            SkillType.Bite => CreateBiteSkill(),
+            _ => throw new InvalidOperationException()
+        };
+    }
+    #endregion
+
+    #region Language Methods
+    public static string GetSkillNameHealByLanguage()
     {
         return Settings.Language switch
-        {             Language.Japanese => "ヒール",             Language.English => "Heal"         };     }
+        {
+            Language.Japanese => "ヒール",
+            Language.English => "Heal"
+        };
+    }
 
     public static string GetSkillDescriptionHealByLanguage()
     {
         return Settings.Language switch
-        {             Language.Japanese => "HPを回復する",             Language.English => "Heal your hp"         };     }
+        {
+            Language.Japanese => "HPを回復する",
+            Language.English => "Heal your hp"
+        };
+    }
 
     public static string GetSkillNameBiteByLanguage()
     {
@@ -48,10 +102,52 @@
             Language.Japanese => "相手に噛みつく",
             Language.English => "Bite the opponent"
         };
-    }      public static Skill Heal()     {         int manaCost = 5;         int effectAmount = 5;          return new Skill(name: GetSkillNameHealByLanguage(), description: GetSkillDescriptionHealByLanguage(), manaCost: manaCost, action: (skillUser, opponent) =>         {
-            skillUser.Parameter.ManaPoint -= manaCost;
-            skillUser.TakeDamage(-effectAmount);             return new string[] { $"{skillUser.name}は{skillUser.name}のHPを{effectAmount}回復した" };         });     }      public static Skill Bite()     {
-        int manaCost = 5;
-        int effectAmount = 5;         return new Skill(name: GetSkillNameBiteByLanguage(), description: GetSkillDescriptionBiteByLanguage(), manaCost: 5, action: (skillUser, target) =>         {
-            skillUser.Parameter.ManaPoint -= manaCost;
-            target.TakeDamage(effectAmount);             return new string[] { $"{skillUser.name}は{target.name}に噛みついた" };         });     } }
+    }
+    #endregion
+
+    #region Skill Creation Methods
+    private static Skill CreateHealSkill()
+    {
+        return new Skill(
+            name: GetSkillNameHealByLanguage(),
+            description: GetSkillDescriptionHealByLanguage(),
+            manaCost: SkillParameters.Heal.ManaCost,
+            action: (skillUser, opponent) =>
+            {
+                skillUser.Parameter.ManaPoint -= SkillParameters.Heal.ManaCost;
+                int healAmount = Constants.GetRandomizedValueWithinOffset(
+                    baseValue: SkillParameters.Heal.HealPotential,
+                    offsetPercent: SkillParameters.Heal.OffsetPercent
+                );
+                skillUser.TakeDamage(-healAmount);
+                return new string[]
+                {
+                    $"{skillUser.name}は{skillUser.name}のHPを{healAmount}回復した"
+                };
+            }
+        );
+    }
+
+    private static Skill CreateBiteSkill()
+    {
+        return new Skill(
+            name: GetSkillNameBiteByLanguage(),
+            description: GetSkillDescriptionBiteByLanguage(),
+            manaCost: SkillParameters.Bite.ManaCost,
+            action: (skillUser, opponent) =>
+            {
+                skillUser.Parameter.ManaPoint -= SkillParameters.Bite.ManaCost;
+                int damageAmount = Constants.GetRandomizedValueWithinOffset(
+                    baseValue: skillUser.Parameter.Power,
+                    offsetPercent: SkillParameters.Bite.OffsetPercent
+                );
+                opponent.TakeDamage(damageAmount);
+                return new string[]
+                {
+                      $"{opponent.name}は{damageAmount}のダメージを受けた"
+                };
+            }
+        );
+    }
+    #endregion
+}

@@ -15,23 +15,11 @@ MonoBehaviour:
   m_GroupName: Parameter
   m_GUID: ea73b9b8de50b2b41966d0cac76f2640
   m_SerializeEntries:
-  - m_GUID: 0f5d6ec6e752cd642a751d505ff10273
-    m_Address: HeartIcon
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Icon
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1c8010707525a3240be4643d2ba1fbe7
     m_Address: Parameter
     m_ReadOnly: 0
     m_SerializedLabels:
     - Parameter
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5919f2f91a6f9b244b463f6e55d9eed9
-    m_Address: PowerIcon
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Icon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 99a768d1d91d9e841918b2124d0fc1bb
     m_Address: Player
@@ -39,23 +27,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Entity
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ba13a36b835556449819f7045226e4cd
-    m_Address: ManaIcon
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Icon
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d54b53dc55fc91440a37a9128826a61b
     m_Address: Enemy
     m_ReadOnly: 0
     m_SerializedLabels:
     - Entity
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fe5fe608913d1b749baf641cc1d6acac
-    m_Address: PlayerIcon
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Icon
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c15980a2792339542b1da6f13079ad19, type: 2}
