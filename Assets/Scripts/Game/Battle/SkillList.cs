@@ -114,7 +114,7 @@ public static class SkillList
             manaCost: SkillParameters.Heal.ManaCost,
             action: (skillUser, opponent) =>
             {
-                skillUser.Parameter.ManaPoint -= SkillParameters.Heal.ManaCost;
+                skillUser.UseManaPoint(SkillParameters.Heal.ManaCost);
                 int healAmount = Constants.GetRandomizedValueWithinOffset(
                     baseValue: SkillParameters.Heal.HealPotential,
                     offsetPercent: SkillParameters.Heal.OffsetPercent
@@ -136,7 +136,7 @@ public static class SkillList
             manaCost: SkillParameters.Bite.ManaCost,
             action: (skillUser, opponent) =>
             {
-                skillUser.Parameter.ManaPoint -= SkillParameters.Bite.ManaCost;
+                skillUser.UseManaPoint(SkillParameters.Bite.ManaCost);
                 int damageAmount = Constants.GetRandomizedValueWithinOffset(
                     baseValue: skillUser.Parameter.Power,
                     offsetPercent: SkillParameters.Bite.OffsetPercent

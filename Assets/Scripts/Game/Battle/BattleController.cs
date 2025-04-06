@@ -43,6 +43,9 @@ public class BattleController : MonoBehaviour
 
     private Label _turnCountLabel;
 
+    private Label _entityNameLeft;
+    private Label _entityNameRight;
+
     private Button _closeSkillScrollViewButton;
     private List<(Button, int)> _skillButtons = new();
 
@@ -113,22 +116,28 @@ public class BattleController : MonoBehaviour
     {
         var rootLeftElement = _root.Q<VisualElement>("Element-Left");
         rootLeftElement.Q<VisualElement>("Image-Entity").style.backgroundImage = _leftEntity.Parameter.IconSprite.texture;
-        rootLeftElement.Q<Label>("Label-EntityName").text = _leftEntity.name;
-        _healthLabelLeft = rootLeftElement.Q<Label>("Label-Health");
-        _manaLabelLeft = rootLeftElement.Q<Label>("Label-Mana");
+        _entityNameLeft = rootLeftElement.Q<Label>("Label-EntityName");
+        _entityNameLeft.text = _leftEntity.name;
+        _healthLabelLeft = rootLeftElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
+        _manaLabelLeft = rootLeftElement.Q<VisualElement>("Element-ManaPoint").Q<Label>("Label");
 
         _healthLabelLeft.text = _leftEntity.Parameter.HitPoint.ToString();
         _manaLabelLeft.text = _leftEntity.Parameter.ManaPoint.ToString();
 
         var rootRightElement = _root.Q<VisualElement>("Element-Right");
         rootRightElement.Q<VisualElement>("Image-Entity").style.backgroundImage = _rightEntity.Parameter.IconSprite.texture;
-        rootRightElement.Q<Label>("Label-EntityName").text = _rightEntity.name;
-        _healthLabelRight = rootRightElement.Q<Label>("Label-Health");
-        _manaLabelRight = rootRightElement.Q<Label>("Label-Mana");
+        _entityNameRight = rootRightElement.Q<Label>("Label-EntityName");
+        _entityNameRight.text = _rightEntity.name;
+        _healthLabelRight = rootRightElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
+        _manaLabelRight = rootRightElement.Q<VisualElement>("Element-ManaPoint").Q<Label>("Label");
 
         _healthLabelRight.text = _rightEntity.Parameter.HitPoint.ToString();
         _manaLabelRight.text = _rightEntity.Parameter.ManaPoint.ToString();
+
+        // リアクティブプロパティの監視を設定
+        InitializeReactiveProperties();
     }
+
 
     private void SetSkillButtons()
     {
@@ -141,7 +150,6 @@ public class BattleController : MonoBehaviour
             {
                 UseSkill(skill.Name);
                 CloseSkillScroll();
-                StartNewTurn();
             })
             {
                 text = skill.Name
@@ -181,7 +189,7 @@ public class BattleController : MonoBehaviour
 
     private void StartNewTurn()
     {
-        ApplyCurrentBattleStatus(false);
+        ApplyCurrentBattleStatus(isInResult: false);
         bool isFirstTurn = _turnCount == 0;
         if (!isFirstTurn)
         {
@@ -256,7 +264,6 @@ public class BattleController : MonoBehaviour
         _battleLogController.AddLog(Constants.GetAttackSentence(Settings.Language, _currentTurnEntity.name));
 
         int damage = _currentTurnEntity.Attack(_waitingTurnEntity);
-        PopDamageNumberEffect(_waitingTurnEntity, damage, Color.white);
 
         _battleLogController.AddLog(Constants.GetAttackResultSentence(Settings.Language, _waitingTurnEntity.name, damage));
 
@@ -266,11 +273,14 @@ public class BattleController : MonoBehaviour
     public void UseSkill(string name)
     {
         string[] result = _currentTurnEntity.UseSkill(name, _currentTurnEntity, _waitingTurnEntity);
+
         _battleLogController.AddLog(Constants.GetSkillSentence(Settings.Language, _currentTurnEntity.name, name));
+
         foreach (var log in result)
         {
             _battleLogController.AddLog(log);
         }
+
         OnActionEnded();
     }
 
@@ -290,12 +300,7 @@ public class BattleController : MonoBehaviour
     {
         _hasActionEnded = true;
         CloseCommandView();
-        _healthLabelLeft.text = _leftEntity.Parameter.HitPoint.ToString();
-        _manaLabelLeft.text = _leftEntity.Parameter.ManaPoint.ToString();
-        _healthLabelRight.text = _rightEntity.Parameter.HitPoint.ToString();
-        _manaLabelRight.text = _rightEntity.Parameter.ManaPoint.ToString();
-
-        ApplyCurrentBattleStatus(false);
+        ApplyCurrentBattleStatus(isInResult: false);
 
         switch (_battleStatus)
         {
@@ -484,29 +489,121 @@ public class BattleController : MonoBehaviour
         _rewardElement.style.display = DisplayStyle.None;
     }
 
-    private async Task PopDamageNumberEffect(Entity targetEntity, int damage, Color color)
+    // エンティティのHPとMPの変化を監視して、ダメージや回復のエフェクトを表示する
+    private void InitializeReactiveProperties()
     {
-        var damageNumberEffect = ObjectPool.Instance.GetObject();
+        _leftEntity.HitPointRp.Subscribe(newHp =>
+        {
+            _healthLabelLeft.text = newHp.ToString();
+            int oldHp = _leftEntity.Parameter.HitPoint;
+            if (newHp < oldHp)
+            {
+                PopDamageNumberEffectAsync(_leftEntity, oldHp - newHp).Forget();
+            }
+            else if (newHp > oldHp)
+            {
+                PopHealNumberEffectAsync(_leftEntity, newHp - oldHp).Forget();
+            }
+        });
+
+        _leftEntity.ManaPointRp.Subscribe(newMp =>
+        {
+            _manaLabelLeft.text = newMp.ToString();
+            int oldMp = _leftEntity.Parameter.ManaPoint;
+            if (newMp < oldMp)
+            {
+                PopManaCostNumberEffectAsync(_leftEntity, oldMp - newMp).Forget();
+            }
+        });
+
+        _rightEntity.HitPointRp.Subscribe(newHp =>
+        {
+            _healthLabelRight.text = newHp.ToString();
+            int oldHp = _rightEntity.Parameter.HitPoint;
+            if (newHp < oldHp)
+            {
+                PopDamageNumberEffectAsync(_rightEntity, oldHp - newHp).Forget();
+            }
+            else if (newHp > oldHp)
+            {
+                PopHealNumberEffectAsync(_rightEntity, newHp - oldHp).Forget();
+            }
+        });
+
+        _rightEntity.ManaPointRp.Subscribe(newMp =>
+        {
+            _manaLabelRight.text = newMp.ToString();
+            int oldMp = _rightEntity.Parameter.ManaPoint;
+            if (newMp < oldMp)
+            {
+                PopManaCostNumberEffectAsync(_rightEntity, oldMp - newMp).Forget();
+            }
+        });
+    }
+
+    private async UniTask PopDamageNumberEffectAsync(Entity targetEntity, int damage)
+    {
+        var damageNumberEffect = EffectPool.Instance.GetFromPool<DamageNumberEffect>("DamageNumberEffect");
 
         if (targetEntity == _leftEntity)
         {
             var rect = _healthLabelLeft.worldBound;
             // UIToolKitの座標はScreen座標とは異なるため、Screen座標に変換する(Screen座標は左下が原点)
             var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
-            var offsetToEntityImage = 200;
-            screenPos.y -= offsetToEntityImage;
             damageNumberEffect.transform.position = screenPos;
         }
         else if (targetEntity == _rightEntity)
         {
             var rect = _healthLabelRight.worldBound;
             var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
-            var offsetToEntityImage = 200;
-            screenPos.y -= offsetToEntityImage;
             damageNumberEffect.transform.position = screenPos;
         }
 
-        await damageNumberEffect.GetComponent<DamageNumberEffect>().ShowDamage(damage, color);
-        ObjectPool.Instance.ReturnObject(damageNumberEffect);
+        await damageNumberEffect.ShowEffect(damage);
+        EffectPool.Instance.ReturnToPool("DamageNumberEffect", damageNumberEffect.gameObject);
+    }
+
+    private async UniTask PopHealNumberEffectAsync(Entity targetEntity, int healAmount)
+    {
+        var healNumberEffect = EffectPool.Instance.GetFromPool<HealNumberEffect>("HealNumberEffect");
+
+        if (targetEntity == _leftEntity)
+        {
+            var rect = _healthLabelLeft.worldBound;
+            // UIToolKitの座標はScreen座標とは異なるため、Screen座標に変換する(Screen座標は左下が原点)
+            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            healNumberEffect.transform.position = screenPos;
+        }
+        else if (targetEntity == _rightEntity)
+        {
+            var rect = _healthLabelRight.worldBound;
+            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            healNumberEffect.transform.position = screenPos;
+        }
+
+        await healNumberEffect.ShowEffect(healAmount);
+        EffectPool.Instance.ReturnToPool("HealNumberEffect", healNumberEffect.gameObject);
+    }
+
+    private async UniTask PopManaCostNumberEffectAsync(Entity targetEntity, int manaCost)
+    {
+        var manaCostNumberEffect = EffectPool.Instance.GetFromPool<ManaCostNumberEffect>("ManaCostNumberEffect");
+
+        if (targetEntity == _leftEntity)
+        {
+            var rect = _manaLabelLeft.worldBound;
+            // UIToolKitの座標はScreen座標とは異なるため、Screen座標に変換する(Screen座標は左下が原点)
+            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            manaCostNumberEffect.transform.position = screenPos;
+        }
+        else if (targetEntity == _rightEntity)
+        {
+            var rect = _manaLabelRight.worldBound;
+            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            manaCostNumberEffect.transform.position = screenPos;
+        }
+
+        await manaCostNumberEffect.ShowEffect(manaCost);
+        EffectPool.Instance.ReturnToPool("ManaCostNumberEffect", manaCostNumberEffect.gameObject);
     }
 }

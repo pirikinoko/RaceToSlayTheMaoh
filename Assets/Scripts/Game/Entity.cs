@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using R3;
 
 public class Entity : MonoBehaviour
 {
@@ -6,6 +8,12 @@ public class Entity : MonoBehaviour
 
     public EntityType EntityType;
     public Parameter Parameter { get; private set; }
+
+    public ReadOnlyReactiveProperty<int> HitPointRp => _hitPointRp;
+    public ReadOnlyReactiveProperty<int> ManaPointRp => _manaPointRp;
+
+    private ReactiveProperty<int> _hitPointRp = new ReactiveProperty<int>();
+    private ReactiveProperty<int> _manaPointRp = new ReactiveProperty<int>();
 
     private AbnormalCondition _abnormalCondition;
     private SpriteRenderer _spriteRenderer;
@@ -22,6 +30,9 @@ public class Entity : MonoBehaviour
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _spriteRenderer.sprite = Parameter.IconSprite;
+
+        _hitPointRp.Value = Parameter.HitPoint;
+        _manaPointRp.Value = Parameter.ManaPoint;
     }
 
     public int Attack(Entity target)
@@ -42,6 +53,15 @@ public class Entity : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Parameter.HitPoint -= damage;
+        // 先にリアクションプロパティを更新してから、エンティティのHPを更新する
+        // これによって、エンティティのHPが変化したことをBattleControllerに通知し，差分を取得できる
+        _hitPointRp.Value = Parameter.HitPoint - damage;
+        Parameter.HitPoint = _hitPointRp.Value;
+    }
+
+    public void UseManaPoint(int manaCost)
+    {
+        _manaPointRp.Value = Parameter.ManaPoint - manaCost;
+        Parameter.ManaPoint = _manaPointRp.Value;
     }
 }

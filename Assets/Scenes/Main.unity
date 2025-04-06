@@ -9283,7 +9283,7 @@ GameObject:
   - component: {fileID: 1904835136}
   - component: {fileID: 1904835137}
   m_Layer: 5
-  m_Name: ObjectPool
+  m_Name: EffectPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9320,8 +9320,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c09d6bfb97b2cbe46a36924b713b3ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolSize: 3
-  prefab: {fileID: 6072027815452892033, guid: 6cedf3bf2afd33645be337867488faa1, type: 3}
+  poolConfigs:
+  - prefab: {fileID: 6072027815452892033, guid: 6cedf3bf2afd33645be337867488faa1, type: 3}
+    initialSize: 3
 --- !u!1001 &1932387158
 PrefabInstance:
   m_ObjectHideFlags: 0

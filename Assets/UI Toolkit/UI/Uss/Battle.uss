@@ -90,19 +90,39 @@
     scale: 1.1 1.1;
 }
 
+.statusElementContainer {
+    flex-direction: row;
+    align-items: auto;
+    justify-content: flex-start;
+    align-self: flex-start;
+    left: 100px;
+    height: 100px;
+}
+
 .statusElement {
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: auto;
     align-content: auto;
+    height: auto;
+    width: auto;
+    justify-content: flex-start;
+    align-self: center;
+    flex-shrink: 1;
+    flex-basis: auto;
+    left: 0;
 }
 
 .statusIcon {
     background-image: url("project://database/Assets/Images/UI/HeartIcon.png?fileID=2800000&guid=0f5d6ec6e752cd642a751d505ff10273&type=3#HeartIcon");
-    -unity-background-scale-mode: scale-to-fit;
-    width: 100px;
-    height: 100px;
+    -unity-background-scale-mode: stretch-to-fill;
+    width: 70px;
+    height: 70px;
 }
 
 .statusLabel {
+    width: 100px;
+    -unity-text-align: upper-center;
+    font-size: 60px;
+    left: 0;
 }

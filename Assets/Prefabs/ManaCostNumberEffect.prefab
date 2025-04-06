@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2784642716966583994}
-  - component: {fileID: 2665628415681913680}
+  - component: {fileID: -9003346845371328054}
   - component: {fileID: 3037094288517677756}
   - component: {fileID: 7485189048306821148}
   m_Layer: 0
-  m_Name: DamageNumberEffect
+  m_Name: ManaCostNumberEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2665628415681913680
+--- !u!114 &-9003346845371328054
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6072027815452892033}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96c4c56920e2d8540b099c25545b0a0f, type: 3}
+  m_Script: {fileID: 11500000, guid: 99ba66e9a1f38a94c93320ee639e49a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   effectText: {fileID: 3037094288517677756}
