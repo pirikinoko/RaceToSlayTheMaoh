@@ -46,10 +46,10 @@ public class BattleController : MonoBehaviour
     private Button _closeSkillScrollViewButton;
     private List<(Button, int)> _skillButtons = new();
 
-    private IndicatorBarComponent _healthBarLeft;
-    private IndicatorBarComponent _manaBarLeft;
-    private IndicatorBarComponent _healthBarRight;
-    private IndicatorBarComponent _manaBarRight;
+    private Label _healthLabelLeft;
+    private Label _manaLabelLeft;
+    private Label _healthLabelRight;
+    private Label _manaLabelRight;
 
     private void Start()
     {
@@ -114,24 +114,20 @@ public class BattleController : MonoBehaviour
         var rootLeftElement = _root.Q<VisualElement>("Element-Left");
         rootLeftElement.Q<VisualElement>("Image-Entity").style.backgroundImage = _leftEntity.Parameter.IconSprite.texture;
         rootLeftElement.Q<Label>("Label-EntityName").text = _leftEntity.name;
-        _healthBarLeft = rootLeftElement.Q<IndicatorBarComponent>("HealthBar");
-        _manaBarLeft = rootLeftElement.Q<IndicatorBarComponent>("ManaBar");
+        _healthLabelLeft = rootLeftElement.Q<Label>("Label-Health");
+        _manaLabelLeft = rootLeftElement.Q<Label>("Label-Mana");
 
-        _healthBarLeft.CurrentValue = _leftEntity.Parameter.HitPoint;
-        _healthBarLeft.MaximumValue = Constants.MaxHitPoint;
-        _manaBarLeft.CurrentValue = _rightEntity.Parameter.ManaPoint;
-        _manaBarLeft.MaximumValue = Constants.MaxManaPoint;
+        _healthLabelLeft.text = _leftEntity.Parameter.HitPoint.ToString();
+        _manaLabelLeft.text = _leftEntity.Parameter.ManaPoint.ToString();
 
         var rootRightElement = _root.Q<VisualElement>("Element-Right");
         rootRightElement.Q<VisualElement>("Image-Entity").style.backgroundImage = _rightEntity.Parameter.IconSprite.texture;
         rootRightElement.Q<Label>("Label-EntityName").text = _rightEntity.name;
-        _healthBarRight = rootRightElement.Q<IndicatorBarComponent>("HealthBar");
-        _manaBarRight = rootRightElement.Q<IndicatorBarComponent>("ManaBar");
+        _healthLabelRight = rootRightElement.Q<Label>("Label-Health");
+        _manaLabelRight = rootRightElement.Q<Label>("Label-Mana");
 
-        _healthBarRight.CurrentValue = _rightEntity.Parameter.HitPoint;
-        _healthBarRight.MaximumValue = Constants.MaxHitPoint;
-        _manaBarRight.CurrentValue = _rightEntity.Parameter.ManaPoint;
-        _manaBarRight.MaximumValue = Constants.MaxManaPoint;
+        _healthLabelRight.text = _rightEntity.Parameter.HitPoint.ToString();
+        _manaLabelRight.text = _rightEntity.Parameter.ManaPoint.ToString();
     }
 
     private void SetSkillButtons()
@@ -294,10 +290,10 @@ public class BattleController : MonoBehaviour
     {
         _hasActionEnded = true;
         CloseCommandView();
-        _healthBarLeft.CurrentValue = _leftEntity.Parameter.HitPoint;
-        _manaBarLeft.CurrentValue = _leftEntity.Parameter.ManaPoint;
-        _healthBarRight.CurrentValue = _rightEntity.Parameter.HitPoint;
-        _manaBarRight.CurrentValue = _rightEntity.Parameter.ManaPoint;
+        _healthLabelLeft.text = _leftEntity.Parameter.HitPoint.ToString();
+        _manaLabelLeft.text = _leftEntity.Parameter.ManaPoint.ToString();
+        _healthLabelRight.text = _rightEntity.Parameter.HitPoint.ToString();
+        _manaLabelRight.text = _rightEntity.Parameter.ManaPoint.ToString();
 
         ApplyCurrentBattleStatus(false);
 
@@ -494,7 +490,7 @@ public class BattleController : MonoBehaviour
 
         if (targetEntity == _leftEntity)
         {
-            var rect = _healthBarLeft.worldBound;
+            var rect = _healthLabelLeft.worldBound;
             // UIToolKitの座標はScreen座標とは異なるため、Screen座標に変換する(Screen座標は左下が原点)
             var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
             var offsetToEntityImage = 200;
@@ -503,7 +499,7 @@ public class BattleController : MonoBehaviour
         }
         else if (targetEntity == _rightEntity)
         {
-            var rect = _healthBarRight.worldBound;
+            var rect = _healthLabelRight.worldBound;
             var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
             var offsetToEntityImage = 200;
             screenPos.y -= offsetToEntityImage;

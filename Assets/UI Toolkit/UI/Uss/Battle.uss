@@ -1,8 +1,3 @@
-.IndicatorBar {
-    width: 400px;
-    height: 50px;
-}
-
 .entity {
     width: 200px;
 }
@@ -93,4 +88,21 @@
     transition-property: scale;
     transition-duration: 0.1s;
     scale: 1.1 1.1;
+}
+
+.statusElement {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: auto;
+    align-content: auto;
+}
+
+.statusIcon {
+    background-image: url("project://database/Assets/Images/UI/HeartIcon.png?fileID=2800000&guid=0f5d6ec6e752cd642a751d505ff10273&type=3#HeartIcon");
+    -unity-background-scale-mode: scale-to-fit;
+    width: 100px;
+    height: 100px;
+}
+
+.statusLabel {
 }

@@ -1,22 +1,21 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/OverAll.uss?fileID=7433441132597879392&amp;guid=4a4c7c1f77800fa4eb5a604d5e7f58b2&amp;type=3#OverAll" />
     <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/Battle.uss?fileID=7433441132597879392&amp;guid=1cc742bf12b9f244aaf39b20aebbdb16&amp;type=3#Battle" />
-    <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/IndicatorBar.uss?fileID=7433441132597879392&amp;guid=bd68759010d80e54a9dc0d6cf70267b6&amp;type=3#IndicatorBar" />
     <engine:VisualElement name="Root" style="flex-grow: 1; width: auto; height: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 100px; padding-right: 100px; padding-bottom: 100px; padding-left: 100px; background-color: rgba(0, 0, 0, 0.39);">
         <engine:VisualElement name="BattleView" style="flex-grow: 1; height: 500px; margin-bottom: 30px;">
             <engine:VisualElement name="Image-Battle-Frame" style="flex-grow: 1; flex-direction: row; background-image: url(&quot;project://database/Assets/Images/UI/BattleFrame.png?fileID=2800000&amp;guid=58084651486787a4daa2fdf340cc98dd&amp;type=3#BattleFrame&quot;); height: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-background-scale-mode: scale-to-fit; background-size: 100% 100%; flex-shrink: 1;">
                 <engine:VisualElement name="BattleElement" style="flex-grow: 1; flex-direction: row; display: flex;">
                     <engine:VisualElement name="Element-Left" style="flex-grow: 1; align-content: center; flex-shrink: 1; align-items: flex-start; align-self: auto; justify-content: flex-start; width: 0;">
                         <engine:Label text="Label" name="Label-EntityName" display-tooltip-when-elided="true" class="label entity-name__label" style="color: rgb(255, 255, 255); right: 100px; align-self: center; margin-top: 10px;" />
-                        <UIToolkit.IndicatorBarComponent currentValue="30" minimumValue="0" name="HealthBar" maximumValue="50" />
-                        <UIToolkit.IndicatorBarComponent barType="Mana" currentValue="10" name="ManaBar" maximumValue="30" />
+                        <engine:VisualElement name="Element-HitPoint" class="statusElement" style="flex-grow: 1;">
+                            <engine:VisualElement name="Icon" class="statusIcon" style="flex-grow: 1; align-self: auto; align-items: auto;" />
+                            <engine:Label text="Label" name="Label" class="statusLabel label" />
+                        </engine:VisualElement>
                         <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Images/Player/Player.png?fileID=2800000&amp;guid=fe5fe608913d1b749baf641cc1d6acac&amp;type=3#Player&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: 200px; bottom: 30px;" />
                     </engine:VisualElement>
                     <engine:Label text="Turn:1" emoji-fallback-support="true" name="Label-TurnCount" class="label" style="color: rgb(255, 255, 255); font-size: 60px; margin-top: 10px;" />
                     <engine:VisualElement name="Element-Right" style="flex-grow: 1; align-content: center; flex-shrink: 1; align-items: flex-end; align-self: auto; justify-content: flex-start; width: 0; flex-direction: column;">
                         <engine:Label text="Label" name="Label-EntityName" display-tooltip-when-elided="true" class="label entity-name__label" style="color: rgb(255, 255, 255); left: 100px; align-self: center; margin-top: 10px;" />
-                        <UIToolkit.IndicatorBarComponent currentValue="100" minimumValue="0" name="HealthBar" style="flex-direction: row; margin-right: 0;" />
-                        <UIToolkit.IndicatorBarComponent barType="Mana" currentValue="50" name="ManaBar" maximumValue="50" style="margin-right: 0;" />
                         <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Images/Enemy/AxeMan.png?fileID=2800000&amp;guid=bf0dad1f62408524fa7c854516e3fec2&amp;type=3#AxeMan&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: auto; bottom: 30px; right: 200px;" />
                     </engine:VisualElement>
                 </engine:VisualElement>
