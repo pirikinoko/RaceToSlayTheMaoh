@@ -507,73 +507,49 @@ public class BattleController : MonoBehaviour
     {
         _leftEntity.HitPointRp.Subscribe(newHp =>
         {
-            _healthLabelLeft.text = newHp.ToString();
             int oldHp = _leftEntity.Parameter.HitPoint;
             if (newHp < oldHp)
             {
-                PopDamageNumberEffectAsync(_leftEntity, oldHp - newHp).Forget();
+                ChangeNumberWithAnimationAsync(_healthLabelLeft, newHp).Forget();
             }
             else if (newHp > oldHp)
             {
+                ChangeNumberWithAnimationAsync(_healthLabelLeft, newHp).Forget();
                 PopHealNumberEffectAsync(_leftEntity, newHp - oldHp).Forget();
             }
         });
 
         _leftEntity.ManaPointRp.Subscribe(newMp =>
         {
-            _manaLabelLeft.text = newMp.ToString();
             int oldMp = _leftEntity.Parameter.ManaPoint;
             if (newMp < oldMp)
             {
-                PopManaCostNumberEffectAsync(_leftEntity, oldMp - newMp).Forget();
+                ChangeNumberWithAnimationAsync(_manaLabelLeft, newMp).Forget();
             }
         });
 
         _rightEntity.HitPointRp.Subscribe(newHp =>
         {
-            _healthLabelRight.text = newHp.ToString();
             int oldHp = _rightEntity.Parameter.HitPoint;
             if (newHp < oldHp)
             {
-                PopDamageNumberEffectAsync(_rightEntity, oldHp - newHp).Forget();
+                ChangeNumberWithAnimationAsync(_healthLabelRight, newHp).Forget();
             }
             else if (newHp > oldHp)
             {
+                ChangeNumberWithAnimationAsync(_healthLabelRight, newHp).Forget();
                 PopHealNumberEffectAsync(_rightEntity, newHp - oldHp).Forget();
             }
         });
 
         _rightEntity.ManaPointRp.Subscribe(newMp =>
         {
-            _manaLabelRight.text = newMp.ToString();
             int oldMp = _rightEntity.Parameter.ManaPoint;
             if (newMp < oldMp)
             {
-                PopManaCostNumberEffectAsync(_rightEntity, oldMp - newMp).Forget();
+                ChangeNumberWithAnimationAsync(_manaLabelRight, newMp).Forget();
             }
         });
-    }
-
-    private async UniTask PopDamageNumberEffectAsync(Entity targetEntity, int damage)
-    {
-        var damageNumberEffect = NumberEffectPool.Instance.GetFromPool<DamageNumberEffect>("DamageNumberEffect");
-
-        if (targetEntity == _leftEntity)
-        {
-            var rect = _healthLabelLeft.worldBound;
-            // UIToolKitの座標はScreen座標とは異なるため、Screen座標に変換する(Screen座標は左下が原点)
-            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
-            damageNumberEffect.transform.position = screenPos;
-        }
-        else if (targetEntity == _rightEntity)
-        {
-            var rect = _healthLabelRight.worldBound;
-            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
-            damageNumberEffect.transform.position = screenPos;
-        }
-
-        await damageNumberEffect.ShowEffect(damage);
-        NumberEffectPool.Instance.ReturnToPool("DamageNumberEffect", damageNumberEffect.gameObject);
     }
 
     private async UniTask PopHealNumberEffectAsync(Entity targetEntity, int healAmount)
@@ -596,28 +572,6 @@ public class BattleController : MonoBehaviour
 
         await healNumberEffect.ShowEffect(healAmount);
         NumberEffectPool.Instance.ReturnToPool("HealNumberEffect", healNumberEffect.gameObject);
-    }
-
-    private async UniTask PopManaCostNumberEffectAsync(Entity targetEntity, int manaCost)
-    {
-        var manaCostNumberEffect = NumberEffectPool.Instance.GetFromPool<ManaCostNumberEffect>("ManaCostNumberEffect");
-
-        if (targetEntity == _leftEntity)
-        {
-            var rect = _manaLabelLeft.worldBound;
-            // UIToolKitの座標はScreen座標とは異なるため、Screen座標に変換する(Screen座標は左下が原点)
-            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
-            manaCostNumberEffect.transform.position = screenPos;
-        }
-        else if (targetEntity == _rightEntity)
-        {
-            var rect = _manaLabelRight.worldBound;
-            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
-            manaCostNumberEffect.transform.position = screenPos;
-        }
-
-        await manaCostNumberEffect.ShowEffect(manaCost);
-        NumberEffectPool.Instance.ReturnToPool("ManaCostNumberEffect", manaCostNumberEffect.gameObject);
     }
 
     private async UniTask PlayImageAnimationAsync(string key, Entity targetEntity)
@@ -646,8 +600,8 @@ public class BattleController : MonoBehaviour
     {
         VisualElement targetImage = targetEntity == _leftEntity ? _entityImageLeft : _entityImageRight;
 
-        const float stepDistance = 30f; // 一歩の距離
-        const float animationDuration = 0.2f; // アニメーションの時間（秒）
+        const float stepDistance = 30f;
+        const float animationDuration = 0.2f;
 
         if (targetEntity == _leftEntity)
         {
@@ -687,5 +641,33 @@ public class BattleController : MonoBehaviour
                 animationDuration
             ).SetEase(Ease.InQuad).AsyncWaitForCompletion();
         }
+    }
+
+    /// <summary>
+    /// HPやMPの変化をアニメーションで表示するメソッド
+    /// 一度ラベルが透明になり、値変更後に透明度を戻す
+    /// </summary>
+    /// <param name="label"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private async UniTask ChangeNumberWithAnimationAsync(Label label, int value)
+    {
+        var ChangeDuration = 0.3f;
+
+        await DOTween.To(
+            () => label.style.color.value,
+            color => label.style.color = color,
+            new Color(1, 1, 1, 0),
+            ChangeDuration
+        );
+
+        label.text = value.ToString();
+
+        await DOTween.To(
+            () => label.style.color.value,
+            color => label.style.color = color,
+            new Color(1, 1, 1, 1),
+            ChangeDuration
+        );
     }
 }
