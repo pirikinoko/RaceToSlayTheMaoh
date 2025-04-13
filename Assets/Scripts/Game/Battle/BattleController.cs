@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using R3;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ public class BattleController : MonoBehaviour
     private PlayerController _playerController;
     [SerializeField]
     private EnemyController _enemyController;
+    [SerializeField]
+    private ImageAnimationHolder _imageAnimationHolder;
     [SerializeField]
     private Canvas _overlayCanvas;
 
@@ -45,6 +48,9 @@ public class BattleController : MonoBehaviour
 
     private Label _entityNameLeft;
     private Label _entityNameRight;
+
+    private VisualElement _entityImageLeft;
+    private VisualElement _entityImageRight;
 
     private Button _closeSkillScrollViewButton;
     private List<(Button, int)> _skillButtons = new();
@@ -115,7 +121,8 @@ public class BattleController : MonoBehaviour
     private void SetEntities()
     {
         var rootLeftElement = _root.Q<VisualElement>("Element-Left");
-        rootLeftElement.Q<VisualElement>("Image-Entity").style.backgroundImage = _leftEntity.Parameter.IconSprite.texture;
+        _entityImageLeft = rootLeftElement.Q<VisualElement>("Image-Entity");
+        _entityImageLeft.style.backgroundImage = _leftEntity.Parameter.IconSprite.texture;
         _entityNameLeft = rootLeftElement.Q<Label>("Label-EntityName");
         _entityNameLeft.text = _leftEntity.name;
         _healthLabelLeft = rootLeftElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
@@ -125,7 +132,8 @@ public class BattleController : MonoBehaviour
         _manaLabelLeft.text = _leftEntity.Parameter.ManaPoint.ToString();
 
         var rootRightElement = _root.Q<VisualElement>("Element-Right");
-        rootRightElement.Q<VisualElement>("Image-Entity").style.backgroundImage = _rightEntity.Parameter.IconSprite.texture;
+        _entityImageRight = rootRightElement.Q<VisualElement>("Image-Entity");
+        _entityImageRight.style.backgroundImage = _rightEntity.Parameter.IconSprite.texture;
         _entityNameRight = rootRightElement.Q<Label>("Label-EntityName");
         _entityNameRight.text = _rightEntity.name;
         _healthLabelRight = rootRightElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
@@ -265,6 +273,8 @@ public class BattleController : MonoBehaviour
 
         int damage = _currentTurnEntity.Attack(_waitingTurnEntity);
 
+        PlayImageAnimationAsync(Constants.ImageAnimationKeySlash, _waitingTurnEntity).Forget();
+
         _battleLogController.AddLog(Constants.GetAttackResultSentence(Settings.Language, _waitingTurnEntity.name, damage));
 
         OnActionEnded();
@@ -298,6 +308,9 @@ public class BattleController : MonoBehaviour
 
     private void OnActionEnded()
     {
+        // 攻撃時のステップアニメーションを実行
+        AnimateEntityStepAsync(_currentTurnEntity).Forget();
+
         _hasActionEnded = true;
         CloseCommandView();
         ApplyCurrentBattleStatus(isInResult: false);
@@ -543,7 +556,7 @@ public class BattleController : MonoBehaviour
 
     private async UniTask PopDamageNumberEffectAsync(Entity targetEntity, int damage)
     {
-        var damageNumberEffect = EffectPool.Instance.GetFromPool<DamageNumberEffect>("DamageNumberEffect");
+        var damageNumberEffect = NumberEffectPool.Instance.GetFromPool<DamageNumberEffect>("DamageNumberEffect");
 
         if (targetEntity == _leftEntity)
         {
@@ -560,12 +573,12 @@ public class BattleController : MonoBehaviour
         }
 
         await damageNumberEffect.ShowEffect(damage);
-        EffectPool.Instance.ReturnToPool("DamageNumberEffect", damageNumberEffect.gameObject);
+        NumberEffectPool.Instance.ReturnToPool("DamageNumberEffect", damageNumberEffect.gameObject);
     }
 
     private async UniTask PopHealNumberEffectAsync(Entity targetEntity, int healAmount)
     {
-        var healNumberEffect = EffectPool.Instance.GetFromPool<HealNumberEffect>("HealNumberEffect");
+        var healNumberEffect = NumberEffectPool.Instance.GetFromPool<HealNumberEffect>("HealNumberEffect");
 
         if (targetEntity == _leftEntity)
         {
@@ -582,12 +595,12 @@ public class BattleController : MonoBehaviour
         }
 
         await healNumberEffect.ShowEffect(healAmount);
-        EffectPool.Instance.ReturnToPool("HealNumberEffect", healNumberEffect.gameObject);
+        NumberEffectPool.Instance.ReturnToPool("HealNumberEffect", healNumberEffect.gameObject);
     }
 
     private async UniTask PopManaCostNumberEffectAsync(Entity targetEntity, int manaCost)
     {
-        var manaCostNumberEffect = EffectPool.Instance.GetFromPool<ManaCostNumberEffect>("ManaCostNumberEffect");
+        var manaCostNumberEffect = NumberEffectPool.Instance.GetFromPool<ManaCostNumberEffect>("ManaCostNumberEffect");
 
         if (targetEntity == _leftEntity)
         {
@@ -604,6 +617,75 @@ public class BattleController : MonoBehaviour
         }
 
         await manaCostNumberEffect.ShowEffect(manaCost);
-        EffectPool.Instance.ReturnToPool("ManaCostNumberEffect", manaCostNumberEffect.gameObject);
+        NumberEffectPool.Instance.ReturnToPool("ManaCostNumberEffect", manaCostNumberEffect.gameObject);
+    }
+
+    private async UniTask PlayImageAnimationAsync(string key, Entity targetEntity)
+    {
+        var imageAnimation = ImageAnimationPool.Instance.GetFromPool<ImageAnimation>("ImageAnimation");
+        imageAnimation.SetSprites(_imageAnimationHolder.GetSpriteps(key));
+
+        if (targetEntity == _leftEntity)
+        {
+            var rect = _entityImageLeft.worldBound;
+            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            imageAnimation.transform.position = screenPos;
+        }
+        else if (targetEntity == _rightEntity)
+        {
+            var rect = _entityImageRight.worldBound;
+            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            imageAnimation.transform.position = screenPos;
+        }
+
+        await imageAnimation.PlayAnimationAsync();
+        ImageAnimationPool.Instance.ReturnToPool("ImageAnimation", imageAnimation.gameObject);
+    }
+
+    private async UniTask AnimateEntityStepAsync(Entity targetEntity)
+    {
+        VisualElement targetImage = targetEntity == _leftEntity ? _entityImageLeft : _entityImageRight;
+
+        const float stepDistance = 30f; // 一歩の距離
+        const float animationDuration = 0.2f; // アニメーションの時間（秒）
+
+        if (targetEntity == _leftEntity)
+        {
+            // 左エンティティの場合、MarginLeftを操作
+            var originalMarginLeft = targetImage.style.marginLeft;
+
+            await DOTween.To(
+                () => targetImage.style.marginLeft.value.value,
+                value => targetImage.style.marginLeft = new StyleLength(value),
+                originalMarginLeft.value.value + stepDistance,
+                animationDuration
+            ).SetEase(Ease.OutQuad).AsyncWaitForCompletion();
+
+            await DOTween.To(
+                () => targetImage.style.marginLeft.value.value,
+                value => targetImage.style.marginLeft = new StyleLength(value),
+                originalMarginLeft.value.value,
+                animationDuration
+            ).SetEase(Ease.InQuad).AsyncWaitForCompletion();
+        }
+        else
+        {
+            // 右エンティティの場合、MarginRightを操作
+            var originalMarginRight = targetImage.style.marginRight;
+
+            await DOTween.To(
+                () => targetImage.style.marginRight.value.value,
+                value => targetImage.style.marginRight = new StyleLength(value),
+                originalMarginRight.value.value + stepDistance,
+                animationDuration
+            ).SetEase(Ease.OutQuad).AsyncWaitForCompletion();
+
+            await DOTween.To(
+                () => targetImage.style.marginRight.value.value,
+                value => targetImage.style.marginRight = new StyleLength(value),
+                originalMarginRight.value.value,
+                animationDuration
+            ).SetEase(Ease.InQuad).AsyncWaitForCompletion();
+        }
     }
 }

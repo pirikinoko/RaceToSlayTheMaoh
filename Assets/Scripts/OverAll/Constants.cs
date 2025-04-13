@@ -229,4 +229,7 @@ public class Constants
                 return "Status";
         }
     }
+
+    // ****** SpriteAnimationKey *******
+    public static string ImageAnimationKeySlash = "SlashAnimation";
 }

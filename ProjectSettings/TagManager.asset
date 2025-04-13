@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Front
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 1835626117
+    locked: 0
+  - name: New Layer 4
+    uniqueID: 50746199
     locked: 0
   m_RenderingLayers:
   - Default
