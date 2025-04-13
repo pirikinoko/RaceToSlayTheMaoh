@@ -9162,7 +9162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatorConfigs:
-  - name: SlashAnimation
+  - name: SlashAnimationEffect
     sprites:
     - {fileID: 2873468861240947033, guid: 726312363cf957d4f8e794b96eb75fd5, type: 3}
     - {fileID: -3838399130750711146, guid: 9d219236dfa522b4b8c7aeefba705682, type: 3}
@@ -9170,6 +9170,18 @@ MonoBehaviour:
     - {fileID: 7651652956544365532, guid: 015ab6cfcf92f3346bfe694bafcf21f6, type: 3}
     - {fileID: 3696961986190806569, guid: de8d5e72001765540aa2fe8689ac4269, type: 3}
     - {fileID: 2377541833084464458, guid: d1e28131ed7f76048951a8b0fef033eb, type: 3}
+  - name: HealAnimationEffect
+    sprites:
+    - {fileID: -530034241178878421, guid: 8a7204f8149c20645918b97b3d789734, type: 3}
+    - {fileID: 6028507921123887231, guid: 0ee22b13891e9454a8eb07c06ffac2dd, type: 3}
+    - {fileID: -4217878503464057227, guid: ca35fa416b306244ebc6fe3b152f1651, type: 3}
+    - {fileID: 8433481913278819324, guid: 4fab03507eaeec241becd45fd00b4ea9, type: 3}
+  - name: BiteAnimationEffect
+    sprites:
+    - {fileID: -4789370092206297288, guid: 9db0e60e8bf60b248bcea3092dca182f, type: 3}
+    - {fileID: 5540630298499624654, guid: 75366ba6dc2783b41bff3f70bb19f2a5, type: 3}
+    - {fileID: 8647413979306863119, guid: 8c95d0c77c984d746b6c681e064aadf4, type: 3}
+    - {fileID: -7920390214905072387, guid: cabf2a25db8d9a6468b7a265588dc6a7, type: 3}
 --- !u!1001 &1717475887
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9434,10 +9446,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolConfigs:
-  - prefab: {fileID: 6072027815452892033, guid: 6cedf3bf2afd33645be337867488faa1, type: 3}
-    initialSize: 3
-  - prefab: {fileID: 6072027815452892033, guid: cadf81ff97281714dadb2f47b8cabe80, type: 3}
-    initialSize: 3
   - prefab: {fileID: 6072027815452892033, guid: a2453cc2f52b20b4283f75cccb90f603, type: 3}
     initialSize: 3
 --- !u!1001 &1932387158

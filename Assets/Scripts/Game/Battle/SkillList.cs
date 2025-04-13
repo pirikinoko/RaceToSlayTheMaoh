@@ -112,6 +112,8 @@ public static class SkillList
             name: GetSkillNameHealByLanguage(),
             description: GetSkillDescriptionHealByLanguage(),
             manaCost: SkillParameters.Heal.ManaCost,
+            effectKey: Constants.ImageAnimationKeyHeal,
+
             action: (skillUser, opponent) =>
             {
                 skillUser.UseManaPoint(SkillParameters.Heal.ManaCost);
@@ -120,10 +122,13 @@ public static class SkillList
                     offsetPercent: SkillParameters.Heal.OffsetPercent
                 );
                 skillUser.TakeDamage(-healAmount);
-                return new string[]
-                {
-                    $"{skillUser.name}は{skillUser.name}のHPを{healAmount}回復した"
-                };
+                return new Skill.SkillResult(
+                    logs: new string[]
+                    {
+                        $"{skillUser.name}は{skillUser.name}のHPを{healAmount}回復した"
+                    },
+                    effectKey: Constants.ImageAnimationKeyHeal
+                );
             }
         );
     }
@@ -134,6 +139,7 @@ public static class SkillList
             name: GetSkillNameBiteByLanguage(),
             description: GetSkillDescriptionBiteByLanguage(),
             manaCost: SkillParameters.Bite.ManaCost,
+            effectKey: Constants.ImageAnimationKeyBite,
             action: (skillUser, opponent) =>
             {
                 skillUser.UseManaPoint(SkillParameters.Bite.ManaCost);
@@ -142,10 +148,13 @@ public static class SkillList
                     offsetPercent: SkillParameters.Bite.OffsetPercent
                 );
                 opponent.TakeDamage(damageAmount);
-                return new string[]
-                {
-                      $"{opponent.name}は{damageAmount}のダメージを受けた"
-                };
+                return new Skill.SkillResult(
+                    logs: new string[]
+                    {
+                        $"{skillUser.name}は{opponent.name}に{damageAmount}のダメージを与えた"
+                    },
+                    effectKey: Constants.ImageAnimationKeyBite
+                );
             }
         );
     }

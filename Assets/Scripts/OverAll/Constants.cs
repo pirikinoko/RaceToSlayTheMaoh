@@ -230,6 +230,8 @@ public class Constants
         }
     }
 
-    // ****** SpriteAnimationKey *******
-    public static string ImageAnimationKeySlash = "SlashAnimation";
+    // ****** ImageEffectKey *******
+    public static string ImageAnimationKeySlash = "SlashAnimationEffect";
+    public static string ImageAnimationKeyHeal = "HealAnimationEffect";
+    public static string ImageAnimationKeyBite = "BiteAnimationEffect";
 }

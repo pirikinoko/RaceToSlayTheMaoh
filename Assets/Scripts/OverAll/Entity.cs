@@ -45,7 +45,7 @@ public class Entity : MonoBehaviour
         return damage;
     }
 
-    public string[] UseSkill(string skillName, Entity skillUser, Entity opponent)
+    public Skill.SkillResult UseSkill(string skillName, Entity skillUser, Entity opponent)
     {
         Skill skill = Parameter.Skills.Find(s => s.Name == skillName);
         return skill.Execute(skillUser, opponent);

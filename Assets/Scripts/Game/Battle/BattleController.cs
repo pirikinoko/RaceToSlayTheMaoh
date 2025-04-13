@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using R3;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UIToolkit;
@@ -192,11 +193,12 @@ public class BattleController : MonoBehaviour
         SetEntities();
         SetSkillButtons();
 
-        _battleLogController.AddLog(Constants.GetSentenceWhenStartBattle(Settings.Language.ToString(), _leftEntity.name, _rightEntity.name));
+        _battleLogController.AddLogAsync(Constants.GetSentenceWhenStartBattle(Settings.Language.ToString(), _leftEntity.name, _rightEntity.name));
     }
 
     private void StartNewTurn()
     {
+        _hasActionEnded = false;
         ApplyCurrentBattleStatus(isInResult: false);
         bool isFirstTurn = _turnCount == 0;
         if (!isFirstTurn)
@@ -236,7 +238,7 @@ public class BattleController : MonoBehaviour
                 {
                     _battleStatus = BattleStatus.SelectReword;
                 }
-                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _leftEntity.name, _rightEntity.name));
+                _battleLogController.AddLogAsync(Constants.GetResultSentence(Settings.Language, _leftEntity.name, _rightEntity.name));
                 break;
             case BattleStatus.RightWin:
                 _winnerEntity = _rightEntity;
@@ -245,18 +247,18 @@ public class BattleController : MonoBehaviour
                 {
                     _battleStatus = BattleStatus.SelectReword;
                 }
-                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _rightEntity.name, _leftEntity.name));
+                _battleLogController.AddLogAsync(Constants.GetResultSentence(Settings.Language, _rightEntity.name, _leftEntity.name));
                 break;
             case BattleStatus.SelectReword:
                 _battleStatus = BattleStatus.Ending;
                 break;
             case BattleStatus.BothDied:
                 _battleStatus = BattleStatus.Ending;
-                _battleLogController.AddLog(Constants.GetSentenceWhenBothDied(Settings.Language));
+                _battleLogController.AddLogAsync(Constants.GetSentenceWhenBothDied(Settings.Language));
                 break;
             case BattleStatus.TurnOver:
                 _battleStatus = BattleStatus.Ending;
-                _battleLogController.AddLog(Constants.GetSentenceWhenTurnOver(Settings.Language));
+                _battleLogController.AddLogAsync(Constants.GetSentenceWhenTurnOver(Settings.Language));
                 break;
         }
     }
@@ -269,26 +271,66 @@ public class BattleController : MonoBehaviour
 
     public void Attack()
     {
-        _battleLogController.AddLog(Constants.GetAttackSentence(Settings.Language, _currentTurnEntity.name));
+        CloseCommandView();
+        // 攻撃時のアニメーションを再生
+        RunAttackProcessAsync().Forget();
+    }
 
+    private async UniTask RunAttackProcessAsync()
+    {
+        // 「○○の攻撃！」のログ
+        _battleLogController.AddLogAsync(Constants.GetAttackSentence(Settings.Language, _currentTurnEntity.name));
+        // ステップアニメーションを実行
+        await AnimateEntityStepAsync(_currentTurnEntity);
+        // 攻撃時のエフェクトを再生
+        await PlayImageAnimationAsync(Constants.ImageAnimationKeySlash, _waitingTurnEntity);
+
+        // ダメージ計算処理
         int damage = _currentTurnEntity.Attack(_waitingTurnEntity);
 
-        PlayImageAnimationAsync(Constants.ImageAnimationKeySlash, _waitingTurnEntity).Forget();
-
-        _battleLogController.AddLog(Constants.GetAttackResultSentence(Settings.Language, _waitingTurnEntity.name, damage));
+        // 結果のログ
+        _battleLogController.AddLogAsync(Constants.GetAttackResultSentence(Settings.Language, _waitingTurnEntity.name, damage));
 
         OnActionEnded();
     }
 
-    public void UseSkill(string name)
+    public void UseSkill(string skillName)
     {
-        string[] result = _currentTurnEntity.UseSkill(name, _currentTurnEntity, _waitingTurnEntity);
+        CloseCommandView();
+        RunOnUsingSkillProcessAsync(skillName).Forget();
+    }
 
-        _battleLogController.AddLog(Constants.GetSkillSentence(Settings.Language, _currentTurnEntity.name, name));
+    private async UniTask RunOnUsingSkillProcessAsync(string skillName)
+    {
+        // 「○○のヒール！」(例)のログ
+        _battleLogController.AddLogAsync(Constants.GetSkillSentence(Settings.Language, _currentTurnEntity.name, skillName));
 
-        foreach (var log in result)
+        // ステップアニメーションを実行
+        await AnimateEntityStepAsync(_currentTurnEntity);
+
+        // 相手のHPが減るかそれとも自分のHPが減るかでエフェクトをどちらに出すかを決める(1)
+        int enemyHp = _waitingTurnEntity.Parameter.HitPoint;
+
+        // スキルの使用
+        Skill.SkillResult result = _currentTurnEntity.UseSkill(skillName, _currentTurnEntity, _waitingTurnEntity);
+
+        // 相手のHPが減るかそれとも自分のHPが減るかでエフェクトをどちらに出すかを決める(2)
+        bool hasEnemyTakenDamage = enemyHp > _waitingTurnEntity.Parameter.HitPoint;
+
+        // スキルのエフェクトを再生
+        if (hasEnemyTakenDamage)
         {
-            _battleLogController.AddLog(log);
+            await PlayImageAnimationAsync(result.EffectKey, _waitingTurnEntity);
+        }
+        else
+        {
+            await PlayImageAnimationAsync(result.EffectKey, _currentTurnEntity);
+        }
+
+        // スキルの結果のログ
+        foreach (var log in result.Logs)
+        {
+            _battleLogController.AddLogAsync(log);
         }
 
         OnActionEnded();
@@ -308,11 +350,7 @@ public class BattleController : MonoBehaviour
 
     private void OnActionEnded()
     {
-        // 攻撃時のステップアニメーションを実行
-        AnimateEntityStepAsync(_currentTurnEntity).Forget();
-
         _hasActionEnded = true;
-        CloseCommandView();
         ApplyCurrentBattleStatus(isInResult: false);
 
         switch (_battleStatus)
@@ -322,16 +360,16 @@ public class BattleController : MonoBehaviour
             case BattleStatus.AfterAction:
                 return;
             case BattleStatus.LeftWin:
-                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _leftEntity.name, _rightEntity.name));
+                _battleLogController.AddLogAsync(Constants.GetResultSentence(Settings.Language, _leftEntity.name, _rightEntity.name));
                 break;
             case BattleStatus.RightWin:
-                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _rightEntity.name, _leftEntity.name));
+                _battleLogController.AddLogAsync(Constants.GetResultSentence(Settings.Language, _rightEntity.name, _leftEntity.name));
                 break;
             case BattleStatus.BothDied:
-                _battleLogController.AddLog(Constants.GetSentenceWhenBothDied(Settings.Language));
+                _battleLogController.AddLogAsync(Constants.GetSentenceWhenBothDied(Settings.Language));
                 break;
             case BattleStatus.TurnOver:
-                _battleLogController.AddLog(Constants.GetSentenceWhenTurnOver(Settings.Language));
+                _battleLogController.AddLogAsync(Constants.GetSentenceWhenTurnOver(Settings.Language));
                 break;
         }
     }
@@ -378,7 +416,7 @@ public class BattleController : MonoBehaviour
         var statusRewardButton = new Button(() =>
         {
             string result = reward.Execute(_winnerEntity);
-            _battleLogController.AddLog(result);
+            _battleLogController.AddLogAsync(result);
         });
         statusRewardButton.AddToClassList(ClassNames.RewardButton);
 
@@ -398,7 +436,7 @@ public class BattleController : MonoBehaviour
             skillRewardButton.clicked += () =>
             {
                 AddSkillToMyEntity(rewardSelectedSkills[index], out string log);
-                _battleLogController.AddLog(log);
+                _battleLogController.AddLogAsync(log);
             };
 
             skillRewardButton.Add(CreateNewLabelWithDetails(ClassNames.RewardTitle, rewardSelectedSkills[index].Name));
@@ -427,13 +465,13 @@ public class BattleController : MonoBehaviour
         List<T> result = new List<T>();
         if (list.Count > 0)
         {
-            int index1 = Random.Range(0, list.Count);
+            int index1 = UnityEngine.Random.Range(0, list.Count);
             result.Add(list[index1]);
             list.RemoveAt(index1);
         }
         if (list.Count > 0)
         {
-            int index2 = Random.Range(0, list.Count);
+            int index2 = UnityEngine.Random.Range(0, list.Count);
             result.Add(list[index2]);
         }
         return result;
@@ -505,73 +543,58 @@ public class BattleController : MonoBehaviour
     // エンティティのHPとMPの変化を監視して、ダメージや回復のエフェクトを表示する
     private void InitializeReactiveProperties()
     {
-        _leftEntity.HitPointRp.Subscribe(newHp =>
+        var delayOnHpChangeMills = 0;
+        var delayOnManaChangeMills = 900;
+
+        _leftEntity.HitPointRp.Subscribe(async newHp =>
         {
             int oldHp = _leftEntity.Parameter.HitPoint;
             if (newHp < oldHp)
             {
+                await UniTask.Delay(delayOnHpChangeMills);
                 ChangeNumberWithAnimationAsync(_healthLabelLeft, newHp).Forget();
             }
             else if (newHp > oldHp)
             {
+                await UniTask.Delay(delayOnHpChangeMills);
                 ChangeNumberWithAnimationAsync(_healthLabelLeft, newHp).Forget();
-                PopHealNumberEffectAsync(_leftEntity, newHp - oldHp).Forget();
             }
         });
 
-        _leftEntity.ManaPointRp.Subscribe(newMp =>
+        _leftEntity.ManaPointRp.Subscribe(async newMp =>
         {
             int oldMp = _leftEntity.Parameter.ManaPoint;
             if (newMp < oldMp)
             {
+                await UniTask.Delay(delayOnManaChangeMills);
                 ChangeNumberWithAnimationAsync(_manaLabelLeft, newMp).Forget();
             }
         });
 
-        _rightEntity.HitPointRp.Subscribe(newHp =>
+        _rightEntity.HitPointRp.Subscribe(async newHp =>
         {
             int oldHp = _rightEntity.Parameter.HitPoint;
             if (newHp < oldHp)
             {
+                await UniTask.Delay(delayOnHpChangeMills);
                 ChangeNumberWithAnimationAsync(_healthLabelRight, newHp).Forget();
             }
             else if (newHp > oldHp)
             {
+                await UniTask.Delay(delayOnHpChangeMills);
                 ChangeNumberWithAnimationAsync(_healthLabelRight, newHp).Forget();
-                PopHealNumberEffectAsync(_rightEntity, newHp - oldHp).Forget();
             }
         });
 
-        _rightEntity.ManaPointRp.Subscribe(newMp =>
+        _rightEntity.ManaPointRp.Subscribe(async newMp =>
         {
             int oldMp = _rightEntity.Parameter.ManaPoint;
             if (newMp < oldMp)
             {
+                await UniTask.Delay(delayOnManaChangeMills);
                 ChangeNumberWithAnimationAsync(_manaLabelRight, newMp).Forget();
             }
         });
-    }
-
-    private async UniTask PopHealNumberEffectAsync(Entity targetEntity, int healAmount)
-    {
-        var healNumberEffect = NumberEffectPool.Instance.GetFromPool<HealNumberEffect>("HealNumberEffect");
-
-        if (targetEntity == _leftEntity)
-        {
-            var rect = _healthLabelLeft.worldBound;
-            // UIToolKitの座標はScreen座標とは異なるため、Screen座標に変換する(Screen座標は左下が原点)
-            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
-            healNumberEffect.transform.position = screenPos;
-        }
-        else if (targetEntity == _rightEntity)
-        {
-            var rect = _healthLabelRight.worldBound;
-            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
-            healNumberEffect.transform.position = screenPos;
-        }
-
-        await healNumberEffect.ShowEffect(healAmount);
-        NumberEffectPool.Instance.ReturnToPool("HealNumberEffect", healNumberEffect.gameObject);
     }
 
     private async UniTask PlayImageAnimationAsync(string key, Entity targetEntity)

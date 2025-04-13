@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using R3;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class BattleLogController : MonoBehaviour
     private Label _label;
 
     private bool isFlipable;
+    private int _waitTimeToBeFilippableMills = 500;
 
     public void Initialize(Label logLabel)
     {
@@ -39,16 +41,14 @@ public class BattleLogController : MonoBehaviour
         _label.text = text;
     }
 
-    public void AddLog(string log)
+    public async UniTask AddLogAsync(string log)
     {
-        isFlipable = true;
         _logs.Enqueue(log);
         _label.text = _logs.Peek();
-    }
 
-    public void ClearLogs()
-    {
-        _logs.Clear();
+        // ログが追加されてもすぐにはフリップできないようにする
+        await UniTask.Delay(_waitTimeToBeFilippableMills, cancellationToken: this.GetCancellationTokenOnDestroy());
+        isFlipable = true;
     }
 
     private void FlipLog()

@@ -31,7 +31,7 @@ public class Parameter
         foreach (var skillType in original.SkillTypes)
         {
             var skill = SkillList.GetSkill(skillType);
-            Skills.Add(new Skill(skill.Name, skill.Description, skill.ManaCost, skill.Action));
+            Skills.Add(new Skill(skill.Name, skill.Description, skill.ManaCost, skill.EffectKey, skill.Action));
         }
         IconSprite = original.IconSprite;
     }
