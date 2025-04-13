@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
 
     public async UniTask InitializePlayersAsync()
     {
-        // パラメーターアセットをロード
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
         var clonedParameter = parameter.Clone();
