@@ -229,4 +229,9 @@ public class Constants
                 return "Status";
         }
     }
+
+    // ****** ImageEffectKey *******
+    public static string ImageAnimationKeySlash = "SlashAnimationEffect";
+    public static string ImageAnimationKeyHeal = "HealAnimationEffect";
+    public static string ImageAnimationKeyBite = "BiteAnimationEffect";
 }

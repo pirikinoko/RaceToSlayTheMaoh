@@ -19,7 +19,7 @@ public class Parameter
     public List<SkillList.SkillType> SkillTypes = new();
     public List<Skill> Skills = new();
 
-    // コピーコンストラクタ
+    // 繧ｳ繝斐�ｼ逕ｨ縺ｮ繧ｳ繝ｳ繧ｹ繝医Λ繧ｯ繧ｿ
     public Parameter(Parameter original)
     {
         EntityType = original.EntityType;
@@ -27,11 +27,11 @@ public class Parameter
         HitPoint = original.HitPoint;
         ManaPoint = original.ManaPoint;
         Power = original.Power;
-        // スキルのディープコピー
+        // 繧ｹ繧ｭ繝ｫ縺ｮ繧ｳ繝斐�ｼ
         foreach (var skillType in original.SkillTypes)
         {
             var skill = SkillList.GetSkill(skillType);
-            Skills.Add(new Skill(skill.Name, skill.Description, skill.ManaCost, skill.Action));
+            Skills.Add(new Skill(skill.Name, skill.Description, skill.ManaCost, skill.EffectKey, skill.Action));
         }
         IconSprite = original.IconSprite;
     }
