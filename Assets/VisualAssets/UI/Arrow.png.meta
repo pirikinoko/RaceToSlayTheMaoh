@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7080eb27861f55848bd824092b8a3dcf
+guid: c52e465573038ca4e856395c6d66d039
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1893193033442730955
-    second: ManaBar-Progress_0
+      213: -4346244404228752641
+    second: Arrow_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,12 +113,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ManaBar-Progress_0
+      name: Arrow_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 24
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bc329998809f54a10800000000000000
-      internalID: 1893193033442730955
+      spriteID: ffa7ae2edb90fa3c0800000000000000
+      internalID: -4346244404228752641
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ManaBar-Progress_0: 1893193033442730955
+      Arrow_0: -4346244404228752641
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
