@@ -14,40 +14,47 @@ public class Reward
         SetRandomReword();
     }
 
+    public class RewardParameter
+    {
+        public static int HpGain = 10;
+        public static int MpGain = 7;
+        public static int PowerGain = 1;
+    }
+
     private void SetRandomReword()
     {
-        // •ñV‚ÌŒó•â‚Æ‚È‚éƒAƒNƒVƒ‡ƒ“‚Æà–¾‚ğƒŠƒXƒg‚É‚Ü‚Æ‚ß‚é
+        // å ±é…¬ã®å€™è£œã¨ãªã‚‹ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¨èª¬æ˜ã‚’ãƒªã‚¹ãƒˆã«ã¾ã¨ã‚ã‚‹
         List<(StatusReword action, string description)> rewordActions = new List<(StatusReword, string)>
         {
-            (IncreaseHealth, "HP‚ª10ƒ|ƒCƒ“ƒg‘‰Á‚·‚é"),
-            (IncreaseMana, "MP‚ª10ƒ|ƒCƒ“ƒg‘‰Á‚·‚é"),
-            (IncreasePower, "UŒ‚—Í‚ª2ƒ|ƒCƒ“ƒg‘‰Á‚·‚é")
+            (IncreaseHealth, $"HPãŒ{RewardParameter.HpGain}ãƒã‚¤ãƒ³ãƒˆå¢—åŠ ã™ã‚‹"),
+            (IncreaseMana, $"MPãŒ{RewardParameter.MpGain}ãƒã‚¤ãƒ³ãƒˆå¢—åŠ ã™ã‚‹"),
+            (IncreasePower, $"æ”»æ’ƒåŠ›ãŒ{RewardParameter.PowerGain}ãƒã‚¤ãƒ³ãƒˆå¢—åŠ ã™ã‚‹")
         };
 
-        // ƒ‰ƒ“ƒ_ƒ€‚ÉƒCƒ“ƒfƒbƒNƒX‚ğ‘I‘ğ
+        // ãƒ©ãƒ³ãƒ€ãƒ ã«ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’é¸æŠ
         int index = Random.Range(0, rewordActions.Count);
 
-        // ‘I‘ğ‚µ‚½•ñV‚ğƒZƒbƒg
+        // é¸æŠã—ãŸå ±é…¬ã‚’ã‚»ãƒƒãƒˆ
         StatusRewordAction = rewordActions[index].action;
         Description = rewordActions[index].description;
     }
 
     private string IncreaseHealth(Entity target)
     {
-        target.Parameter.HitPoint += 10;
-        return $"{target.name}‚ÌHP‚ª10ƒ|ƒCƒ“ƒg‘‰Á‚µ‚½I";
+        target.TakeDamage(-RewardParameter.HpGain);
+        return $"{target.name}ã®HPãŒ{RewardParameter.HpGain}ãƒã‚¤ãƒ³ãƒˆå¢—åŠ ã—ãŸï¼";
     }
 
     private string IncreaseMana(Entity target)
     {
-        target.Parameter.ManaPoint += 10;
-        return $"{target.name}‚ÌMP‚ª10ƒ|ƒCƒ“ƒg‘‰Á‚µ‚½I";
+        target.UseManaPoint(-RewardParameter.MpGain);
+        return $"{target.name}ã®MPãŒ{RewardParameter.MpGain}ãƒã‚¤ãƒ³ãƒˆå¢—åŠ ã—ãŸï¼";
     }
 
     private string IncreasePower(Entity target)
     {
-        target.Parameter.Power += 1;
-        return $"{target.name}‚ÌUŒ‚—Í‚ª2ƒ|ƒCƒ“ƒg‘‰Á‚µ‚½I";
+        target.Parameter.Power += RewardParameter.PowerGain;
+        return $"{target.name}ã®æ”»æ’ƒåŠ›ãŒ{RewardParameter.PowerGain}ãƒã‚¤ãƒ³ãƒˆå¢—åŠ ã—ãŸï¼";
     }
 
     public string Execute(Entity target)

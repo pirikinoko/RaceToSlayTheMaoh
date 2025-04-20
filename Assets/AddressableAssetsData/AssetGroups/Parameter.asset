@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Parameter
   m_GUID: ea73b9b8de50b2b41966d0cac76f2640
   m_SerializeEntries:
+  - m_GUID: 1d7ff081d94552a4381f5b620f70fea5
+    m_Address: Assets/ScriptableObjects/Parameter/Parameter.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Parameter
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 99a768d1d91d9e841918b2124d0fc1bb
     m_Address: Player
     m_ReadOnly: 0

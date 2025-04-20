@@ -41,13 +41,11 @@ public class BattleLogController : MonoBehaviour
         _label.text = text;
     }
 
-    public async UniTask AddLogAsync(string log)
+    public void AddLog(string log)
     {
         _logs.Enqueue(log);
         _label.text = _logs.Peek();
 
-        // ログが追加されてもすぐにはフリップできないようにする
-        await UniTask.Delay(_waitTimeToBeFilippableMills, cancellationToken: this.GetCancellationTokenOnDestroy());
         isFlipable = true;
     }
 

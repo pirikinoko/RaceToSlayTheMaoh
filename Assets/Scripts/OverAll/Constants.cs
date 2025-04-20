@@ -19,8 +19,10 @@ public class Constants
     public static int GetRandomizedValueWithinOffset(int baseValue, int offsetPercent)
     {
         var offsetValue = (int)(baseValue * offsetPercent / 100);
-        var min = baseValue - offsetValue;
-        var max = baseValue + offsetValue;
+        // minが1未満の場合は1を返す
+        var min = ((baseValue - offsetValue) < 1) ? 1 : baseValue - offsetValue;
+        // +1は上限値を含めるため
+        var max = baseValue + offsetValue + 1;
         var randomValue = Random.Range(min, max);
         // 最低でも1を返す
         return randomValue >= 1 ? randomValue : 1;
@@ -28,7 +30,7 @@ public class Constants
 
     // ******* Player *******
 
-    public static float PlayerMoveSpeed = 1.5f;
+    public static float PlayerMoveSpeed = 2.0f;
 
     // ******* Entity *******
 
@@ -76,7 +78,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}の必殺技!", attacker);
+                return string.Format("{0}の攻撃!", attacker);
             case Language.English:
                 return string.Format("{0} is Attacking!", attacker);
             default:
@@ -141,11 +143,37 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return "この戦いは永遠に続くのか.....";
+                return "日が暮れてしまったようだ.....";
             case Language.English:
                 return "This battle seems to be endless.....";
             default:
                 return "This battle seems to be endless.....";
+        }
+    }
+
+    public static string GetSentenceWhenSelectingReward(Language language)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return "報酬を選択してください";
+            case Language.English:
+                return "Please select a reward";
+            default:
+                return "Please select a reward";
+        }
+    }
+
+    public static string GetSentenceWhenAlreadyHoldingTheSkill(Language language)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return "既に習得済みです";
+            case Language.English:
+                return "You have already learned this skill";
+            default:
+                return "You have already learned this skill";
         }
     }
 

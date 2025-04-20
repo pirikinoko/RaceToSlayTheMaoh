@@ -1,8 +1,17 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/Title.uss?fileID=7433441132597879392&amp;guid=58670fe35fcc16045b1b532c6eaabb4c&amp;type=3#Title" />
-    <engine:Label text="Correct!" name="Lavel-Title" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&amp;guid=fdb8f6fb8f0532743a53412e3c61402b&amp;type=3#Nosutaru-dotMPlusH-10-Regular&quot;); font-size: 150px; -unity-text-align: upper-center; top: 10%; color: rgb(255, 255, 255);" />
-    <engine:VisualElement name="VisualElement" style="justify-content: flex-start; align-self: center; margin-top: 0; width: 600px; align-content: auto; align-items: stretch; position: absolute; top: auto; bottom: 25%; left: auto; right: auto;">
-        <engine:Button text="StartLocal" name="Button-Start-Local" enabled="true" class="actionButton" style="visibility: visible;" />
-        <engine:Button text="StartOnline" name="Button-Start-Online" class="actionButton" style="font-size: 80px;" />
+    <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/OverAll.uss?fileID=7433441132597879392&amp;guid=4a4c7c1f77800fa4eb5a604d5e7f58b2&amp;type=3#OverAll" />
+    <engine:VisualElement name="TitleElement" style="top: 10%;">
+        <engine:VisualElement name="TitleImage" style="background-image: url(&quot;project://database/Assets/VisualAssets/TitleLogo/TitleLogo.png?fileID=2800000&amp;guid=0023473bc0fd0b745b9ae943b64dde8e&amp;type=3#TitleLogo&quot;); -unity-background-scale-mode: scale-to-fit; width: 1200px; height: 400px; align-self: center; justify-content: center;">
+            <engine:Label text="Recta!" name="Lavel-Title" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&amp;guid=fdb8f6fb8f0532743a53412e3c61402b&amp;type=3#Nosutaru-dotMPlusH-10-Regular&quot;); font-size: 200px; -unity-text-align: upper-center; top: auto; color: rgb(255, 255, 255); display: none;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="InteractiveElements" style="justify-content: flex-start; align-self: center; margin-top: 90px; width: auto; align-content: auto; align-items: center;">
+            <engine:VisualElement name="LocalPlayElement" style="flex-grow: 1; flex-direction: row;">
+                <engine:Button name="ArrowLeft" class="arrowButton" style="rotate: 180deg; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
+                <engine:Button text="4PlayersGame" name="Button-Start-Local" enabled="true" class="actionButton label titleLabel" style="visibility: visible;" />
+                <engine:Button name="ArrowRight" class="arrowButton" style="border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
+            </engine:VisualElement>
+            <engine:Button text="StartOnline" name="Button-Start-Online" class="actionButton label titleLabel" style="font-size: 60px;" />
+        </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

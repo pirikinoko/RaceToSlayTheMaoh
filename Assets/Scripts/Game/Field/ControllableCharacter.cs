@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ControllableCharacter : MonoBehaviour
 {
-    // �ړ��֘A
     private StateController _stateController;
 
     private Transform _transform;
@@ -12,10 +11,10 @@ public class ControllableCharacter : MonoBehaviour
 
     private bool _isMoving;
 
-    async void Start()
+    private void Start()
     {
         _transform = GetComponent<Transform>();
-        _stateController = FindObjectOfType<StateController>();
+        _stateController = FindFirstObjectByType<StateController>();
     }
 
     private void Update()
@@ -23,8 +22,10 @@ public class ControllableCharacter : MonoBehaviour
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
+        // 押しっぱなしで移動できないように
         if (!_isReadyToMove)
         {
+            //　移動が終わって,かつキー入力がない場合は移動可能にする
             _isReadyToMove = !_isMoving && x == 0 && y == 0;
             return;
         }
@@ -41,7 +42,15 @@ public class ControllableCharacter : MonoBehaviour
                 return;
             }
 
-            MoveAsync(new Vector2(x, y)).Forget();
+            var InputedDirection = new Vector2(x, y);
+
+            // 移動先に障害物がないか確認する
+            if (!CheckInputedDirectionMovable(InputedDirection))
+            {
+                return;
+            }
+
+            MoveAsync(InputedDirection).Forget();
             _isReadyToMove = false;
         }
     }
@@ -59,5 +68,16 @@ public class ControllableCharacter : MonoBehaviour
         });
 
         _isMoving = false;
+    }
+
+    /// <summary>
+    /// Rayを飛ばして、移動先に障害物がないか確認する
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
+    private bool CheckInputedDirectionMovable(Vector2 direction)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(_transform.position, direction, 1f);
+        return hit.collider == null && direction.magnitude > 0;
     }
 }
