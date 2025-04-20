@@ -39,7 +39,7 @@ public class FieldController : MonoBehaviour
         // エンカウントをチェックし続ける
         while (true)
         {
-            await UniTask.Delay(1000);
+            await UniTask.Delay(800);
 
             if (_stateController.CurrentState != State.Field)
             {
@@ -69,8 +69,12 @@ public class FieldController : MonoBehaviour
                 {
                     _stateController.ChangeState(State.Battle);
 
-                    // 敵とプレイヤーが衝突した場合は敵をプレイヤーに変換
-                    if (entityLeft.EntityType != EntityType.Player && entityRight.EntityType == EntityType.Player)
+                    // 敵とプレイヤー衝突した場合はプレイヤーを左側に変換
+                    if (entityLeft.EntityType == EntityType.Player && entityRight.EntityType != EntityType.Player)
+                    {
+                        _battleController.StartBattle(entityLeft, entityRight);
+                    }
+                    else
                     {
                         _battleController.StartBattle(entityRight, entityLeft);
                     }

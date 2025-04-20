@@ -25,14 +25,15 @@ public static class SkillList
     {
         public static class Heal
         {
-            public const int ManaCost = 3;
-            public const int HealPotential = 10;
+            public const int ManaCost = 2;
+            public const int HealPotential = 4;
             public const int OffsetPercent = 50;
         }
 
         public static class Bite
         {
             public const int ManaCost = 2;
+            public const int HealPotential = 1;
             public const int OffsetPercent = 50;
         }
     }
@@ -148,10 +149,15 @@ public static class SkillList
                     offsetPercent: SkillParameters.Bite.OffsetPercent
                 );
                 opponent.TakeDamage(damageAmount);
+                int healAmount = Constants.GetRandomizedValueWithinOffset(
+                    baseValue: SkillParameters.Bite.HealPotential,
+                    offsetPercent: SkillParameters.Bite.OffsetPercent
+                );
+                skillUser.TakeDamage(-healAmount);
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
-                        $"{skillUser.name}は{opponent.name}に{damageAmount}のダメージを与えた"
+                        $"{skillUser.name}は{opponent.name}に{damageAmount}のダメージを与え,{healAmount}回復した",
                     },
                     effectKey: Constants.ImageAnimationKeyBite
                 );

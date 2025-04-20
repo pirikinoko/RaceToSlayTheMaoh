@@ -16,35 +16,35 @@ MonoBehaviour:
   - EntityType: 0
     IconSprite: {fileID: 21300000, guid: fe5fe608913d1b749baf641cc1d6acac, type: 3}
     Name: Player
-    HitPoint: 15
-    ManaPoint: 10
+    HitPoint: 7
+    ManaPoint: 5
     Power: 2
     SkillTypes: 01000000
   - EntityType: 1
     IconSprite: {fileID: 21300000, guid: bf0dad1f62408524fa7c854516e3fec2, type: 3}
     Name: Axe
-    HitPoint: 15
-    ManaPoint: 10
+    HitPoint: 8
+    ManaPoint: 4
     Power: 2
     SkillTypes: 01000000
   - EntityType: 2
     IconSprite: {fileID: 21300000, guid: b4c56ca07096ce8479d0f3b95edc6658, type: 3}
-    Name: Samura
-    HitPoint: 15
-    ManaPoint: 10
-    Power: 2
+    Name: Samurai
+    HitPoint: 6
+    ManaPoint: 4
+    Power: 3
     SkillTypes: 01000000
   - EntityType: 3
     IconSprite: {fileID: 21300000, guid: 1ea9fa4e92244ca469c752748b3cf923, type: 3}
     Name: Cook
-    HitPoint: 15
-    ManaPoint: 10
+    HitPoint: 10
+    ManaPoint: 6
     Power: 2
     SkillTypes: 0100000002000000
   - EntityType: 4
     IconSprite: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
     Name: Magician
-    HitPoint: 15
+    HitPoint: 10
     ManaPoint: 10
     Power: 2
     SkillTypes: 01000000
@@ -52,20 +52,20 @@ MonoBehaviour:
     IconSprite: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
     Name: Shield
     HitPoint: 15
-    ManaPoint: 10
+    ManaPoint: 4
     Power: 2
     SkillTypes: 01000000
   - EntityType: 6
     IconSprite: {fileID: 21300000, guid: 119dca6699aa14f459693b0905e3d7d1, type: 3}
     Name: Dullahan
-    HitPoint: 15
-    ManaPoint: 10
-    Power: 2
+    HitPoint: 20
+    ManaPoint: 8
+    Power: 3
     SkillTypes: 0100000002000000
   - EntityType: 7
     IconSprite: {fileID: 21300000, guid: 51deeebefef47cf478d93159728eb67d, type: 3}
     Name: Satan
-    HitPoint: 15
+    HitPoint: 30
     ManaPoint: 10
-    Power: 2
+    Power: 5
     SkillTypes: 01000000
