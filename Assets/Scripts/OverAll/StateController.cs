@@ -103,7 +103,13 @@ public class StateController : MonoBehaviour
             _fieldController.DisplayStatusBoxes();
         }
         await _fieldController.UpdateStatusBoxesAsync();
-        await _mainController.StartNewTurnAsync();
+
+        var currentTurnPlayer = _mainController.GetCurrentTurnPlayerEntity();
+
+        if (_mainController.TurnCount == 0 || currentTurnPlayer.GetComponent<ControllableCharacter>().GetMoves() <= 0)
+        {
+            await _mainController.StartNewTurnAsync();
+        }
     }
 
     private void SwitchBattleState()

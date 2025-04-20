@@ -35,54 +35,40 @@ public class FieldController : MonoBehaviour
         _statusBoxComponents.AddRange(bottomStatusBoxComponents);
 
         _statusBoxComponents.ForEach(statusBox => statusBox.style.display = DisplayStyle.None);
-
-        // エンカウントをチェックし続ける
-        while (true)
-        {
-            await UniTask.Delay(800);
-
-            if (_stateController.CurrentState != State.Field)
-            {
-                await UniTask.Delay(3000);
-                continue;
-            }
-            CheckEncount();
-        }
     }
 
-    private void CheckEncount()
+    public bool CheckEncount(Entity entityLeft)
     {
         var allEntity = new List<Entity>();
         allEntity.AddRange(_playerController.PlayerList);
         allEntity.AddRange(_enemyController._enemyList);
 
-        foreach (var entityLeft in allEntity)
+        foreach (var entityRight in allEntity)
         {
-            foreach (var entityRight in allEntity)
+            // 自分同士 || 魔物同士はスルー
+            if (entityLeft == entityRight || (entityLeft.EntityType != EntityType.Player && entityRight.EntityType != EntityType.Player))
             {
-                if (entityLeft == entityRight || (entityLeft.EntityType != EntityType.Player && entityRight.EntityType != EntityType.Player))
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                if (Vector2.Distance(entityLeft.transform.position, entityRight.transform.position) < 0.1f)
-                {
-                    _stateController.ChangeState(State.Battle);
+            if (Vector2.Distance(entityLeft.transform.position, entityRight.transform.position) < 0.1f)
+            {
+                _stateController.ChangeState(State.Battle);
 
-                    // 敵とプレイヤー衝突した場合はプレイヤーを左側に変換
-                    if (entityLeft.EntityType == EntityType.Player && entityRight.EntityType != EntityType.Player)
-                    {
-                        _battleController.StartBattle(entityLeft, entityRight);
-                    }
-                    else
-                    {
-                        _battleController.StartBattle(entityRight, entityLeft);
-                    }
+                // 敵とプレイヤー衝突した場合はプレイヤーを左側に変換
+                if (entityLeft.EntityType == EntityType.Player && entityRight.EntityType != EntityType.Player)
+                {
                     _battleController.StartBattle(entityLeft, entityRight);
-                    return;
                 }
+                else
+                {
+                    _battleController.StartBattle(entityRight, entityLeft);
+                }
+                _battleController.StartBattle(entityLeft, entityRight);
+                return true;
             }
         }
+        return false;
     }
 
     public void DisplayStatusBoxes()

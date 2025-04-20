@@ -1,9 +1,11 @@
 using Cysharp.Threading.Tasks;
+using R3;
 using UnityEngine;
 
 public class ControllableCharacter : MonoBehaviour
 {
-    private StateController _stateController;
+    private MainContrller _mainController;
+    private FieldController _fieldController;
 
     private Transform _transform;
 
@@ -11,16 +13,24 @@ public class ControllableCharacter : MonoBehaviour
 
     private bool _isMoving;
 
+    private int _remainingMoves = 0;
+
     private void Start()
     {
         _transform = GetComponent<Transform>();
-        _stateController = FindFirstObjectByType<StateController>();
+        _fieldController = FindFirstObjectByType<FieldController>();
+        _mainController = FindFirstObjectByType<MainContrller>();
     }
 
     private void Update()
     {
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
+
+        if (_remainingMoves <= 0)
+        {
+            return;
+        }
 
         // 押しっぱなしで移動できないように
         if (!_isReadyToMove)
@@ -30,29 +40,27 @@ public class ControllableCharacter : MonoBehaviour
             return;
         }
 
-        if (_stateController.CurrentState == State.Field)
+        // 縦横同時押しの時は、優先度をつける
+        if (x != 0)
         {
-            if (x != 0)
-            {
-                y = 0;
-            }
-
-            if (x == 0 && y == 0)
-            {
-                return;
-            }
-
-            var InputedDirection = new Vector2(x, y);
-
-            // 移動先に障害物がないか確認する
-            if (!CheckInputedDirectionMovable(InputedDirection))
-            {
-                return;
-            }
-
-            MoveAsync(InputedDirection).Forget();
-            _isReadyToMove = false;
+            y = 0;
         }
+
+        if (x == 0 && y == 0)
+        {
+            return;
+        }
+
+        var InputedDirection = new Vector2(x, y);
+
+        // 移動先に障害物がないか確認する
+        if (!CheckInputedDirectionMovable(InputedDirection))
+        {
+            return;
+        }
+
+        MoveAsync(InputedDirection).Forget();
+        _isReadyToMove = false;
     }
 
     private async UniTask MoveAsync(Vector2 direction)
@@ -68,6 +76,20 @@ public class ControllableCharacter : MonoBehaviour
         });
 
         _isMoving = false;
+        _remainingMoves--;
+
+        // エンカウントチェック
+        if (_fieldController.CheckEncount(gameObject.GetComponent<Entity>()))
+        {
+            return;
+        }
+
+        // 戦闘が発生した場合は,次のターン開始処理はStateControllerに任せる
+        // ここでは戦闘が発生しなかった場合の次のターン開始処理を行う
+        if (_remainingMoves <= 0)
+        {
+            _mainController.StartNewTurnAsync().Forget();
+        }
     }
 
     /// <summary>
@@ -79,5 +101,14 @@ public class ControllableCharacter : MonoBehaviour
     {
         RaycastHit2D hit = Physics2D.Raycast(_transform.position, direction, 1f);
         return hit.collider == null && direction.magnitude > 0;
+    }
+
+    public void SetMoves(int moves)
+    {
+        _remainingMoves = moves;
+    }
+    public int GetMoves()
+    {
+        return _remainingMoves;
     }
 }

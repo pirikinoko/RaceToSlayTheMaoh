@@ -31,6 +31,7 @@ public class Constants
     // ******* Player *******
 
     public static float PlayerMoveSpeed = 2.0f;
+    public static int MaxMoves = 3;
 
     // ******* Entity *******
 
