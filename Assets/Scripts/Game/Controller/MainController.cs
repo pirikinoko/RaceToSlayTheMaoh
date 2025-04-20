@@ -12,6 +12,8 @@ public class MainContrller : MonoBehaviour
     [SerializeField]
     private CameraController _cameraController;
     [SerializeField]
+    private StateController _stateController;
+    [SerializeField]
     private PlayerController _playerController;
     [SerializeField]
     private EnemyController _enemyController;
@@ -28,6 +30,7 @@ public class MainContrller : MonoBehaviour
     private void Start()
     {
         _diceBoxComponent = GetComponent<UIDocument>().rootVisualElement.Q<DiceBoxComponent>("DiceBoxComponent");
+        _diceBoxComponent.style.display = DisplayStyle.None;
     }
 
     public async UniTask InitializeGame()
@@ -52,12 +55,19 @@ public class MainContrller : MonoBehaviour
 
     private async UniTask<int> GetDiceResultAsync()
     {
+        _stateController.BlackoutField();
+
+        _diceBoxComponent.style.display = DisplayStyle.Flex;
         _diceBoxComponent.StartRolling();
         if (_userController.MyEntity == _currentTurnPlayerEntity)
         {
             _stopButton.style.display = DisplayStyle.Flex;
         }
+
         await UniTask.WaitUntil(() => _diceBoxComponent.IsRolling == false);
+        _diceBoxComponent.style.display = DisplayStyle.None;
+
+        _stateController.RevealField();
         return _diceBoxComponent.GetCurrentNumber();
     }
 

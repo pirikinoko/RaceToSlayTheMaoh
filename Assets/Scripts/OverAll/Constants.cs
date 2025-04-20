@@ -33,6 +33,13 @@ public class Constants
     public static float PlayerMoveSpeed = 2.0f;
     public static int MaxMoves = 3;
 
+    // ******* Main *******
+    public static int MaxPlayerCount = 4;
+    public static int MinPlayerCount = 1;
+    public static int MaxDiceValue = 4;
+    public static float DiceRollUpdateInterval = 0.03f;
+    public static int DiceHighlightBlinkCount = 5;
+    public static float DiceHighlightBlinkInterval = 0.2f;
     // ******* Entity *******
 
     public static int MaxHitPoint = 50;

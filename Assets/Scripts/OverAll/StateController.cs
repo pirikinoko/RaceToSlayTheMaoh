@@ -1,4 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+﻿// Removed unnecessary using directive
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -95,6 +97,7 @@ public class StateController : MonoBehaviour
     {
         _fieldRoot.style.display = DisplayStyle.Flex;
         RevealField();
+
         if (_mainController.TurnCount == 0)
         {
             await _mainController.InitializeGame();
@@ -112,10 +115,28 @@ public class StateController : MonoBehaviour
         }
     }
 
-    private void SwitchBattleState()
+    private async void SwitchBattleState()
     {
-        _battleRoot.style.display = DisplayStyle.Flex;
         BlackoutField();
+        await UniTask.Delay(TimeSpan.FromSeconds(1f));
+        _battleRoot.style.display = DisplayStyle.Flex;
+
+        // スライドイン演出
+        // 画面右端から中央へ移動（X座標を調整）
+        var width = _battleRoot.resolvedStyle.width;
+        if (width == 0) width = 1920; // fallback（エディタで未レイアウト時）
+        _battleRoot.style.translate = new StyleTranslate(new Translate(width, 0, 0));
+        float duration = 0.4f;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+            float x = Mathf.Lerp(width, 0, t);
+            _battleRoot.style.translate = new StyleTranslate(new Translate(x, 0, 0));
+            await UniTask.DelayFrame(1);
+            elapsed += Time.deltaTime;
+        }
+        _battleRoot.style.translate = new StyleTranslate(new Translate(0, 0, 0));
     }
 
     private void SwitchResultState()
@@ -123,6 +144,7 @@ public class StateController : MonoBehaviour
         _resultRoot.style.display = DisplayStyle.Flex;
         BlackoutField();
     }
+
 
     public void BlackoutField()
     {
