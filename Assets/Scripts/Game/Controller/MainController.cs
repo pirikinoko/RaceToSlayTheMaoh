@@ -1,9 +1,14 @@
 using Cysharp.Threading.Tasks;
 using System.Linq;
+using TMPro;
+using UIToolkit;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MainContrller : MonoBehaviour
 {
+    [SerializeField]
+    private UserController _userController;
     [SerializeField]
     private CameraController _cameraController;
     [SerializeField]
@@ -16,6 +21,15 @@ public class MainContrller : MonoBehaviour
     private int _playerCount = 1;
     private int _currentTurnPlayerId = 1;
     private Entity _currentTurnPlayerEntity;
+    private DiceBoxComponent _diceBoxComponent;
+
+    private Button _stopButton => _diceBoxComponent.StopButton;
+
+    private void Start()
+    {
+        _diceBoxComponent = GetComponent<UIDocument>().rootVisualElement.Q<DiceBoxComponent>("DiceBoxComponent");
+    }
+
     public async UniTask InitializeGame()
     {
         await _playerController.InitializePlayersAsync();
@@ -27,16 +41,24 @@ public class MainContrller : MonoBehaviour
         _currentTurnPlayerId = _currentTurnPlayerId == _playerCount ? 1 : _currentTurnPlayerId + 1;
 
         _currentTurnPlayerEntity = _playerController.PlayerList.FirstOrDefault(p => p.Id == _currentTurnPlayerId);
-        _currentTurnPlayerEntity.GetComponent<ControllableCharacter>().SetMoves(GetMovesByRandom());
 
         await _cameraController.MoveCameraAsync(_currentTurnPlayerEntity.transform.position);
+
+        var moves = await GetDiceResultAsync();
+        _currentTurnPlayerEntity.GetComponent<ControllableCharacter>().SetMoves(moves);
 
         TurnCount++;
     }
 
-    private int GetMovesByRandom()
+    private async UniTask<int> GetDiceResultAsync()
     {
-        return Random.Range(1, Constants.MaxMoves + 1);
+        _diceBoxComponent.StartRolling();
+        if (_userController.MyEntity == _currentTurnPlayerEntity)
+        {
+            _stopButton.style.display = DisplayStyle.Flex;
+        }
+        await UniTask.WaitUntil(() => _diceBoxComponent.IsRolling == false);
+        return _diceBoxComponent.GetCurrentNumber();
     }
 
     public Entity GetCurrentTurnPlayerEntity()

@@ -5,7 +5,6 @@ namespace UIToolkit
 {
     public class StatusBoxComponent : VisualElement
     {
-
         private static class ClassNames
         {
             public static string StatusBoxContainer = "statusBox__container";
@@ -32,7 +31,6 @@ namespace UIToolkit
             }
         }
 
-        // �f�[�^�������������N����A�r���_�[�ɕ\�������悤�ɂ��邽�߂ɁA��`���ꂽ Traits �Ɠ������O�̃v���p�e�B�����K�v������܂�
         private Parameter _parameter;
         private VisualElement _leftContainer;
         private VisualElement _rightContainer;
@@ -53,7 +51,6 @@ namespace UIToolkit
             set => _parameter = value;
         }
 
-        // ����left,right, upper, lower �Ƃ������O�͕�����ɂ����ł��C�����Ƌ�̓I�Ȗ��O������ׂ��ł�
         public StatusBoxComponent()
         {
             AddToClassList(ClassNames.StatusBoxContainer);
