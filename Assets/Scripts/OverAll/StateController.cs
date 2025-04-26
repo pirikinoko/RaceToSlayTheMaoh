@@ -109,7 +109,7 @@ public class StateController : MonoBehaviour
 
         var currentTurnPlayer = _mainController.GetCurrentTurnPlayerEntity();
 
-        if (_mainController.TurnCount == 0 || currentTurnPlayer.GetComponent<ControllableCharacter>().GetMoves() <= 0)
+        if (_mainController.TurnCount == 0 || currentTurnPlayer.GetComponent<ControllableEntity>().GetMoves() <= 0)
         {
             await _mainController.StartNewTurnAsync();
         }

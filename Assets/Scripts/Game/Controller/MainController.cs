@@ -48,7 +48,8 @@ public class MainContrller : MonoBehaviour
         await _cameraController.MoveCameraAsync(_currentTurnPlayerEntity.transform.position);
 
         var moves = await GetDiceResultAsync();
-        _currentTurnPlayerEntity.GetComponent<ControllableCharacter>().SetMoves(moves);
+        _currentTurnPlayerEntity.GetComponent<ControllableEntity>().SetMoves(moves);
+        _currentTurnPlayerEntity.GetComponent<ControllableEntity>().EnableClickMovement();
 
         TurnCount++;
     }
