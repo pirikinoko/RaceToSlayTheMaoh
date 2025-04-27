@@ -15,13 +15,20 @@ public class MoveHighlight : MonoBehaviour
     Color _defaultColor = new Color(1, 1, 1, 0.3f);
 
     // 初期化メソッド
-    public void Initialize(ControllableEntity entity, Queue<Vector2> pathToHighlightPosition)
+    public void Initialize(ControllableEntity entity, Queue<Vector2> pathToHighlightPosition, Color color)
     {
         _entity = entity;
         _pathToHighlightPosition = pathToHighlightPosition;
         // デフォルトのハイライト色を設定
-        GetComponent<SpriteRenderer>().color = _defaultColor;
+        SetColor(color);
         _isInitialized = true;
+    }
+
+    private void SetColor(Color color)
+    {
+        color.a = 0.3f;
+        _defaultColor = color;
+        GetComponent<SpriteRenderer>().color = color;
     }
 
     private void OnMouseDown()

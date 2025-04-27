@@ -506,7 +506,7 @@ public class BattleController : MonoBehaviour
                 _playerController.PlayerList.Remove(entity);
                 break;
             default:
-                _enemyController._enemyList.Remove(entity);
+                _enemyController.EnemyList.Remove(entity);
                 break;
         }
     }

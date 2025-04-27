@@ -9,6 +9,8 @@ using UnityEngine.UIElements;
 public class FieldController : MonoBehaviour
 {
     [SerializeField]
+    private MainController _mainController;
+    [SerializeField]
     private StateController _stateController;
     [SerializeField]
     private EnemyController _enemyController;
@@ -41,7 +43,7 @@ public class FieldController : MonoBehaviour
     {
         var allEntity = new List<Entity>();
         allEntity.AddRange(_playerController.PlayerList);
-        allEntity.AddRange(_enemyController._enemyList);
+        allEntity.AddRange(_enemyController.EnemyList);
 
         foreach (var entityRight in allEntity)
         {
@@ -89,6 +91,8 @@ public class FieldController : MonoBehaviour
         for (int i = 0; i < _playerController.PlayerList.Count; i++)
         {
             _statusBoxComponents[i].UpdateStatuBoxElments(_playerController.PlayerList[i], heartIcon, manaIcon, powerIcon);
+            _statusBoxComponents[i].style.opacity = Constants.opacityForWaitingPlayersStatusBox;
         }
+        _statusBoxComponents[_mainController.GetCurrentTurnPlayerId() - 1].style.opacity = Constants.opacityForActivePlayerStatusBox;
     }
 }

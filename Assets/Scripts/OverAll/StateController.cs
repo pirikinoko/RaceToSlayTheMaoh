@@ -9,7 +9,7 @@ public class StateController : MonoBehaviour
     public State CurrentState { get; private set; }
 
     [SerializeField]
-    private MainContrller _mainController;
+    private MainController _mainController;
 
     [SerializeField]
     private FieldController _fieldController;
@@ -107,14 +107,10 @@ public class StateController : MonoBehaviour
         }
         await _fieldController.UpdateStatusBoxesAsync();
 
-        var currentTurnPlayer = _mainController.GetCurrentTurnPlayerEntity();
+        var controllableEntity = _mainController.GetCurrentTurnPlayerEntity()?.GetComponent<ControllableEntity>();
 
-        if (_mainController.TurnCount == 0 || currentTurnPlayer.GetComponent<ControllableEntity>().GetMoves() <= 0)
-        {
-            await _mainController.StartNewTurnAsync();
-        }
+        await _mainController.StartNewTurnAsync();
     }
-
     private async void SwitchBattleState()
     {
         BlackoutField();

@@ -8,7 +8,7 @@
         <engine:VisualElement name="InteractiveElements" style="justify-content: flex-start; align-self: center; margin-top: 90px; width: auto; align-content: auto; align-items: center;">
             <engine:VisualElement name="LocalPlayElement" style="flex-grow: 1; flex-direction: row;">
                 <engine:Button name="ArrowLeft" class="arrowButton" style="rotate: 180deg; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
-                <engine:Button text="4PlayersGame" name="Button-Start-Local" enabled="true" class="actionButton label titleLabel" style="visibility: visible;" />
+                <engine:Button text="4PlayersGame" name="Button-Start-Local" enabled="true" class="actionButton label titleLabel" style="visibility: visible; font-size: 50px;" />
                 <engine:Button name="ArrowRight" class="arrowButton" style="border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
             </engine:VisualElement>
             <engine:Button text="StartOnline" name="Button-Start-Online" class="actionButton label titleLabel" style="font-size: 60px;" />

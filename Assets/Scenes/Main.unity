@@ -2739,7 +2739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd4a759dc645d9d4a91531fa4d051bc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyList: []
+  EnemyList: []
   _staticEnemiesParent: {fileID: 77268407}
   _enemiesToRandomizeParent: {fileID: 1744486628}
 --- !u!1001 &1038442398
@@ -9044,6 +9044,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9057513552961986785, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
+      propertyPath: _mainController
+      value: 
+      objectReference: {fileID: 1511823651}
+    - target: {fileID: 9057513552961986785, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
       propertyPath: _stateContoller
       value: 
       objectReference: {fileID: 118952727}
@@ -9175,10 +9179,14 @@ MonoBehaviour:
     - {fileID: 2377541833084464458, guid: d1e28131ed7f76048951a8b0fef033eb, type: 3}
   - name: HealAnimationEffect
     sprites:
-    - {fileID: -530034241178878421, guid: 8a7204f8149c20645918b97b3d789734, type: 3}
-    - {fileID: 6028507921123887231, guid: 0ee22b13891e9454a8eb07c06ffac2dd, type: 3}
-    - {fileID: -4217878503464057227, guid: ca35fa416b306244ebc6fe3b152f1651, type: 3}
-    - {fileID: 8433481913278819324, guid: 4fab03507eaeec241becd45fd00b4ea9, type: 3}
+    - {fileID: 21300000, guid: fe782a26c2061fe49975c3be2f845f65, type: 3}
+    - {fileID: 21300000, guid: 043ebacf12df14d4696601fe09767def, type: 3}
+    - {fileID: 21300000, guid: 300db80f941f59b44b89bc28301c160e, type: 3}
+    - {fileID: 21300000, guid: b0dc483a10134e543857b31a7adb6251, type: 3}
+    - {fileID: 21300000, guid: 4b3633fa7d3d25a429336db51c81d29c, type: 3}
+    - {fileID: 21300000, guid: df2525d189b669e4f8ce8a272d58df53, type: 3}
+    - {fileID: 21300000, guid: 851f07e1017cce543bb4ee65fddf56dc, type: 3}
+    - {fileID: 21300000, guid: 924918ed98985ba40abd3dcff3cc99fe, type: 3}
   - name: BiteAnimationEffect
     sprites:
     - {fileID: -4789370092206297288, guid: 9db0e60e8bf60b248bcea3092dca182f, type: 3}
@@ -9644,7 +9652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name

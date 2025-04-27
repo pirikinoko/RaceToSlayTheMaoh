@@ -8,6 +8,8 @@ using UnityEngine.AddressableAssets;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
+    private MainController _mainController;
+    [SerializeField]
     private Transform _playerParent;
 
     public List<Entity> PlayerList = new();
@@ -23,11 +25,19 @@ public class PlayerController : MonoBehaviour
         var clonedParameter = parameter.Clone();
         var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferencePlayer).Task;
 
-        var playerGameObject = Instantiate(playerPrefab, Constants.PlayerSpownPosition, Quaternion.identity, _playerParent);
+        for (int i = 0; i < _mainController.GetPlayerCount(); i++)
+        {
+            InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i]);
+        }
+        _onPlayersInitialized.OnNext(PlayerList);
+    }
+
+    private void InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector3 spawnPosition)
+    {
+        var playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity, _playerParent);
         var player = playerGameObject.GetComponent<Entity>();
         player.Initialize(clonedParameter);
 
         PlayerList.Add(player);
-        _onPlayersInitialized.OnNext(PlayerList);
     }
 }

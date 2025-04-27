@@ -5,10 +5,12 @@ using UIToolkit;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MainContrller : MonoBehaviour
+public class MainController : MonoBehaviour
 {
     [SerializeField]
     private UserController _userController;
+    [SerializeField]
+    private FieldController _fieldController;
     [SerializeField]
     private CameraController _cameraController;
     [SerializeField]
@@ -20,6 +22,7 @@ public class MainContrller : MonoBehaviour
 
     public int TurnCount { get; private set; } = 0;
 
+    private GameMode _gameMode;
     private int _playerCount = 1;
     private int _currentTurnPlayerId = 1;
     private Entity _currentTurnPlayerEntity;
@@ -41,8 +44,16 @@ public class MainContrller : MonoBehaviour
 
     public async UniTask StartNewTurnAsync()
     {
-        _currentTurnPlayerId = _currentTurnPlayerId == _playerCount ? 1 : _currentTurnPlayerId + 1;
+        if (TurnCount != 0)
+        {
+            _currentTurnPlayerId++;
+            if (_currentTurnPlayerId > _playerCount)
+            {
+                _currentTurnPlayerId = 1;
+            }
+        }
 
+        _fieldController.UpdateStatusBoxesAsync().Forget();
         _currentTurnPlayerEntity = _playerController.PlayerList.FirstOrDefault(p => p.Id == _currentTurnPlayerId);
 
         await _cameraController.MoveCameraAsync(_currentTurnPlayerEntity.transform.position);
@@ -60,7 +71,7 @@ public class MainContrller : MonoBehaviour
 
         _diceBoxComponent.style.display = DisplayStyle.Flex;
         _diceBoxComponent.StartRolling();
-        if (_userController.MyEntity == _currentTurnPlayerEntity)
+        if (_userController.MyEntity == _currentTurnPlayerEntity || _gameMode == GameMode.Local)
         {
             _stopButton.style.display = DisplayStyle.Flex;
         }
@@ -72,8 +83,28 @@ public class MainContrller : MonoBehaviour
         return _diceBoxComponent.GetCurrentNumber();
     }
 
+    public int GetCurrentTurnPlayerId()
+    {
+        return _currentTurnPlayerId;
+    }
+
     public Entity GetCurrentTurnPlayerEntity()
     {
         return _currentTurnPlayerEntity;
+    }
+
+    public int GetPlayerCount()
+    {
+        return _playerCount;
+    }
+
+    public void SetPlayerCount(int playerCount)
+    {
+        _playerCount = playerCount;
+    }
+
+    public void SetGameMode(GameMode gameMode)
+    {
+        _gameMode = gameMode;
     }
 }

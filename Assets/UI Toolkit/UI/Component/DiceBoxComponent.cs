@@ -52,6 +52,7 @@ namespace UIToolkit
         {
             _cancellationTokenSource = new CancellationTokenSource();
             _cancellationToken = _cancellationTokenSource.Token;
+
             // サイコロの数字をランダムに切り替え続ける処理
             IsRolling = true;
             while (!_cancellationToken.IsCancellationRequested)

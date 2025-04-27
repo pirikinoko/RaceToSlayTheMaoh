@@ -2,13 +2,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using R3;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 public class ControllableEntity : MonoBehaviour
 {
-    private MainContrller _mainController;
+    private MainController _mainController;
     private FieldController _fieldController;
+    private PlayerController _playerController;
+    private EnemyController _enemyController;
 
     private Transform _transform;
 
@@ -22,7 +25,9 @@ public class ControllableEntity : MonoBehaviour
     {
         _transform = GetComponent<Transform>();
         _fieldController = FindFirstObjectByType<FieldController>();
-        _mainController = FindFirstObjectByType<MainContrller>();
+        _mainController = FindFirstObjectByType<MainController>();
+        _playerController = FindFirstObjectByType<PlayerController>();
+        _enemyController = FindFirstObjectByType<EnemyController>();
     }
 
 
@@ -60,7 +65,6 @@ public class ControllableEntity : MonoBehaviour
             // 移動力を使い切ったら、そのパスはこれ以上探索しない
             if (movesLeft <= 0)
             {
-                Debug.Log($"  移動力を使い切ったためこのパスの探索を終了");
                 continue;
             }
 
@@ -92,8 +96,17 @@ public class ControllableEntity : MonoBehaviour
                     var newPath = new Queue<Vector2>(path);
                     newPath.Enqueue(nextPos);
 
+
+                    if (CheckEnemyInthePosition(nextPos))
+                    {
+                        // ハイライトを生成（敵のマスなので赤色)
+                        CreateHighlight(nextPos, newPath, Color.red).Forget();
+                        // 敵がいるマスを越えて移動できないのでこれ以上は探索しない
+                        continue;
+                    }
+
                     // ハイライトを生成
-                    CreateHighlight(nextPos, newPath).Forget();
+                    CreateHighlight(nextPos, newPath, Color.white).Forget();
 
                     // 次の探索のためにキューに追加（移動力を1減らす）
                     queue.Enqueue((nextPos, movesLeft - 1, newPath));
@@ -116,10 +129,33 @@ public class ControllableEntity : MonoBehaviour
         return isMovable;
     }
 
+    private bool CheckEnemyInthePosition(Vector2 position)
+    {
+        // 敵がいるかどうかをチェック
+        var allEntity = new List<Entity>();
+        allEntity.AddRange(_playerController.PlayerList);
+        allEntity.AddRange(_enemyController.EnemyList);
+
+
+        foreach (var entity in allEntity)
+        {
+            if (entity == this.gameObject.GetComponent<Entity>())
+            {
+                continue;
+            }
+            if (Vector2.Distance(position, entity.transform.position) < 0.1f)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// 移動可能な位置にハイライトオブジェクトを作成する
     /// </summary>
-    private async UniTask CreateHighlight(Vector2 position, Queue<Vector2> path = null)
+    private async UniTask CreateHighlight(Vector2 position, Queue<Vector2> path, Color color)
     {
         var operation = Addressables.InstantiateAsync("MoveHighlight");
         var highlight = await operation;
@@ -128,8 +164,7 @@ public class ControllableEntity : MonoBehaviour
 
         // クリックハンドラーの追加
         MoveHighlight moveHighlight = highlight.GetComponent<MoveHighlight>();
-
-        moveHighlight.Initialize(this, path);
+        moveHighlight.Initialize(this, path, color);
     }
 
     /// <summary>
@@ -140,18 +175,20 @@ public class ControllableEntity : MonoBehaviour
         // 強調表示を全て削除
         ClearAllHighlights();
 
+        var hasEncounted = false;
         while (path.Count > 0)
         {
             Vector2 nextPos = path.Dequeue();
             await MoveAsync(nextPos);
+            if (_fieldController.CheckEncount(gameObject.GetComponent<Entity>()))
+            {
+                hasEncounted = true;
+                break;
+            }
         }
 
         // 移動完了後、残りがあればまた移動可能マスを表示
-        if (_remainingMoves > 0)
-        {
-            ShowMovablePositions();
-        }
-        else
+        if (!hasEncounted)
         {
             _mainController.StartNewTurnAsync().Forget();
         }
@@ -175,9 +212,6 @@ public class ControllableEntity : MonoBehaviour
         });
 
         _remainingMoves--;
-
-        // エンカウントチェック
-        _fieldController.CheckEncount(gameObject.GetComponent<Entity>());
         _isMoving = false;
     }
 
