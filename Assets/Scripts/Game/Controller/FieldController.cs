@@ -8,18 +8,22 @@ using UnityEngine.UIElements;
 
 public class FieldController : MonoBehaviour
 {
-    [SerializeField]
     private MainController _mainController;
-    [SerializeField]
     private StateController _stateController;
-    [SerializeField]
     private EnemyController _enemyController;
-    [SerializeField]
     private PlayerController _playerController;
-    [SerializeField]
     private BattleController _battleController;
 
     private List<StatusBoxComponent> _statusBoxComponents = new();
+
+    public void Initialize(MainController mainController, StateController stateController, EnemyController enemyController, PlayerController playerController, BattleController battleController)
+    {
+        _mainController = mainController;
+        _stateController = stateController;
+        _enemyController = enemyController;
+        _playerController = playerController;
+        _battleController = battleController;
+    }
 
     private async UniTask Start()
     {
@@ -93,6 +97,6 @@ public class FieldController : MonoBehaviour
             _statusBoxComponents[i].UpdateStatuBoxElments(_playerController.PlayerList[i], heartIcon, manaIcon, powerIcon);
             _statusBoxComponents[i].style.opacity = Constants.opacityForWaitingPlayersStatusBox;
         }
-        _statusBoxComponents[_mainController.GetCurrentTurnPlayerId() - 1].style.opacity = Constants.opacityForActivePlayerStatusBox;
+        _statusBoxComponents[_mainController.CurrentTurnPlayerId - 1].style.opacity = Constants.opacityForActivePlayerStatusBox;
     }
 }

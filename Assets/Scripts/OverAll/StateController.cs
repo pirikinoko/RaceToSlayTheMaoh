@@ -8,28 +8,13 @@ public class StateController : MonoBehaviour
 {
     public State CurrentState { get; private set; }
 
-    [SerializeField]
     private MainController _mainController;
-
-    [SerializeField]
     private FieldController _fieldController;
-
-    [SerializeField]
     private PlayerController _playerController;
-
-    [SerializeField]
     private UIDocument _overAllUi;
-
-    [SerializeField]
     private UIDocument _titleUi;
-
-    [SerializeField]
     private UIDocument _fieldUi;
-
-    [SerializeField]
     private UIDocument _battleUi;
-
-    [SerializeField]
     private UIDocument _resultUi;
 
     private VisualElement _overAllroot;
@@ -41,6 +26,18 @@ public class StateController : MonoBehaviour
     private Color _blackoutColor = new Color(0f, 0f, 0f, 0.8f);
 
     private VisualElement _colorEffectPanel;
+
+    public void Initialize(MainController mainController, FieldController fieldController, PlayerController playerController, UIDocument overAllUi, UIDocument titleUi, UIDocument fieldUi, UIDocument battleUi, UIDocument resultUi)
+    {
+        _mainController = mainController;
+        _fieldController = fieldController;
+        _playerController = playerController;
+        _overAllUi = overAllUi;
+        _titleUi = titleUi;
+        _fieldUi = fieldUi;
+        _battleUi = battleUi;
+        _resultUi = resultUi;
+    }
 
     private void Start()
     {
@@ -106,8 +103,6 @@ public class StateController : MonoBehaviour
             _fieldController.DisplayStatusBoxes();
         }
         await _fieldController.UpdateStatusBoxesAsync();
-
-        var controllableEntity = _mainController.GetCurrentTurnPlayerEntity()?.GetComponent<ControllableEntity>();
 
         await _mainController.StartNewTurnAsync();
     }

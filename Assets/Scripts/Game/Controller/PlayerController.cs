@@ -7,7 +7,6 @@ using UnityEngine.AddressableAssets;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
     private MainController _mainController;
     [SerializeField]
     private Transform _playerParent;
@@ -18,6 +17,11 @@ public class PlayerController : MonoBehaviour
 
     public Subject<List<Entity>> _onPlayersInitialized = new();
 
+    public void Initialize(MainController mainController)
+    {
+        _mainController = mainController;
+    }
+
     public async UniTask InitializePlayersAsync()
     {
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
@@ -25,7 +29,7 @@ public class PlayerController : MonoBehaviour
         var clonedParameter = parameter.Clone();
         var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferencePlayer).Task;
 
-        for (int i = 0; i < _mainController.GetPlayerCount(); i++)
+        for (int i = 0; i < _mainController.PlayerCount; i++)
         {
             InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i]);
         }

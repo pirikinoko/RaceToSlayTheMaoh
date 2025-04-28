@@ -23,34 +23,34 @@ public class TitleController : MonoBehaviour
         root.Q<Button>("ArrowLeft").clicked += DecreasePlayerCount;
         root.Q<Button>("ArrowRight").clicked += IncreasePlayerCount;
 
-        _buttonStartLocal.text = Constants.GetSentenceForLocalPlayButton(Settings.Language, _mainController.GetPlayerCount());
+        _buttonStartLocal.text = Constants.GetSentenceForLocalPlayButton(Settings.Language, _mainController.PlayerCount);
     }
 
     private void StartLocalGame()
     {
-        _mainController.SetGameMode(GameMode.Local);
+        _mainController.GameMode = GameMode.Local;
         _stateContoller.ChangeState(State.Field);
     }
 
     private void StartOnlineGame()
     {
-        _mainController.SetGameMode(GameMode.Online);
+        _mainController.GameMode = GameMode.Online;
         _stateContoller.ChangeState(State.Field);
     }
 
     private void DecreasePlayerCount()
     {
-        int playerCount = _mainController.GetPlayerCount() - 1;
+        int playerCount = _mainController.PlayerCount - 1;
         if (playerCount < 1) playerCount = 1;
         _buttonStartLocal.text = Constants.GetSentenceForLocalPlayButton(Settings.Language, playerCount);
-        _mainController.SetPlayerCount(playerCount);
+        _mainController.PlayerCount = playerCount;
     }
 
     private void IncreasePlayerCount()
     {
-        int playerCount = _mainController.GetPlayerCount() + 1;
+        int playerCount = _mainController.PlayerCount + 1;
         if (playerCount > Constants.MaxPlayerCount) playerCount = Constants.MaxPlayerCount;
         _buttonStartLocal.text = Constants.GetSentenceForLocalPlayButton(Settings.Language, playerCount);
-        _mainController.SetPlayerCount(playerCount);
+        _mainController.PlayerCount = playerCount;
     }
 }

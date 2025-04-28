@@ -7,26 +7,29 @@ using UnityEngine.UIElements;
 
 public class MainController : MonoBehaviour
 {
-    [SerializeField]
     private UserController _userController;
-    [SerializeField]
     private FieldController _fieldController;
-    [SerializeField]
     private CameraController _cameraController;
-    [SerializeField]
     private StateController _stateController;
-    [SerializeField]
     private PlayerController _playerController;
-    [SerializeField]
     private EnemyController _enemyController;
 
     public int TurnCount { get; private set; } = 0;
 
     private GameMode _gameMode;
+    public GameMode GameMode { get => _gameMode; set => _gameMode = value; }
+
     private int _playerCount = 1;
+    public int PlayerCount { get => _playerCount; set => _playerCount = value; }
+
     private int _currentTurnPlayerId = 1;
+    public int CurrentTurnPlayerId { get => _currentTurnPlayerId; private set => _currentTurnPlayerId = value; }
+
     private Entity _currentTurnPlayerEntity;
+    public Entity CurrentTurnPlayerEntity { get => _currentTurnPlayerEntity; private set => _currentTurnPlayerEntity = value; }
+
     private DiceBoxComponent _diceBoxComponent;
+
 
     private Button _stopButton => _diceBoxComponent.StopButton;
 
@@ -34,6 +37,16 @@ public class MainController : MonoBehaviour
     {
         _diceBoxComponent = GetComponent<UIDocument>().rootVisualElement.Q<DiceBoxComponent>("DiceBoxComponent");
         _diceBoxComponent.style.display = DisplayStyle.None;
+    }
+
+    public void Initialize(UserController userController, FieldController fieldController, CameraController cameraController, StateController stateController, PlayerController playerController, EnemyController enemyController)
+    {
+        _userController = userController;
+        _fieldController = fieldController;
+        _cameraController = cameraController;
+        _stateController = stateController;
+        _playerController = playerController;
+        _enemyController = enemyController;
     }
 
     public async UniTask InitializeGame()
@@ -46,21 +59,21 @@ public class MainController : MonoBehaviour
     {
         if (TurnCount != 0)
         {
-            _currentTurnPlayerId++;
-            if (_currentTurnPlayerId > _playerCount)
+            CurrentTurnPlayerId++;
+            if (CurrentTurnPlayerId > PlayerCount)
             {
-                _currentTurnPlayerId = 1;
+                CurrentTurnPlayerId = 1;
             }
         }
 
         _fieldController.UpdateStatusBoxesAsync().Forget();
-        _currentTurnPlayerEntity = _playerController.PlayerList.FirstOrDefault(p => p.Id == _currentTurnPlayerId);
+        CurrentTurnPlayerEntity = _playerController.PlayerList.FirstOrDefault(p => p.Id == CurrentTurnPlayerId);
 
-        await _cameraController.MoveCameraAsync(_currentTurnPlayerEntity.transform.position);
+        await _cameraController.MoveCameraAsync(CurrentTurnPlayerEntity.transform.position);
 
         var moves = await GetDiceResultAsync();
-        _currentTurnPlayerEntity.GetComponent<ControllableEntity>().SetMoves(moves);
-        _currentTurnPlayerEntity.GetComponent<ControllableEntity>().EnableClickMovement();
+        CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().SetMoves(moves);
+        CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().EnableClickMovement();
 
         TurnCount++;
     }
@@ -71,7 +84,7 @@ public class MainController : MonoBehaviour
 
         _diceBoxComponent.style.display = DisplayStyle.Flex;
         _diceBoxComponent.StartRolling();
-        if (_userController.MyEntity == _currentTurnPlayerEntity || _gameMode == GameMode.Local)
+        if (_userController.MyEntity == CurrentTurnPlayerEntity || GameMode == GameMode.Local)
         {
             _stopButton.style.display = DisplayStyle.Flex;
         }
@@ -81,30 +94,5 @@ public class MainController : MonoBehaviour
 
         _stateController.RevealField();
         return _diceBoxComponent.GetCurrentNumber();
-    }
-
-    public int GetCurrentTurnPlayerId()
-    {
-        return _currentTurnPlayerId;
-    }
-
-    public Entity GetCurrentTurnPlayerEntity()
-    {
-        return _currentTurnPlayerEntity;
-    }
-
-    public int GetPlayerCount()
-    {
-        return _playerCount;
-    }
-
-    public void SetPlayerCount(int playerCount)
-    {
-        _playerCount = playerCount;
-    }
-
-    public void SetGameMode(GameMode gameMode)
-    {
-        _gameMode = gameMode;
     }
 }

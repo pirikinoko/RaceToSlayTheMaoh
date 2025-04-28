@@ -11,16 +11,10 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField]
     private Transform _staticEnemiesParent;
-
     [SerializeField]
     private Transform _enemiesToRandomizeParent;
-
     private ParameterAsset _parameterAsset;
 
-    /// <summary>
-    /// ���ׂĂ̓G�����������܂��B
-    /// </summary>
-    /// <returns></returns>
     public async UniTask InitializeAllEnemiesAsync()
     {
         _parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;

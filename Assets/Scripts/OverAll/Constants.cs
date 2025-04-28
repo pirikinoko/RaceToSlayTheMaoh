@@ -34,8 +34,8 @@ public class Constants
     public static int MissPotentilaiOnEveryDamageAction = 10;
 
     // ******* Player *******
-    public static float PlayerMoveSpeed = 2.0f;
-    public static int MaxMoves = 3;
+    public static float PlayerMoveSpeed { get; set; } = 2.0f;
+    public static int MaxMoves { get; set; } = 3;
 
     // ******* Title *******
     public static string GetSentenceForLocalPlayButton(Language language, int playerCount)
@@ -52,33 +52,34 @@ public class Constants
     }
 
     // ******* Main *******
-    public static int MaxPlayerCount = 4;
-    public static int MinPlayerCount = 1;
-    public static int MaxDiceValue = 4;
-    public static float DiceRollUpdateInterval = 0.03f;
-    public static int DiceHighlightBlinkCount = 5;
-    public static float DiceHighlightBlinkInterval = 0.2f;
+    public static int MaxPlayerCount { get; set; } = 4;
+    public static int MinPlayerCount { get; set; } = 1;
+    public static int MaxDiceValue { get; set; } = 4;
+    public static float DiceRollUpdateInterval { get; set; } = 0.03f;
+    public static int DiceHighlightBlinkCount { get; set; } = 5;
+    public static float DiceHighlightBlinkInterval { get; set; } = 0.2f;
+
     // ******* Entity *******
 
-    public static int MaxHitPoint = 50;
-    public static int MaxManaPoint = 30;
-    public static int AttackOffsetPercent = 50;
+    public static int MaxHitPoint { get; set; } = 50;
+    public static int MaxManaPoint { get; set; } = 30;
+    public static int AttackOffsetPercent { get; set; } = 50;
 
     // ******* Field *******
-    public static Vector3 FieldCornerUpLeft = new Vector3(-7, 7, 0);
-    public static Vector3 FieldCornerUpRight = new Vector3(7, 7, 0);
-    public static Vector3 FieldCornerDownLeft = new Vector3(-7, -7, 0);
-    public static Vector3 FieldCornerDownRight = new Vector3(7, -7, 0);
+    public static Vector3 FieldCornerUpLeft { get; set; } = new Vector3(-7, 7, 0);
+    public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(7, 7, 0);
+    public static Vector3 FieldCornerDownLeft { get; set; } = new Vector3(-7, -7, 0);
+    public static Vector3 FieldCornerDownRight { get; set; } = new Vector3(7, -7, 0);
 
-    public static Vector3[] PlayerSpownPositions =
+    public static Vector3[] PlayerSpownPositions { get; set; } =
     {
         FieldCornerUpLeft,
         FieldCornerUpRight,
         FieldCornerDownLeft,
         FieldCornerDownRight
     };
-    public static float opacityForActivePlayerStatusBox = 1.0f;
-    public static float opacityForWaitingPlayersStatusBox = 0.5f;
+    public static float opacityForActivePlayerStatusBox { get; set; } = 1.0f;
+    public static float opacityForWaitingPlayersStatusBox { get; set; } = 0.5f;
 
     // ******* Battle *******
     public static int MaxTurn = 20;

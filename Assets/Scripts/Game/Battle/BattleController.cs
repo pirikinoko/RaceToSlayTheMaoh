@@ -11,20 +11,13 @@ using UnityEngine.UIElements;
 
 public class BattleController : MonoBehaviour
 {
-    [SerializeField]
     private StateController _stateController;
-    [SerializeField]
     private UserController _userController;
-    [SerializeField]
+    private MainController _mainController;
     private BattleLogController _battleLogController;
-    [SerializeField]
     private PlayerController _playerController;
-    [SerializeField]
     private EnemyController _enemyController;
-    [SerializeField]
     private ImageAnimationHolder _imageAnimationHolder;
-    [SerializeField]
-    private Canvas _overlayCanvas;
 
     private BattleStatus _battleStatus;
 
@@ -67,6 +60,16 @@ public class BattleController : MonoBehaviour
     {
         InitializeUIElements();
         InitializeBattleLogController();
+    }
+
+    public void Initialize(StateController stateController, UserController userController, BattleLogController battleLogController, PlayerController playerController, EnemyController enemyController, ImageAnimationHolder imageAnimationHolder)
+    {
+        _stateController = stateController;
+        _userController = userController;
+        _battleLogController = battleLogController;
+        _playerController = playerController;
+        _enemyController = enemyController;
+        _imageAnimationHolder = imageAnimationHolder;
     }
 
     public static class ClassNames
@@ -193,7 +196,7 @@ public class BattleController : MonoBehaviour
             _waitingTurnEntity = tmp;
         }
 
-        if (_currentTurnEntity == _userController.MyEntity)
+        if (_mainController.GameMode == GameMode.Local || _currentTurnEntity == _userController.MyEntity)
         {
             OpenCommandView();
             ToggleSkillButonClickable();
