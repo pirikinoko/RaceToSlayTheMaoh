@@ -16,7 +16,8 @@ public class Constants
     // ******* General *******
     // 指定されたパーセンテージのオフセット内でランダムな値を返す
     // 例: baseValue = 100, offsetPercent = 20 の場合, 80から120の間でランダムな値を返す
-    public static int GetRandomizedValueWithinOffset(int baseValue, int offsetPercent)
+    // ただしミスすることもある
+    public static int GetRandomizedValueWithinOffsetWithMissPotential(int baseValue, int offsetPercent, int missPotential)
     {
         var offsetValue = (int)(baseValue * offsetPercent / 100);
         // minが1未満の場合は1を返す
@@ -25,24 +26,60 @@ public class Constants
         var max = baseValue + offsetValue + 1;
         var randomValue = Random.Range(min, max);
         // 最低でも1を返す
-        return randomValue >= 1 ? randomValue : 1;
+        randomValue = randomValue < 1 ? 1 : randomValue;
+        var isMissed = Random.Range(0, 100) < missPotential;
+        return isMissed ? 0 : randomValue;
     }
 
-    // ******* Player *******
+    public static int MissPotentilaiOnEveryDamageAction = 10;
 
-    public static float PlayerMoveSpeed = 2.0f;
+    // ******* Player *******
+    public static float PlayerMoveSpeed { get; set; } = 2.0f;
+    public static int MaxMoves { get; set; } = 3;
+
+    // ******* Title *******
+    public static string GetSentenceForLocalPlayButton(Language language, int playerCount)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}人でローカルプレイ", playerCount);
+            case Language.English:
+                return string.Format("{0} Players Local Play", playerCount);
+            default:
+                return string.Format("{0} Players Local Play", playerCount);
+        }
+    }
+
+    // ******* Main *******
+    public static int MaxPlayerCount { get; set; } = 4;
+    public static int MinPlayerCount { get; set; } = 1;
+    public static int MaxDiceValue { get; set; } = 4;
+    public static float DiceRollUpdateInterval { get; set; } = 0.03f;
+    public static int DiceHighlightBlinkCount { get; set; } = 5;
+    public static float DiceHighlightBlinkInterval { get; set; } = 0.2f;
 
     // ******* Entity *******
 
-    public static int MaxHitPoint = 50;
-    public static int MaxManaPoint = 30;
-    public static int AttackOffsetPercent = 50;
+    public static int MaxHitPoint { get; set; } = 50;
+    public static int MaxManaPoint { get; set; } = 30;
+    public static int AttackOffsetPercent { get; set; } = 50;
 
     // ******* Field *******
+    public static Vector3 FieldCornerUpLeft { get; set; } = new Vector3(-7, 7, 0);
+    public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(7, 7, 0);
+    public static Vector3 FieldCornerDownLeft { get; set; } = new Vector3(-7, -7, 0);
+    public static Vector3 FieldCornerDownRight { get; set; } = new Vector3(7, -7, 0);
 
-    public static Vector3 FieldCornerDownLeft = new Vector3(-7, -7, 0);
-    public static Vector3 FieldCornerUpRight = new Vector3(8, 8, 0);
-    public static Vector3 PlayerSpownPosition = new Vector3(-7, -7, 0);
+    public static Vector3[] PlayerSpownPositions { get; set; } =
+    {
+        FieldCornerUpLeft,
+        FieldCornerUpRight,
+        FieldCornerDownLeft,
+        FieldCornerDownRight
+    };
+    public static Vector2 ScaleForActivePlayerStatusBox { get; set; } = new Vector2(1.0f, 1.0f);
+    public static Vector2 ScaleForWaitingPlayersStatusBox { get; set; } = new Vector2(0.7f, 0.7f);
 
     // ******* Battle *******
     public static int MaxTurn = 20;
@@ -88,6 +125,18 @@ public class Constants
 
     public static string GetAttackResultSentence(Language language, string damageReciever, int damage)
     {
+        if (damage == 0)
+        {
+            switch (language)
+            {
+                case Language.Japanese:
+                    return string.Format("{0}は攻撃をかわした", damageReciever);
+                case Language.English:
+                    return string.Format("{0} has dodged the attack!", damageReciever);
+                default:
+                    return string.Format("{0} has dodged the attack!", damageReciever);
+            }
+        }
         switch (language)
         {
             case Language.Japanese:

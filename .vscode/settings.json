@@ -16,5 +16,6 @@
     "files.encoding": "utf8",
     "files.autoGuessEncoding": false,
     "files.autoDetect": "off",
-    "files.eol": "\n"
+    "files.eol": "\n",
+    "codeium.enableSearch": true
 }

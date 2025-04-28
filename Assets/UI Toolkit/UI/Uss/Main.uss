@@ -1,0 +1,50 @@
+.dice-box-component {
+    background-image: none;
+    -unity-background-scale-mode: scale-to-fit;
+    width: 500px;
+    height: 500px;
+    align-self: center;
+    top: 250px;
+}
+
+.number-box-container {
+    background-image: url("project://database/Assets/VisualAssets/UI/Frame1To1.png?fileID=2800000&guid=37a8e662ae2bf0d42b090a448ffb85a2&type=3#Frame1To1");
+    -unity-background-scale-mode: scale-to-fit;
+    width: 300px;
+    height: 300px;
+    align-self: center;
+    top: 50px;
+}
+
+.number-label {
+    -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
+    color: rgb(255, 255, 255);
+    font-size: 250px;
+    -unity-text-align: middle-center;
+    align-self: center;
+    width: auto;
+    left: 12px;
+    top: 6px;
+    transition-property: scale;
+    transition-duration: 0.2s;
+}
+
+.stop-button {
+    background-image: url("project://database/Assets/VisualAssets/UI/Frame3To1.png?fileID=2800000&guid=232f03a15e769c542903107880f17b17&type=3#Frame3To1");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    -unity-font-definition: url("project://database/Assets/Fonts/Nosutaru-dotMPlusH-10-Regular.ttf?fileID=12800000&guid=fdb8f6fb8f0532743a53412e3c61402b&type=3#Nosutaru-dotMPlusH-10-Regular");
+    color: rgb(255, 255, 255);
+    width: 300px;
+    height: 130px;
+    align-self: center;
+    font-size: 50px;
+    margin-top: 50px;
+}
+
+.stop-button:hover {
+    transition-property: scale;
+    transition-duration: 0.1s;
+    scale: 1.1 1.1;
+}

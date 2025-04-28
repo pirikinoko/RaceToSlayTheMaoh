@@ -26,7 +26,7 @@ public static class SkillList
         public static class Heal
         {
             public const int ManaCost = 2;
-            public const int HealPotential = 4;
+            public const int HealPotential = 5;
             public const int OffsetPercent = 50;
         }
 
@@ -118,9 +118,10 @@ public static class SkillList
             action: (skillUser, opponent) =>
             {
                 skillUser.UseManaPoint(SkillParameters.Heal.ManaCost);
-                int healAmount = Constants.GetRandomizedValueWithinOffset(
+                int healAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: SkillParameters.Heal.HealPotential,
-                    offsetPercent: SkillParameters.Heal.OffsetPercent
+                    offsetPercent: SkillParameters.Heal.OffsetPercent,
+                    missPotential: 0
                 );
                 skillUser.TakeDamage(-healAmount);
                 return new Skill.SkillResult(
@@ -144,14 +145,16 @@ public static class SkillList
             action: (skillUser, opponent) =>
             {
                 skillUser.UseManaPoint(SkillParameters.Bite.ManaCost);
-                int damageAmount = Constants.GetRandomizedValueWithinOffset(
+                int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.Parameter.Power,
-                    offsetPercent: SkillParameters.Bite.OffsetPercent
+                    offsetPercent: SkillParameters.Bite.OffsetPercent,
+                    missPotential: Constants.MissPotentilaiOnEveryDamageAction
                 );
                 opponent.TakeDamage(damageAmount);
-                int healAmount = Constants.GetRandomizedValueWithinOffset(
+                int healAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: SkillParameters.Bite.HealPotential,
-                    offsetPercent: SkillParameters.Bite.OffsetPercent
+                    offsetPercent: SkillParameters.Bite.OffsetPercent,
+                    missPotential: 0
                 );
                 skillUser.TakeDamage(-healAmount);
                 return new Skill.SkillResult(

@@ -7,20 +7,14 @@ using UnityEngine.AddressableAssets;
 
 public class EnemyController : MonoBehaviour
 {
-    public List<Entity> _enemyList = new();
+    public List<Entity> EnemyList = new();
 
     [SerializeField]
     private Transform _staticEnemiesParent;
-
     [SerializeField]
     private Transform _enemiesToRandomizeParent;
-
     private ParameterAsset _parameterAsset;
 
-    /// <summary>
-    /// ‚·‚×‚Ä‚Ì“G‚ğ‰Šú‰»‚µ‚Ü‚·B
-    /// </summary>
-    /// <returns></returns>
     public async UniTask InitializeAllEnemiesAsync()
     {
         _parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
@@ -29,14 +23,14 @@ public class EnemyController : MonoBehaviour
         foreach (var enemy in allEnemiesToRandomize)
         {
             InitializeEnemies(enemy, GetRandomEntityIdentifier());
-            _enemyList.Add(enemy);
+            EnemyList.Add(enemy);
         }
 
         var allStaticEnemies = _staticEnemiesParent.GetComponentsInChildren<Entity>();
         foreach (var enemy in allStaticEnemies)
         {
             InitializeEnemies(enemy, enemy.EntityType);
-            _enemyList.Add(enemy);
+            EnemyList.Add(enemy);
         }
     }
 

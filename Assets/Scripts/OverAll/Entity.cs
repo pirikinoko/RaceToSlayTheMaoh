@@ -40,7 +40,7 @@ public class Entity : MonoBehaviour
         // 攻撃力のポテンシャルを計算
         int potential = Parameter.Power + _abnormalCondition.PowerGain;
         // 攻撃力のポテンシャルのオフセット内でランダムな値を返す
-        int damage = Constants.GetRandomizedValueWithinOffset(potential, Constants.AttackOffsetPercent);
+        int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(potential, Constants.AttackOffsetPercent, 10);
         target.TakeDamage(damage);
         return damage;
     }

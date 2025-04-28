@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Image
+  m_Name: Sprite
   m_EditorClassIdentifier: 
-  m_GroupName: Image
+  m_GroupName: Sprite
   m_GUID: a0994da785cdaed408fc71ce79aa7912
   m_SerializeEntries:
   - m_GUID: 0f5d6ec6e752cd642a751d505ff10273

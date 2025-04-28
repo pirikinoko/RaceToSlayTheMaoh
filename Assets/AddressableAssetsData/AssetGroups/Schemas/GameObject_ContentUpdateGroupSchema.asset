@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
-  m_Name: Image_ContentUpdateGroupSchema
+  m_Name: GameObject_ContentUpdateGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: bfe4be28ae9da9442a7b4e6078d3fa36, type: 2}
+  m_Group: {fileID: 11400000, guid: e0cd86ab7c9051f47847cdb0bb764fdf, type: 2}
   m_StaticContent: 0

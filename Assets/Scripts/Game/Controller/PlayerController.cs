@@ -7,6 +7,7 @@ using UnityEngine.AddressableAssets;
 
 public class PlayerController : MonoBehaviour
 {
+    private MainController _mainController;
     [SerializeField]
     private Transform _playerParent;
 
@@ -16,18 +17,32 @@ public class PlayerController : MonoBehaviour
 
     public Subject<List<Entity>> _onPlayersInitialized = new();
 
+    public void Initialize(MainController mainController)
+    {
+        _mainController = mainController;
+    }
+
     public async UniTask InitializePlayersAsync()
     {
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
-        var clonedParameter = parameter.Clone();
         var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferencePlayer).Task;
 
-        var playerGameObject = Instantiate(playerPrefab, Constants.PlayerSpownPosition, Quaternion.identity, _playerParent);
+        for (int i = 0; i < _mainController.PlayerCount; i++)
+        {
+            var clonedParameter = parameter.Clone();
+            clonedParameter.Name = $"{clonedParameter.Name} {i + 1}";
+            InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i]);
+        }
+        _onPlayersInitialized.OnNext(PlayerList);
+    }
+
+    private void InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector3 spawnPosition)
+    {
+        var playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity, _playerParent);
         var player = playerGameObject.GetComponent<Entity>();
         player.Initialize(clonedParameter);
 
         PlayerList.Add(player);
-        _onPlayersInitialized.OnNext(PlayerList);
     }
 }
