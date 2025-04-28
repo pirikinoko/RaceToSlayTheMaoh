@@ -32,7 +32,7 @@
                                 <engine:Label text="15" name="Label" class="statusLabel label" />
                             </engine:VisualElement>
                         </engine:VisualElement>
-                        <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/VisualAssets/Enemy/AxeMan.png?fileID=2800000&amp;guid=bf0dad1f62408524fa7c854516e3fec2&amp;type=3#AxeMan&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: auto; bottom: 30px; right: 200px;" />
+                        <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/VisualAssets/Enemy/Axe.png?fileID=2800000&amp;guid=bf0dad1f62408524fa7c854516e3fec2&amp;type=3#Axe&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: auto; bottom: 30px; right: 200px;" />
                     </engine:VisualElement>
                 </engine:VisualElement>
                 <engine:VisualElement name="RewardElement" style="flex-grow: 1; flex-direction: row; align-content: auto; justify-content: space-evenly; align-items: stretch; display: none;">
@@ -45,7 +45,7 @@
         </engine:VisualElement>
         <engine:VisualElement name="BottomView" style="flex-grow: 1; flex-direction: row; flex-wrap: wrap-reverse;">
             <engine:VisualElement name="BottomLeftElement" style="flex-grow: 1; width: 500px; height: 400px;">
-                <engine:VisualElement name="CommandView" style="flex-grow: 1; visibility: visible; display: none; overflow: visible; align-self: center; justify-content: center; align-content: auto; position: relative; width: auto; height: auto; top: auto; background-image: none; flex-direction: column; left: auto;">
+                <engine:VisualElement name="CommandView" style="flex-grow: 1; visibility: visible; display: flex; overflow: visible; align-self: center; justify-content: center; align-content: auto; position: relative; width: auto; height: auto; top: auto; background-image: none; flex-direction: column; left: auto;">
                     <engine:Button text="攻撃" name="Button-Attack" class="label actionbutton" style="color: rgb(255, 255, 255);" />
                     <engine:Button text="特技" name="Button-Skill" class="label actionbutton" />
                 </engine:VisualElement>

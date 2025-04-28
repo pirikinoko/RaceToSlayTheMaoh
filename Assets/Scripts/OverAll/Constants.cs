@@ -140,11 +140,11 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}に{1}のダメージが入った!", damageReciever, damage);
+                return string.Format("{1}のダメージ!", damageReciever, damage);
             case Language.English:
-                return string.Format("{0} has taken {1} damage!", damageReciever, damage);
+                return string.Format("{1} damage!", damageReciever, damage);
             default:
-                return string.Format("{0} has taken {1} damage!", damageReciever, damage);
+                return string.Format("{1} damage!", damageReciever, damage);
         }
     }
 
@@ -227,45 +227,6 @@ public class Constants
     }
 
     public static string GetSkillGetSentence(Language language)
-    {
-        switch (language)
-        {
-            case Language.Japanese:
-                return "{0}が{1}を習得した!";
-            case Language.English:
-                return "{0} has learned {1}!";
-            default:
-                return "{0} has learned {1}!";
-        }
-    }
-
-    public static string GetHitPointSentence(Language language)
-    {
-        switch (language)
-        {
-            case Language.Japanese:
-                return "{0}のHPが{1}回復した!";
-            case Language.English:
-                return "{0} has healed {1}HP!";
-            default:
-                return "{0} has healed {1}HP!";
-        }
-    }
-
-    public static string GetManaSentence(Language language)
-    {
-        switch (language)
-        {
-            case Language.Japanese:
-                return "{0}のMPが{1}回復した!";
-            case Language.English:
-                return "{0} has refreshed {1}MagicPoint!";
-            default:
-                return "{0} has refreshed {1}MagicPoint!";
-        }
-    }
-
-    public static string GetPowerSentence(Language language)
     {
         switch (language)
         {

@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < _mainController.PlayerCount; i++)
         {
             var clonedParameter = parameter.Clone();
-            clonedParameter.Name = $"{clonedParameter.Name} {i + 1}";
+            clonedParameter.Name = $"{clonedParameter.Name}{i + 1}";
             InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i]);
         }
         _onPlayersInitialized.OnNext(PlayerList);

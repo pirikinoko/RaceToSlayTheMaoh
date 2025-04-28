@@ -62,9 +62,10 @@ public class BattleController : MonoBehaviour
         InitializeBattleLogController();
     }
 
-    public void Initialize(StateController stateController, UserController userController, BattleLogController battleLogController, PlayerController playerController, EnemyController enemyController, ImageAnimationHolder imageAnimationHolder)
+    public void Initialize(StateController stateController, MainController mainController, UserController userController, BattleLogController battleLogController, PlayerController playerController, EnemyController enemyController, ImageAnimationHolder imageAnimationHolder)
     {
         _stateController = stateController;
+        _mainController = mainController;
         _userController = userController;
         _battleLogController = battleLogController;
         _playerController = playerController;
@@ -134,7 +135,6 @@ public class BattleController : MonoBehaviour
         InitializeReactiveProperties();
     }
 
-
     private void SetSkillButtons()
     {
         _skillButtons.Clear();
@@ -181,6 +181,7 @@ public class BattleController : MonoBehaviour
         SetEntities();
         SetSkillButtons();
 
+        _battleLogController.ClearLogs();
         _battleLogController.AddLog(Constants.GetSentenceWhenStartBattle(Settings.Language.ToString(), _leftEntity.name, _rightEntity.name));
     }
 
@@ -561,7 +562,7 @@ public class BattleController : MonoBehaviour
     private void InitializeReactiveProperties()
     {
         var delayOnHpChangeMills = 0;
-        var delayOnManaChangeMills = 900;
+        var delayOnManaChangeMills = 0;
 
         _leftEntity.HitPointRp.Subscribe(async newHp =>
         {

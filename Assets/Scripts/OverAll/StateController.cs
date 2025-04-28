@@ -104,8 +104,10 @@ public class StateController : MonoBehaviour
         }
         await _fieldController.UpdateStatusBoxesAsync();
 
+        await UniTask.Delay(TimeSpan.FromSeconds(1f));
         await _mainController.StartNewTurnAsync();
     }
+
     private async void SwitchBattleState()
     {
         BlackoutField();

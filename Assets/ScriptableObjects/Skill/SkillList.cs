@@ -25,14 +25,14 @@ public static class SkillList
     {
         public static class Heal
         {
-            public const int ManaCost = 2;
+            public const int ManaCost = 1;
             public const int HealPotential = 5;
             public const int OffsetPercent = 50;
         }
 
         public static class Bite
         {
-            public const int ManaCost = 2;
+            public const int ManaCost = 1;
             public const int HealPotential = 1;
             public const int OffsetPercent = 50;
         }
@@ -127,7 +127,7 @@ public static class SkillList
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
-                        $"{skillUser.name}は{skillUser.name}のHPを{healAmount}回復した"
+                        $"{skillUser.name}はHPを{healAmount}回復した"
                     },
                     effectKey: Constants.ImageAnimationKeyHeal
                 );
@@ -160,7 +160,7 @@ public static class SkillList
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
-                        $"{skillUser.name}は{opponent.name}に{damageAmount}のダメージを与え,{healAmount}回復した",
+                        $"{damageAmount}のダメージを与え,HPを回復した",
                     },
                     effectKey: Constants.ImageAnimationKeyBite
                 );

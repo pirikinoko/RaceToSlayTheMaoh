@@ -23,7 +23,7 @@ MonoBehaviour:
   - EntityType: 1
     IconSprite: {fileID: 21300000, guid: bf0dad1f62408524fa7c854516e3fec2, type: 3}
     Name: Axe
-    HitPoint: 8
+    HitPoint: 5
     ManaPoint: 4
     Power: 2
     SkillTypes: 01000000
