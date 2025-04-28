@@ -95,8 +95,8 @@ public class FieldController : MonoBehaviour
         for (int i = 0; i < _playerController.PlayerList.Count; i++)
         {
             _statusBoxComponents[i].UpdateStatuBoxElments(_playerController.PlayerList[i], heartIcon, manaIcon, powerIcon);
-            _statusBoxComponents[i].style.opacity = Constants.opacityForWaitingPlayersStatusBox;
+            _statusBoxComponents[i].style.scale = Constants.ScaleForWaitingPlayersStatusBox;
         }
-        _statusBoxComponents[_mainController.CurrentTurnPlayerId - 1].style.opacity = Constants.opacityForActivePlayerStatusBox;
+        _statusBoxComponents[_mainController.CurrentTurnPlayerId - 1].style.scale = Constants.ScaleForActivePlayerStatusBox;
     }
 }

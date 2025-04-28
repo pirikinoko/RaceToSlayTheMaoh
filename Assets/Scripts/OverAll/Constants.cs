@@ -78,8 +78,8 @@ public class Constants
         FieldCornerDownLeft,
         FieldCornerDownRight
     };
-    public static float opacityForActivePlayerStatusBox { get; set; } = 1.0f;
-    public static float opacityForWaitingPlayersStatusBox { get; set; } = 0.5f;
+    public static Vector2 ScaleForActivePlayerStatusBox { get; set; } = new Vector2(1.0f, 1.0f);
+    public static Vector2 ScaleForWaitingPlayersStatusBox { get; set; } = new Vector2(0.7f, 0.7f);
 
     // ******* Battle *******
     public static int MaxTurn = 20;

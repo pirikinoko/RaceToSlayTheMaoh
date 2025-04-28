@@ -190,6 +190,7 @@ public class ControllableEntity : MonoBehaviour
         // 移動完了後、残りがあればまた移動可能マスを表示
         if (!hasEncounted)
         {
+            await UniTask.Delay(1000);
             _mainController.StartNewTurnAsync().Forget();
         }
     }

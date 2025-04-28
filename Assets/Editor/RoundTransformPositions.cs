@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RoundTransformPositions : EditorWindow
 {
-    private GameObject targetObject;
+    private GameObject parent;
 
     [MenuItem("Tools/Round Transform Positions")]
     public static void ShowWindow()
@@ -15,17 +15,17 @@ public class RoundTransformPositions : EditorWindow
     {
         GUILayout.Label("Round Transform Positions", EditorStyles.boldLabel);
 
-        targetObject = (GameObject)EditorGUILayout.ObjectField("Target Object", targetObject, typeof(GameObject), true);
+        parent = (GameObject)EditorGUILayout.ObjectField("Parent", parent, typeof(GameObject), true);
 
         if (GUILayout.Button("Round Positions"))
         {
-            if (targetObject != null)
+            if (parent != null)
             {
-                RoundChildTransforms(targetObject);
+                RoundChildTransforms(parent);
             }
             else
             {
-                Debug.LogWarning("Target Object is not set.");
+                Debug.LogWarning("Parent Object is not set.");
             }
         }
     }
