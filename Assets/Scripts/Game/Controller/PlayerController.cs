@@ -32,16 +32,18 @@ public class PlayerController : MonoBehaviour
         {
             var clonedParameter = parameter.Clone();
             clonedParameter.Name = $"{clonedParameter.Name}{i + 1}";
-            InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i]);
+            InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i], Constants.PlayerColors[i]);
         }
         _onPlayersInitialized.OnNext(PlayerList);
     }
 
-    private void InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector3 spawnPosition)
+    private void InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector3 spawnPosition, Color color)
     {
+        Debug.Log($"Parameter instance id: {clonedParameter.GetHashCode()}, Name: {clonedParameter.Name}");
         var playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity, _playerParent);
         var player = playerGameObject.GetComponent<Entity>();
         player.Initialize(clonedParameter);
+        player.SetColor(color);
 
         PlayerList.Add(player);
     }

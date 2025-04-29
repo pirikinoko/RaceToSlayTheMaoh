@@ -64,4 +64,9 @@ public class Entity : MonoBehaviour
         _manaPointRp.Value = Parameter.ManaPoint - manaCost;
         Parameter.ManaPoint = _manaPointRp.Value;
     }
+
+    public void SetColor(Color color)
+    {
+        _spriteRenderer.color = color;
+    }
 }

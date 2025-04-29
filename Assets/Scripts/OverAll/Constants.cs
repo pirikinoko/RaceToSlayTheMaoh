@@ -37,6 +37,14 @@ public class Constants
     public static float PlayerMoveSpeed { get; set; } = 2.0f;
     public static int MaxMoves { get; set; } = 3;
 
+    public static Color[] PlayerColors =
+    {
+        new Color(1.0f, 1.0f, 1.0f), // White
+        new Color(0.2f, 0.8f, 0.2f), // Green
+        new Color(0.2f, 0.2f, 0.8f), // Blue
+        new Color(0.8f, 0.8f, 0.2f)  // Yellow
+    };
+
     // ******* Title *******
     public static string GetSentenceForLocalPlayButton(Language language, int playerCount)
     {

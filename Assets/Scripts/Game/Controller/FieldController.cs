@@ -61,15 +61,12 @@ public class FieldController : MonoBehaviour
             {
                 _stateController.ChangeState(State.Battle);
 
-                // 敵とプレイヤー衝突した場合はプレイヤーを左側に変換
-                if (entityLeft.EntityType == EntityType.Player && entityRight.EntityType != EntityType.Player)
-                {
-                    _battleController.StartBattle(entityLeft, entityRight);
-                }
-                else
+                // 敵とプレイヤーが衝突した場合はプレイヤーが左側になる
+                if (entityLeft.EntityType != EntityType.Player && entityRight.EntityType == EntityType.Player)
                 {
                     _battleController.StartBattle(entityRight, entityLeft);
                 }
+
                 _battleController.StartBattle(entityLeft, entityRight);
                 return true;
             }
