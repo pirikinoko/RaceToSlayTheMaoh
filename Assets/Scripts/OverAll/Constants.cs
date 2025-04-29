@@ -12,6 +12,7 @@ public class Constants
     public static string AssetReferenceManaIcon = "ManaIcon";
     public static string AssetReferencePowerIcon = "PowerIcon";
     public static string AssetReferenceDamageNumberEffect = "DamageNumberEffect";
+    public static string AssetReferenceCoffin = "Coffin";
 
     // ******* General *******
     // 指定されたパーセンテージのオフセット内でランダムな値を返す

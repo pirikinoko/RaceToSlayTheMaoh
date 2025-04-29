@@ -34,9 +34,11 @@ public class BattleController : MonoBehaviour
     private VisualElement _root;
     private VisualElement _battleElement;
     private VisualElement _rewardElement;
+    private VisualElement _actionElement;
+    private VisualElement _logView;
     private VisualElement _commanndView;
-    private VisualElement _skillScrollView;
-    private VisualElement _skillContainer;
+    private VisualElement _skillView;
+    private VisualElement _skillScrollContainer;
 
     private Label _turnCountLabel;
 
@@ -87,10 +89,12 @@ public class BattleController : MonoBehaviour
         _battleElement = _root.Q<VisualElement>("BattleElement");
         _rewardElement = _root.Q<VisualElement>("RewardElement");
 
+        _actionElement = _root.Q<VisualElement>("ActionElement");
+        _logView = _root.Q<VisualElement>("LogView");
         _commanndView = _root.Q<VisualElement>("CommandView");
         _turnCountLabel = _root.Q<Label>("Label-TurnCount");
-        _skillScrollView = _root.Q<VisualElement>("SkillScrollView");
-        _skillContainer = _root.Q<VisualElement>("unity-content-container");
+        _skillView = _root.Q<VisualElement>("SkillView");
+        _skillScrollContainer = _root.Q<VisualElement>("unity-content-container");
 
         _root.Q<Button>("Button-Attack").clicked += Attack;
         _root.Q<Button>("Button-Skill").clicked += OnOpenSkillScrollClicked;
@@ -131,16 +135,18 @@ public class BattleController : MonoBehaviour
         _healthLabelRight.text = _rightEntity.Parameter.HitPoint.ToString();
         _manaLabelRight.text = _rightEntity.Parameter.ManaPoint.ToString();
 
+        // アクションエレメントの位置を左側に初期化
+        ResetActionElementPosition();
         // リアクティブプロパティの監視を設定
         InitializeReactiveProperties();
     }
 
-    private void SetSkillButtons()
+    private void SetSkillButtons(Entity entity)
     {
         _skillButtons.Clear();
-        _skillContainer.Clear();
+        _skillScrollContainer.Clear();
 
-        foreach (var skill in _userController.MyEntity.Parameter.Skills)
+        foreach (var skill in entity.Parameter.Skills)
         {
             var skillButton = new Button(() =>
             {
@@ -151,16 +157,16 @@ public class BattleController : MonoBehaviour
                 text = skill.Name
             };
             skillButton.AddToClassList("skillbutton");
-            _skillContainer.Add(skillButton);
+            _skillScrollContainer.Add(skillButton);
             _skillButtons.Add((skillButton, skill.ManaCost));
         }
     }
 
-    private void ToggleSkillButonClickable()
+    private void ToggleSkillButonClickable(Entity entity)
     {
         foreach (var (button, manaCost) in _skillButtons)
         {
-            button.SetEnabled(_userController.MyEntity.Parameter.ManaPoint >= manaCost);
+            button.SetEnabled(entity.Parameter.ManaPoint >= manaCost);
         }
     }
 
@@ -179,7 +185,6 @@ public class BattleController : MonoBehaviour
         _rightEntity = _waitingTurnEntity = rightEntity;
 
         SetEntities();
-        SetSkillButtons();
 
         _battleLogController.ClearLogs();
         _battleLogController.AddLog(Constants.GetSentenceWhenStartBattle(Settings.Language.ToString(), _leftEntity.name, _rightEntity.name));
@@ -190,6 +195,8 @@ public class BattleController : MonoBehaviour
         _hasActionEnded = false;
         ApplyCurrentBattleStatus(isInResult: false);
         bool isFirstTurn = _turnCount == 0;
+
+        // _currentTurnEntityと_waitingTurnEntityを入れ替える
         if (!isFirstTurn)
         {
             Entity tmp = _currentTurnEntity;
@@ -197,12 +204,15 @@ public class BattleController : MonoBehaviour
             _waitingTurnEntity = tmp;
         }
 
+        // ローカルモードまたはユーザーのターンの場合、コマンドビューを開く
         if (_mainController.GameMode == GameMode.Local || _currentTurnEntity == _userController.MyEntity)
         {
             OpenCommandView();
-            ToggleSkillButonClickable();
+            SetSkillButtons(_currentTurnEntity);
+            ToggleSkillButonClickable(_currentTurnEntity);
         }
 
+        // プレイヤーのターンの場合は待機ログを出し，モンスターのターンの場合は行動を実行する
         if (_currentTurnEntity.Parameter.EntityType == EntityType.Player)
         {
             _battleLogController.SetText(Constants.GetSentenceWhileWaitingAction(Settings.Language.ToString(), _currentTurnEntity.name));
@@ -212,6 +222,13 @@ public class BattleController : MonoBehaviour
             EnemyActer.ActAsync(this, _currentTurnEntity).Forget();
         }
 
+        // プレイヤー同士の戦いの場合は,操作プレイヤーに近い位置にコマンドビューを出す
+        if (_leftEntity.EntityType == EntityType.Player && _rightEntity.EntityType == EntityType.Player)
+        {
+            RepositionActionElementForCurrentTurnPlayer();
+        }
+
+        // ターン数を更新
         if (_currentTurnEntity == _leftEntity)
         {
             _turnCount++;
@@ -223,8 +240,12 @@ public class BattleController : MonoBehaviour
 
     private void BackToField()
     {
-        RemoveEntity(_loserEntity);
+        HandleDiedEntity(_loserEntity);
         _stateController.ChangeState(State.Field);
+    }
+    private void BackToTitle()
+    {
+        _stateController.ChangeState(State.Title);
     }
 
     public void Attack()
@@ -333,6 +354,14 @@ public class BattleController : MonoBehaviour
                     SetRewards();
                     _battleLogController.AddLog(Constants.GetSentenceWhenSelectingReward(Settings.Language));
                     _battleStatus = BattleStatus.SelectReword;
+                }
+                else if (_mainController.PlayerCount > 1)
+                {
+                    _battleStatus = BattleStatus.Ending;
+                }
+                else
+                {
+                    BackToTitle();
                 }
                 break;
 
@@ -501,15 +530,15 @@ public class BattleController : MonoBehaviour
         log = string.Format(Constants.GetSkillGetSentence(Settings.Language), _userController.MyEntity.name, skill.Name);
     }
 
-    private void RemoveEntity(Entity entity)
+    private void HandleDiedEntity(Entity entity)
     {
-        Destroy(entity.gameObject);
         switch (entity.EntityType)
         {
             case EntityType.Player:
-                _playerController.PlayerList.Remove(entity);
+                _mainController.SetPlayerAsDead(entity);
                 break;
             default:
+                Destroy(entity.gameObject);
                 _enemyController.EnemyList.Remove(entity);
                 break;
         }
@@ -537,15 +566,14 @@ public class BattleController : MonoBehaviour
 
     private void OpenSkillScroll()
     {
-        _skillScrollView.style.display = DisplayStyle.Flex;
+        _skillView.style.display = DisplayStyle.Flex;
         _closeSkillScrollViewButton.style.display = DisplayStyle.Flex;
         _commanndView.style.display = DisplayStyle.None;
     }
 
     private void CloseSkillScroll()
     {
-        _skillScrollView.style.display = DisplayStyle.None;
-        _closeSkillScrollViewButton.style.display = DisplayStyle.None;
+        _skillView.style.display = DisplayStyle.None;
         _commanndView.style.display = DisplayStyle.Flex;
     }
 
@@ -556,6 +584,38 @@ public class BattleController : MonoBehaviour
     private void CloseRewardView()
     {
         _rewardElement.style.display = DisplayStyle.None;
+    }
+
+
+    /// <summary>
+    ///  コマンド入力のUIを現在のターンプレイヤーに合わせて再配置する
+    /// </summary>
+    private void RepositionActionElementForCurrentTurnPlayer()
+    {
+        var parent = _actionElement.parent;
+        var index = parent.IndexOf(_actionElement);
+
+        // 一度アクションエレメントを削除
+        parent.RemoveAt(index);
+        if (_currentTurnEntity == _leftEntity)
+        {
+            // 左エンティティのターンの場合、アクションエレメントを最初に追加
+            parent.Insert(0, _actionElement);
+            return;
+        }
+
+        parent.Add(_actionElement);
+    }
+
+    private void ResetActionElementPosition()
+    {
+        var parent = _actionElement.parent;
+        var index = parent.IndexOf(_actionElement);
+
+        // 一度アクションエレメントを削除
+        parent.RemoveAt(index);
+        // アクションエレメントを元の位置に戻す
+        parent.Insert(0, _actionElement);
     }
 
     // エンティティのHPとMPの変化を監視して、ダメージや回復のエフェクトを表示する

@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
 
     private void InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector3 spawnPosition, Color color)
     {
-        Debug.Log($"Parameter instance id: {clonedParameter.GetHashCode()}, Name: {clonedParameter.Name}");
         var playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity, _playerParent);
         var player = playerGameObject.GetComponent<Entity>();
         player.Initialize(clonedParameter);

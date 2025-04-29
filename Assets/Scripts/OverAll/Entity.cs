@@ -12,6 +12,8 @@ public class Entity : MonoBehaviour
     public ReadOnlyReactiveProperty<int> HitPointRp => _hitPointRp;
     public ReadOnlyReactiveProperty<int> ManaPointRp => _manaPointRp;
 
+    public bool IsAlive { get; set; } = true;
+
     private ReactiveProperty<int> _hitPointRp = new ReactiveProperty<int>();
     private ReactiveProperty<int> _manaPointRp = new ReactiveProperty<int>();
 
@@ -67,5 +69,10 @@ public class Entity : MonoBehaviour
     public void SetColor(Color color)
     {
         _spriteRenderer.color = color;
+    }
+
+    public void ChangeVisibility(bool isVisible)
+    {
+        _spriteRenderer.enabled = isVisible;
     }
 }

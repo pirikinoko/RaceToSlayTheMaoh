@@ -1,12 +1,15 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UIToolkit;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
 public class MainController : MonoBehaviour
 {
+    [SerializeField]
+    private Transform _objectsParent;
     private UserController _userController;
     private FieldController _fieldController;
     private CameraController _cameraController;
@@ -30,13 +33,22 @@ public class MainController : MonoBehaviour
 
     private DiceBoxComponent _diceBoxComponent;
 
-
     private Button _stopButton => _diceBoxComponent.StopButton;
+
+    private Dictionary<int, GameObject> _coffinObjects = new();
 
     private void Start()
     {
         _diceBoxComponent = GetComponent<UIDocument>().rootVisualElement.Q<DiceBoxComponent>("DiceBoxComponent");
         _diceBoxComponent.style.display = DisplayStyle.None;
+        for (int i = 0; i < Constants.MaxPlayerCount; i++)
+        {
+            int coffinId = i + 1;
+            var coffinObjectPrefab = Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferenceCoffin).WaitForCompletion();
+            var coffinObject = Instantiate(coffinObjectPrefab, _objectsParent);
+            coffinObject.SetActive(false);
+            _coffinObjects.Add(coffinId, coffinObject);
+        }
     }
 
     public void Initialize(UserController userController, FieldController fieldController, CameraController cameraController, StateController stateController, PlayerController playerController, EnemyController enemyController)
@@ -71,6 +83,13 @@ public class MainController : MonoBehaviour
 
         await _cameraController.MoveCameraAsync(CurrentTurnPlayerEntity.transform.position);
 
+        if (CurrentTurnPlayerEntity.IsAlive == false)
+        {
+            await RevivePlayerAsync(CurrentTurnPlayerEntity);
+            StartNewTurnAsync().Forget();
+            return;
+        }
+
         var moves = await GetDiceResultAsync();
         CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().SetMoves(moves);
         CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().EnableClickMovement();
@@ -94,5 +113,21 @@ public class MainController : MonoBehaviour
 
         _stateController.RevealField();
         return _diceBoxComponent.GetCurrentNumber();
+    }
+
+    private async UniTask RevivePlayerAsync(Entity entity)
+    {
+        await UniTask.Delay(1000);
+        entity.IsAlive = true;
+        entity.ChangeVisibility(true);
+        _coffinObjects[entity.Id].SetActive(false);
+    }
+
+    public void SetPlayerAsDead(Entity playerEntity)
+    {
+        playerEntity.IsAlive = false;
+        playerEntity.ChangeVisibility(false);
+        _coffinObjects[playerEntity.Id].SetActive(true);
+        _coffinObjects[playerEntity.Id].transform.position = playerEntity.transform.position;
     }
 }
