@@ -53,8 +53,7 @@ public class Entity : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        // 先にリアクションプロパティを更新してから、エンティティのHPを更新する
-        // これによって、エンティティのHPが変化したことをBattleControllerに通知し，差分を取得できる
+        // 古いHPも参照して処理をしたいので，先にリアクションプロパティを更新してから、エンティティのHPを更新する
         _hitPointRp.Value = Parameter.HitPoint - damage;
         Parameter.HitPoint = _hitPointRp.Value;
     }
