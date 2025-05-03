@@ -75,10 +75,10 @@ public class Constants
     public static int AttackOffsetPercent { get; set; } = 50;
 
     // ******* Field *******
-    public static Vector3 FieldCornerUpLeft { get; set; } = new Vector3(-7, 7, 0);
-    public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(7, 7, 0);
-    public static Vector3 FieldCornerDownLeft { get; set; } = new Vector3(-7, -7, 0);
-    public static Vector3 FieldCornerDownRight { get; set; } = new Vector3(7, -7, 0);
+    public static Vector3 FieldCornerUpLeft { get; set; } = new Vector3(-5, -5, 0);
+    public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(-1, -5, 0);
+    public static Vector3 FieldCornerDownLeft { get; set; } = new Vector3(1, -5, 0);
+    public static Vector3 FieldCornerDownRight { get; set; } = new Vector3(5, -5, 0);
 
     public static Vector3[] PlayerSpownPositions { get; set; } =
     {
