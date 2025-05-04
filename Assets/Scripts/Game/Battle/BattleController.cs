@@ -1,12 +1,8 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using R3;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using UIToolkit;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
 public class BattleController : MonoBehaviour
@@ -35,7 +31,6 @@ public class BattleController : MonoBehaviour
     private VisualElement _battleElement;
     private VisualElement _rewardElement;
     private VisualElement _actionElement;
-    private VisualElement _logView;
     private VisualElement _commanndView;
     private VisualElement _skillView;
     private VisualElement _skillScrollContainer;
@@ -212,14 +207,15 @@ public class BattleController : MonoBehaviour
             ToggleSkillButonClickable(_currentTurnEntity);
         }
 
-        // プレイヤーのターンの場合は待機ログを出し，モンスターのターンの場合は行動を実行する
-        if (_currentTurnEntity.Parameter.EntityType == EntityType.Player)
-        {
-            _battleLogController.SetText(Constants.GetSentenceWhileWaitingAction(Settings.Language.ToString(), _currentTurnEntity.name));
-        }
-        else
+        // NPCのターンの場合は行動を実行する
+        if (_currentTurnEntity.IsNpc)
         {
             EnemyActer.ActAsync(this, _currentTurnEntity).Forget();
+        }
+        // プレイヤーのターンの場合は待機ログを出す
+        else
+        {
+            _battleLogController.SetText(Constants.GetSentenceWhileWaitingAction(Settings.Language.ToString(), _currentTurnEntity.name));
         }
 
         // プレイヤー同士の戦いの場合は,操作プレイヤーに近い位置にコマンドビューを出す
@@ -242,10 +238,6 @@ public class BattleController : MonoBehaviour
     {
         HandleDiedEntity(_loserEntity);
         _stateController.ChangeState(State.Field);
-    }
-    private void BackToTitle()
-    {
-        _stateController.ChangeState(State.Title);
     }
 
     public void Attack()
@@ -354,14 +346,17 @@ public class BattleController : MonoBehaviour
                     SetRewards();
                     _battleLogController.AddLog(Constants.GetSentenceWhenSelectingReward(Settings.Language));
                     _battleStatus = BattleStatus.SelectReword;
-                }
-                else if (_mainController.PlayerCount > 1)
-                {
-                    _battleStatus = BattleStatus.Ending;
+                    if (_winnerEntity.IsNpc)
+                    {
+                        UniTask.Delay(1000).ContinueWith(() =>
+                        {
+                            _battleLogController.AddLog(Constants.GetSentenceWhenSelectingReward(Settings.Language));
+                        });
+                    }
                 }
                 else
                 {
-                    BackToTitle();
+                    _battleStatus = BattleStatus.Ending;
                 }
                 break;
 

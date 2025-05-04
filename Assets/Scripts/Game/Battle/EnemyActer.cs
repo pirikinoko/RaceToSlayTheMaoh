@@ -1,7 +1,9 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Linq;
+using UIToolkit;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UIElements;
 
 public static class EnemyActer
 {
@@ -80,5 +82,29 @@ public static class EnemyActer
     public static bool HasEnoughManaPoint(Entity acter, string skillName)
     {
         return acter.Parameter.ManaPoint >= acter.Parameter.Skills.FirstOrDefault(s => s.Name == skillName).ManaCost;
+    }
+
+    public static void StopRolling(DiceBoxComponent diceBoxComponent)
+    {
+        diceBoxComponent.StopRolling();
+    }
+
+    /// <summary>
+    /// レイキャストで当たった敵の中から最も近い敵を見つける
+    /// つまりは障害物を挟む敵は対象外
+    /// </summary>
+    /// <param name="acter"></param>
+    /// <param name="playerController"></param>
+    /// <param name="enemyController"></param>
+    /// <returns></returns>
+    public static async UniTask MoveAsync(ControllableEntity acter)
+    {
+        await acter.MoveTowardsNearestEntity();
+    }
+
+    public static void SelectRewards(Button[] rewardButtons)
+    {
+        var selectedButton = rewardButtons[Random.Range(0, rewardButtons.Length)];
+        button.clicked?.Invoke();
     }
 }

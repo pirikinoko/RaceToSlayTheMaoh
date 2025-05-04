@@ -46,6 +46,32 @@ public class Constants
         new Color(0.8f, 0.8f, 0.2f)  // Yellow
     };
 
+    public static string GetPlayerName(Language language, int playerId)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("プレイヤー{0}", playerId);
+            case Language.English:
+                return string.Format("Player{0}", playerId);
+            default:
+                return string.Format("Player{0}", playerId);
+        }
+    }
+
+    public static string[] GetNpcNames(Language language)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return new string[] { "Player1", "アレックス", "モーガン", "テイラー" };
+            case Language.English:
+                return new string[] { "Hero", "Jordan", "Morgan", "Taylor" };
+            default:
+                return new string[] { "Hero", "Jordan", "Morgan", "Taylor" };
+        }
+    }
+
     // ******* Title *******
     public static string GetSentenceForLocalPlayButton(Language language, int playerCount)
     {
@@ -63,7 +89,7 @@ public class Constants
     // ******* Main *******
     public static int MaxPlayerCount { get; set; } = 4;
     public static int MinPlayerCount { get; set; } = 1;
-    public static int MaxDiceValue { get; set; } = 4;
+    public static int MaxDiceValue { get; set; } = 3;
     public static float DiceRollUpdateInterval { get; set; } = 0.03f;
     public static int DiceHighlightBlinkCount { get; set; } = 5;
     public static float DiceHighlightBlinkInterval { get; set; } = 0.2f;
@@ -79,6 +105,8 @@ public class Constants
     public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(-1, -5, 0);
     public static Vector3 FieldCornerDownLeft { get; set; } = new Vector3(1, -5, 0);
     public static Vector3 FieldCornerDownRight { get; set; } = new Vector3(5, -5, 0);
+
+    public static LayerMask EntityLayerMask { get; set; } = LayerMask.GetMask("Entity");
 
     public static Vector3[] PlayerSpownPositions { get; set; } =
     {

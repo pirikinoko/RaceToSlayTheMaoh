@@ -91,8 +91,14 @@ public class MainController : MonoBehaviour
         }
 
         var moves = await GetDiceResultAsync();
+
         CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().SetMoves(moves);
         CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().EnableClickMovement();
+
+        if (CurrentTurnPlayerEntity.IsNpc)
+        {
+            await EnemyActer.MoveAsync(CurrentTurnPlayerEntity.GetComponent<ControllableEntity>());
+        }
 
         TurnCount++;
     }
@@ -103,12 +109,19 @@ public class MainController : MonoBehaviour
 
         _diceBoxComponent.style.display = DisplayStyle.Flex;
         _diceBoxComponent.StartRolling();
-        if (_userController.MyEntity == CurrentTurnPlayerEntity || GameMode == GameMode.Local)
+        _stopButton.style.display = DisplayStyle.Flex;
+        if (_userController.MyEntity == CurrentTurnPlayerEntity || CurrentTurnPlayerEntity.IsNpc)
         {
-            _stopButton.style.display = DisplayStyle.Flex;
+            _stopButton.style.display = DisplayStyle.None;
+        }
+
+        if (CurrentTurnPlayerEntity.IsNpc)
+        {
+            EnemyActer.StopRolling(_diceBoxComponent);
         }
 
         await UniTask.WaitUntil(() => _diceBoxComponent.IsRolling == false);
+
         _diceBoxComponent.style.display = DisplayStyle.None;
 
         _stateController.RevealField();

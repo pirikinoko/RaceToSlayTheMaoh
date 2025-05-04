@@ -5,6 +5,7 @@ using R3;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UIElements;
 
 public class ControllableEntity : MonoBehaviour
 {
@@ -165,6 +166,11 @@ public class ControllableEntity : MonoBehaviour
         // クリックハンドラーの追加
         MoveHighlight moveHighlight = highlight.GetComponent<MoveHighlight>();
         moveHighlight.Initialize(this, path, color);
+
+        if (GetComponent<Entity>().IsNpc)
+        {
+            moveHighlight.GetComponent<BoxCollider2D>().enabled = false;
+        }
     }
 
     /// <summary>
@@ -176,7 +182,7 @@ public class ControllableEntity : MonoBehaviour
         ClearAllHighlights();
 
         var hasEncounted = false;
-        while (path.Count > 0)
+        while (path.Count > 0 && _remainingMoves > 0)
         {
             Vector2 nextPos = path.Dequeue();
             await MoveAsync(nextPos);
@@ -236,5 +242,74 @@ public class ControllableEntity : MonoBehaviour
     public int GetMoves()
     {
         return _remainingMoves;
+    }
+
+    /// <summary>
+    /// /// 一番少ない移動数で済むEntityに向かって移動する
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask MoveTowardsNearestEntity()
+    {
+        Vector2 startPos = _transform.position;
+
+        // ゴール候補（Entityの位置）をHashSetで取得
+        var entityPositions = new HashSet<Vector2>();
+        foreach (var player in _playerController.PlayerList)
+        {
+            if (player != this.GetComponent<Entity>())
+                entityPositions.Add((Vector2)player.transform.position);
+        }
+        foreach (var enemy in _enemyController.EnemyList)
+        {
+            if (enemy != this.GetComponent<Entity>())
+                entityPositions.Add((Vector2)enemy.transform.position);
+        }
+
+        // BFS用キュー: (現在地, 経路)
+        var queue = new Queue<(Vector2 pos, Queue<Vector2> path)>();
+        var visited = new HashSet<Vector2>();
+        queue.Enqueue((startPos, new Queue<Vector2>()));
+        visited.Add(startPos);
+
+        Queue<Vector2> pathTominStepEntity = null;
+        int minStep = int.MaxValue;
+
+        while (queue.Count > 0)
+        {
+            var (current, path) = queue.Dequeue();
+
+            // すでに最短経路より長い場合はスキップ
+            if (path.Count >= minStep)
+                continue;
+
+            // ゴール判定: Entityの位置に到達したら
+            if (entityPositions.Contains(current))
+            {
+                if (path.Count < minStep)
+                {
+                    minStep = path.Count;
+                    pathTominStepEntity = new Queue<Vector2>(path);
+                }
+            }
+
+            // 4方向探索
+            Vector2[] directions = { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
+            foreach (var dir in directions)
+            {
+                Vector2 next = current + dir;
+                if (visited.Contains(next)) continue;
+
+                // 壁やマップ外チェック：Raycastで壁コライダーがあるか
+                RaycastHit2D hit = Physics2D.Raycast(current, dir, 1f);
+                if (hit.collider != null) continue;
+
+                var newPath = new Queue<Vector2>(path);
+                newPath.Enqueue(next);
+                queue.Enqueue((next, newPath));
+                visited.Add(next);
+            }
+        }
+
+        await TracePathAsync(pathTominStepEntity);
     }
 }

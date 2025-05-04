@@ -77,7 +77,7 @@ namespace UIToolkit
             _numberLabel.style.opacity = 1f;
         }
 
-        private async void StopRolling()
+        public async void StopRolling()
         {
             // StartRolling()をキャンセル
             _cancellationTokenSource.Cancel();

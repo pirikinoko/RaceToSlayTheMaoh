@@ -14,6 +14,8 @@ public class Entity : MonoBehaviour
 
     public bool IsAlive { get; set; } = true;
 
+    public bool IsNpc { get; private set; } = false;
+
     private ReactiveProperty<int> _hitPointRp = new ReactiveProperty<int>();
     private ReactiveProperty<int> _manaPointRp = new ReactiveProperty<int>();
 
@@ -21,7 +23,7 @@ public class Entity : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
 
 
-    public void Initialize(Parameter parameter)
+    public void Initialize(Parameter parameter, bool isNpc)
     {
         Parameter = parameter;
 
@@ -35,6 +37,8 @@ public class Entity : MonoBehaviour
 
         _hitPointRp.Value = Parameter.HitPoint;
         _manaPointRp.Value = Parameter.ManaPoint;
+
+        IsNpc = isNpc;
     }
 
     public int Attack(Entity target)
