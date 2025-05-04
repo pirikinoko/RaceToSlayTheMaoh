@@ -142,5 +142,6 @@ public class MainController : MonoBehaviour
         playerEntity.ChangeVisibility(false);
         _coffinObjects[playerEntity.Id].SetActive(true);
         _coffinObjects[playerEntity.Id].transform.position = coffinPosition;
+        playerEntity.transform.position = coffinPosition;
     }
 }
