@@ -24,6 +24,8 @@ public class BattleController : MonoBehaviour
     private Entity _winnerEntity;
     private Entity _loserEntity;
 
+    private Vector2 _entityLeftsPreviousPos;
+
     private int _turnCount = 0;
     private bool _hasActionEnded;
 
@@ -52,6 +54,9 @@ public class BattleController : MonoBehaviour
     private Label _manaLabelRight;
 
     private CompositeDisposable _disposable = new();
+
+    private Reward _currentReward;
+    private List<Skill> _currentRewardSkills;
 
     private void Start()
     {
@@ -85,7 +90,6 @@ public class BattleController : MonoBehaviour
         _rewardElement = _root.Q<VisualElement>("RewardElement");
 
         _actionElement = _root.Q<VisualElement>("ActionElement");
-        _logView = _root.Q<VisualElement>("LogView");
         _commanndView = _root.Q<VisualElement>("CommandView");
         _turnCountLabel = _root.Q<Label>("Label-TurnCount");
         _skillView = _root.Q<VisualElement>("SkillView");
@@ -165,11 +169,12 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    public void StartBattle(Entity leftEntity, Entity rightEntity)
+    public void StartBattle(Entity leftEntity, Entity rightEntity, Vector2 entityLeftsPreviousPos)
     {
         _turnCount = 0;
         _turnCountLabel.text = $"1/{Constants.MaxTurn}";
         _battleStatus = BattleStatus.BeforeAction;
+        _entityLeftsPreviousPos = entityLeftsPreviousPos;
 
         DisplayBattleElement();
         CloseCommandView();
@@ -230,7 +235,7 @@ public class BattleController : MonoBehaviour
             _turnCount++;
         }
 
-        _turnCountLabel.text = $"{_turnCount}/{Constants.MaxTurn}";
+        _turnCountLabel.text = $"Turn:{_turnCount}";
     }
 
 
@@ -348,23 +353,18 @@ public class BattleController : MonoBehaviour
                     _battleStatus = BattleStatus.SelectReword;
                     if (_winnerEntity.IsNpc)
                     {
-                        UniTask.Delay(1000).ContinueWith(() =>
-                        {
-                            _battleLogController.AddLog(Constants.GetSentenceWhenSelectingReward(Settings.Language));
-                        });
+                        EnemyActer.SelectReword(this).Forget();
                     }
                 }
                 else
                 {
+                    _battleLogController.AddLog(Constants.GetSentenceWhenEnemyWins(Settings.Language, _winnerEntity.name));
                     _battleStatus = BattleStatus.Ending;
                 }
                 break;
 
             case BattleStatus.BothDied:
-                _battleStatus = BattleStatus.Ending;
-                break;
-
-            case BattleStatus.TurnOver:
+                _battleLogController.AddLog(Constants.GetSentenceWhenBothDied(Settings.Language));
                 _battleStatus = BattleStatus.Ending;
                 break;
 
@@ -397,10 +397,6 @@ public class BattleController : MonoBehaviour
         else if (_rightEntity.Parameter.HitPoint <= 0)
         {
             _battleStatus = BattleStatus.LeftWin;
-        }
-        else if (_turnCount > Constants.MaxTurn)
-        {
-            _battleStatus = BattleStatus.TurnOver;
         }
         else if (!_hasActionEnded)
         {
@@ -438,47 +434,66 @@ public class BattleController : MonoBehaviour
         }
     }
 
+    public void OnStatusRewardSelected()
+    {
+        string result = _currentReward.Execute(_winnerEntity);
+        _battleLogController.AddLog(result);
+        CloseRewardView();
+        _battleStatus = BattleStatus.Ending;
+    }
+
+    public void OnSkillRewardSelected(int index)
+    {
+        AddSkillToWinnerEntity(_currentRewardSkills[index], out string log);
+        _battleLogController.AddLog(log);
+        CloseRewardView();
+        _battleStatus = BattleStatus.Ending;
+    }
+
+    public List<int> RewardChoices
+    {
+        get
+        {
+            var rewardChoices = new List<int> { 0 };
+            for (int i = 0; i <= _currentRewardSkills.Count; i++)
+            {
+                if (_userController.MyEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[i].Name) == null)
+                {
+                    rewardChoices.Add(i + 1);
+                }
+            }
+            return rewardChoices;
+        }
+    }
+
+
     private void SetRewards()
     {
         _rewardElement.Clear();
         var rewardButtons = new List<Button>();
 
         // ステータス報酬のセット
-        var reward = new Reward();
-        var statusRewardButton = new Button(() =>
-        {
-            string result = reward.Execute(_winnerEntity);
-            _battleLogController.AddLog(result);
-        });
+        _currentReward = new Reward();
+        var statusRewardButton = new Button(OnStatusRewardSelected);
         statusRewardButton.AddToClassList(ClassNames.RewardButton);
-
         statusRewardButton.Add(CreateNewLabelWithDetails(ClassNames.RewardTitle, Constants.GetStatusRewardTitle(Settings.Language)));
-        statusRewardButton.Add(CreateNewLabelWithDetails(ClassNames.RewardDescription, reward.Description));
+        statusRewardButton.Add(CreateNewLabelWithDetails(ClassNames.RewardDescription, _currentReward.Description));
         rewardButtons.Add(statusRewardButton);
 
         // スキル報酬のセット
         List<Skill> loserSkills = _loserEntity.Parameter.Skills;
-        List<Skill> rewardSelectedSkills = GetListOfRandomTwoElementsFromList(loserSkills);
+        _currentRewardSkills = GetListOfRandomTwoElementsFromList(loserSkills);
 
-        for (int i = 0; i < rewardSelectedSkills.Count; i++)
+        for (int i = 0; i < _currentRewardSkills.Count; i++)
         {
-            // クロージャーを使うために、ループのインデックスをキャプチャする
             int index = i;
-
-            var skillRewardButton = new Button();
+            var skillRewardButton = new Button(() => OnSkillRewardSelected(index));
             skillRewardButton.AddToClassList(ClassNames.RewardButton);
-            skillRewardButton.clicked += () =>
-            {
-                AddSkillToMyEntity(rewardSelectedSkills[index], out string log);
-                _battleLogController.AddLog(log);
-            };
-
-            var labelRewardTitle = CreateNewLabelWithDetails(ClassNames.RewardTitle, rewardSelectedSkills[index].Name);
+            var labelRewardTitle = CreateNewLabelWithDetails(ClassNames.RewardTitle, _currentRewardSkills[index].Name);
             skillRewardButton.Add(labelRewardTitle);
-            var labelRewardDescription = CreateNewLabelWithDetails(ClassNames.RewardDescription, rewardSelectedSkills[index].Description);
+            var labelRewardDescription = CreateNewLabelWithDetails(ClassNames.RewardDescription, _currentRewardSkills[index].Description);
             skillRewardButton.Add(labelRewardDescription);
-
-            if (_userController.MyEntity.Parameter.Skills.Find(s => s.Name == rewardSelectedSkills[index].Name) != null)
+            if (_userController.MyEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[index].Name) != null)
             {
                 skillRewardButton.SetEnabled(false);
                 labelRewardDescription.text = Constants.GetSentenceWhenAlreadyHoldingTheSkill(Settings.Language);
@@ -488,8 +503,6 @@ public class BattleController : MonoBehaviour
 
         foreach (var button in rewardButtons)
         {
-            button.clicked += CloseRewardView;
-            button.clicked += () => _battleStatus = BattleStatus.Ending;
             _rewardElement.Add(button);
         }
     }
@@ -519,10 +532,10 @@ public class BattleController : MonoBehaviour
         return result;
     }
 
-    private void AddSkillToMyEntity(Skill skill, out string log)
+    private void AddSkillToWinnerEntity(Skill skill, out string log)
     {
-        _userController.MyEntity.Parameter.Skills.Add(skill);
-        log = string.Format(Constants.GetSkillGetSentence(Settings.Language), _userController.MyEntity.name, skill.Name);
+        _winnerEntity.Parameter.Skills.Add(skill);
+        log = string.Format(Constants.GetSkillGetSentence(Settings.Language), _winnerEntity.name, skill.Name);
     }
 
     private void HandleDiedEntity(Entity entity)
@@ -530,7 +543,13 @@ public class BattleController : MonoBehaviour
         switch (entity.EntityType)
         {
             case EntityType.Player:
-                _mainController.SetPlayerAsDead(entity);
+                // leftEntity(さいころを振って動いたエンティティ)が負けた場合エンカウント地点の1マス前の位置に戻す
+                if (_loserEntity == _leftEntity)
+                {
+                    _mainController.SetPlayerAsDead(entity, _entityLeftsPreviousPos);
+                    break;
+                }
+                _mainController.SetPlayerAsDead(entity, _loserEntity.transform.position);
                 break;
             default:
                 Destroy(entity.gameObject);

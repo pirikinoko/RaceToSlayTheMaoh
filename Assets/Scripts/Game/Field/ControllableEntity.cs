@@ -185,8 +185,10 @@ public class ControllableEntity : MonoBehaviour
         while (path.Count > 0 && _remainingMoves > 0)
         {
             Vector2 nextPos = path.Dequeue();
+            // 負けた場合棺桶を配置するので、移動前に位置を保存
+            var previousPos = _transform.position;
             await MoveAsync(nextPos);
-            if (_fieldController.CheckEncount(gameObject.GetComponent<Entity>()))
+            if (_fieldController.CheckEncount(gameObject.GetComponent<Entity>(), previousPos))
             {
                 hasEncounted = true;
                 break;
@@ -251,6 +253,7 @@ public class ControllableEntity : MonoBehaviour
     public async UniTask MoveTowardsNearestEntity()
     {
         Vector2 startPos = _transform.position;
+        Debug.Log($"[MoveTowardsNearestEntity] Start: startPos={startPos}");
 
         // ゴール候補（Entityの位置）をHashSetで取得
         var entityPositions = new HashSet<Vector2>();
@@ -264,6 +267,7 @@ public class ControllableEntity : MonoBehaviour
             if (enemy != this.GetComponent<Entity>())
                 entityPositions.Add((Vector2)enemy.transform.position);
         }
+        Debug.Log($"[MoveTowardsNearestEntity] entityPositions: {string.Join(",", entityPositions)}");
 
         // BFS用キュー: (現在地, 経路)
         var queue = new Queue<(Vector2 pos, Queue<Vector2> path)>();
@@ -271,24 +275,31 @@ public class ControllableEntity : MonoBehaviour
         queue.Enqueue((startPos, new Queue<Vector2>()));
         visited.Add(startPos);
 
-        Queue<Vector2> pathTominStepEntity = null;
+        Vector2? nearestGoal = null;
+        Queue<Vector2> bestPath = null;
         int minStep = int.MaxValue;
 
         while (queue.Count > 0)
         {
             var (current, path) = queue.Dequeue();
+            Debug.Log($"[MoveTowardsNearestEntity] Dequeue: current={current}, path.Count={path.Count}");
 
             // すでに最短経路より長い場合はスキップ
             if (path.Count >= minStep)
+            {
+                Debug.Log($"[MoveTowardsNearestEntity] Skip: path.Count({path.Count}) >= minStep({minStep})");
                 continue;
+            }
 
             // ゴール判定: Entityの位置に到達したら
-            if (entityPositions.Contains(current))
+            if (entityPositions.Any(pos => Vector2.Distance(current, pos) < 0.1f))
             {
+                Debug.Log($"[MoveTowardsNearestEntity] Goal found at {current} with path.Count={path.Count}");
                 if (path.Count < minStep)
                 {
                     minStep = path.Count;
-                    pathTominStepEntity = new Queue<Vector2>(path);
+                    nearestGoal = current;
+                    bestPath = new Queue<Vector2>(path);
                 }
             }
 
@@ -301,15 +312,28 @@ public class ControllableEntity : MonoBehaviour
 
                 // 壁やマップ外チェック：Raycastで壁コライダーがあるか
                 RaycastHit2D hit = Physics2D.Raycast(current, dir, 1f);
-                if (hit.collider != null) continue;
+                if (hit.collider != null)
+                {
+                    Debug.Log($"[MoveTowardsNearestEntity] Wall at {next}");
+                    continue;
+                }
 
                 var newPath = new Queue<Vector2>(path);
                 newPath.Enqueue(next);
                 queue.Enqueue((next, newPath));
                 visited.Add(next);
+                Debug.Log($"[MoveTowardsNearestEntity] Enqueue: next={next}, newPath.Count={newPath.Count}");
             }
         }
 
-        await TracePathAsync(pathTominStepEntity);
+        if (nearestGoal != null && bestPath != null && bestPath.Count > 0)
+        {
+            Debug.Log($"[MoveTowardsNearestEntity] Path found! nearestGoal={nearestGoal}, steps={bestPath.Count}");
+            await TracePathAsync(bestPath);
+        }
+        else
+        {
+            Debug.LogWarning("[MoveTowardsNearestEntity] No path found to any Entity.");
+        }
     }
 }

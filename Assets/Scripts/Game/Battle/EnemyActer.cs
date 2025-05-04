@@ -102,9 +102,18 @@ public static class EnemyActer
         await acter.MoveTowardsNearestEntity();
     }
 
-    public static void SelectRewards(Button[] rewardButtons)
+    public static async UniTask SelectReword(BattleController battleController)
     {
-        var selectedButton = rewardButtons[Random.Range(0, rewardButtons.Length)];
-        button.clicked?.Invoke();
+        await UniTask.Delay(1000);
+
+        int reward = battleController.RewardChoices[Random.Range(0, battleController.RewardChoices.Count)];
+        if (reward == 0)
+        {
+            battleController.OnStatusRewardSelected();
+        }
+        else
+        {
+            battleController.OnSkillRewardSelected(reward);
+        }
     }
 }

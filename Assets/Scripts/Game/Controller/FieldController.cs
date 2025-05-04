@@ -43,7 +43,8 @@ public class FieldController : MonoBehaviour
         _statusBoxComponents.ForEach(statusBox => statusBox.style.display = DisplayStyle.None);
     }
 
-    public bool CheckEncount(Entity entityLeft)
+    // 歩いたほうのエンティティがentityLeftになる
+    public bool CheckEncount(Entity entityLeft, Vector2 entityLeftsPreviousPos)
     {
         var allEntity = new List<Entity>();
         allEntity.AddRange(_playerController.PlayerList);
@@ -61,13 +62,7 @@ public class FieldController : MonoBehaviour
             {
                 _stateController.ChangeState(State.Battle);
 
-                // 敵とプレイヤーが衝突した場合はプレイヤーが左側になる
-                if (entityLeft.EntityType != EntityType.Player && entityRight.EntityType == EntityType.Player)
-                {
-                    _battleController.StartBattle(entityRight, entityLeft);
-                }
-
-                _battleController.StartBattle(entityLeft, entityRight);
+                _battleController.StartBattle(entityLeft, entityRight, entityLeftsPreviousPos);
                 return true;
             }
         }

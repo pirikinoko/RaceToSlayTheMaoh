@@ -87,12 +87,12 @@ public class Constants
     }
 
     // ******* Main *******
-    public static int MaxPlayerCount { get; set; } = 4;
+    public static int MaxPlayerCountIncludingNpc { get; set; } = 4;
     public static int MinPlayerCount { get; set; } = 1;
     public static int MaxDiceValue { get; set; } = 3;
-    public static float DiceRollUpdateInterval { get; set; } = 0.03f;
+    public static float DiceRollUpdateInterval { get; set; } = 0.02f;
     public static int DiceHighlightBlinkCount { get; set; } = 5;
-    public static float DiceHighlightBlinkInterval { get; set; } = 0.2f;
+    public static float DiceHighlightBlinkInterval { get; set; } = 0.15f;
 
     // ******* Entity *******
 
@@ -221,6 +221,19 @@ public class Constants
                 return "Both died!";
             default:
                 return "Both died!";
+        }
+    }
+
+    public static string GetSentenceWhenEnemyWins(Language language, string enemyName)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}は休憩して元気になった...", enemyName);
+            case Language.English:
+                return string.Format("{0} is resting....", enemyName);
+            default:
+                return string.Format("{0} is resting....", enemyName);
         }
     }
 

@@ -41,7 +41,7 @@ public class MainController : MonoBehaviour
     {
         _diceBoxComponent = GetComponent<UIDocument>().rootVisualElement.Q<DiceBoxComponent>("DiceBoxComponent");
         _diceBoxComponent.style.display = DisplayStyle.None;
-        for (int i = 0; i < Constants.MaxPlayerCount; i++)
+        for (int i = 0; i < Constants.MaxPlayerCountIncludingNpc; i++)
         {
             int coffinId = i + 1;
             var coffinObjectPrefab = Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferenceCoffin).WaitForCompletion();
@@ -72,7 +72,7 @@ public class MainController : MonoBehaviour
         if (TurnCount != 0)
         {
             CurrentTurnPlayerId++;
-            if (CurrentTurnPlayerId > PlayerCount)
+            if (CurrentTurnPlayerId > Constants.MaxPlayerCountIncludingNpc)
             {
                 CurrentTurnPlayerId = 1;
             }
@@ -110,7 +110,7 @@ public class MainController : MonoBehaviour
         _diceBoxComponent.style.display = DisplayStyle.Flex;
         _diceBoxComponent.StartRolling();
         _stopButton.style.display = DisplayStyle.Flex;
-        if (_userController.MyEntity == CurrentTurnPlayerEntity || CurrentTurnPlayerEntity.IsNpc)
+        if (CurrentTurnPlayerEntity != _userController.MyEntity || CurrentTurnPlayerEntity.IsNpc)
         {
             _stopButton.style.display = DisplayStyle.None;
         }
@@ -136,11 +136,11 @@ public class MainController : MonoBehaviour
         _coffinObjects[entity.Id].SetActive(false);
     }
 
-    public void SetPlayerAsDead(Entity playerEntity)
+    public void SetPlayerAsDead(Entity playerEntity, Vector2 coffinPosition)
     {
         playerEntity.IsAlive = false;
         playerEntity.ChangeVisibility(false);
         _coffinObjects[playerEntity.Id].SetActive(true);
-        _coffinObjects[playerEntity.Id].transform.position = playerEntity.transform.position;
+        _coffinObjects[playerEntity.Id].transform.position = coffinPosition;
     }
 }

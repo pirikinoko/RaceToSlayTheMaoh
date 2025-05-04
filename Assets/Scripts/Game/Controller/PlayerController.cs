@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
         var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferencePlayer).Task;
 
-        for (int i = 0; i < Constants.MaxPlayerCount; i++)
+        for (int i = 0; i < Constants.MaxPlayerCountIncludingNpc; i++)
         {
             var clonedParameter = parameter.Clone();
             var isNpc = i >= _mainController.PlayerCount;
