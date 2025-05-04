@@ -96,7 +96,7 @@ namespace UIToolkit
                 }
                 _numberLabel.text = _currentNumber.ToString();
                 await UniTask.Delay(TimeSpan.FromSeconds(delay));
-                delay += 0.10f;
+                delay += 0.08f;
             }
 
             _numberLabel.text = _currentNumber.ToString();

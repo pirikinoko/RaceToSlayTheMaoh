@@ -104,7 +104,7 @@ public class StateController : MonoBehaviour
         }
         await _fieldController.UpdateStatusBoxesAsync();
 
-        await UniTask.Delay(TimeSpan.FromSeconds(1f));
+        await UniTask.Delay(TimeSpan.FromSeconds(Constants.DelayBeforeNewTurnSeconds));
         await _mainController.StartNewTurnAsync();
     }
 

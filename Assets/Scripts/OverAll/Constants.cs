@@ -118,6 +118,8 @@ public class Constants
     public static Vector2 ScaleForActivePlayerStatusBox { get; set; } = new Vector2(1.0f, 1.0f);
     public static Vector2 ScaleForWaitingPlayersStatusBox { get; set; } = new Vector2(0.7f, 0.7f);
 
+    public static float DelayBeforeNewTurnSeconds { get; set; } = 0.6f;
+
     // ******* Battle *******
     public static int MaxTurn = 20;
 
