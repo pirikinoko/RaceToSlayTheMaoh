@@ -70,10 +70,6 @@ public class Entity : MonoBehaviour
         Parameter.ManaPoint = _manaPointRp.Value;
     }
 
-    public void SetColor(Color color)
-    {
-        _spriteRenderer.color = color;
-    }
 
     public void ChangeVisibility(bool isVisible)
     {

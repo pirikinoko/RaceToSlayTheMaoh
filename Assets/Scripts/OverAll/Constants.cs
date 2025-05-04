@@ -5,7 +5,14 @@ public class Constants
     // ******* AssetReference *******   
 
     public static string AssetReferenceParameter = "Parameter";
-    public static string AssetReferencePlayer = "Player";
+    public static string GetAssetReferencePlayer(int playerId)
+    {
+        return string.Format("Player{0}", playerId);
+    }
+    public static string GetAssetReferencePlayerIcon(int playerId)
+    {
+        return string.Format("PlayerIcon{0}", playerId);
+    }
     public static string AssetReferenceEnemy = "Enemy";
     public static string AssetReferencePlayerIcon = "PlayerIcon";
     public static string AssetReferenceHeartIcon = "HeartIcon";
@@ -37,14 +44,6 @@ public class Constants
     // ******* Player *******
     public static float PlayerMoveSpeed { get; set; } = 2.0f;
     public static int MaxMoves { get; set; } = 3;
-
-    public static Color[] PlayerColors =
-    {
-        new Color(1.0f, 1.0f, 1.0f), // White
-        new Color(0.2f, 0.8f, 0.2f), // Green
-        new Color(0.2f, 0.2f, 0.8f), // Blue
-        new Color(0.8f, 0.8f, 0.2f)  // Yellow
-    };
 
     public static string GetPlayerName(Language language, int playerId)
     {

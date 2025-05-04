@@ -34,7 +34,7 @@ MonoBehaviour:
     - Icon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe5fe608913d1b749baf641cc1d6acac
-    m_Address: PlayerIcon
+    m_Address: PlayerIcon1
     m_ReadOnly: 0
     m_SerializedLabels:
     - Icon

@@ -26,25 +26,24 @@ public class PlayerController : MonoBehaviour
     {
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
-        var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferencePlayer).Task;
 
         for (int i = 0; i < Constants.MaxPlayerCountIncludingNpc; i++)
         {
+            var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.GetAssetReferencePlayer(i + 1)).ToUniTask();
             var clonedParameter = parameter.Clone();
             var isNpc = i >= _mainController.PlayerCount;
 
             clonedParameter.Name = isNpc ? $"{Constants.GetNpcNames(Settings.Language)[i]}" : $"{Constants.GetPlayerName(Settings.Language, (i + 1))}";
-            InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i], Constants.PlayerColors[i], isNpc);
+            InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i], isNpc);
         }
         _onPlayersInitialized.OnNext(PlayerList);
     }
 
-    private void InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector3 spawnPosition, Color color, bool isNpc)
+    private void InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector3 spawnPosition, bool isNpc)
     {
         var playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity, _playerParent);
         var player = playerGameObject.GetComponent<Entity>();
         player.Initialize(clonedParameter, isNpc);
-        player.SetColor(color);
 
         PlayerList.Add(player);
     }
