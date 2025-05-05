@@ -230,11 +230,11 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}は休憩して元気になった...", enemyName);
+                return string.Format("{0}は誇らしげに佇んでいる", enemyName);
             case Language.English:
-                return string.Format("{0} is resting....", enemyName);
+                return string.Format("{0} is standing proudly", enemyName);
             default:
-                return string.Format("{0} is resting....", enemyName);
+                return string.Format("{0} is standing proudly", enemyName);
         }
     }
 
@@ -251,16 +251,16 @@ public class Constants
         }
     }
 
-    public static string GetSentenceWhenSelectingReward(Language language)
+    public static string GetSentenceWhenSelectingReward(Language language, bool IsSelectingSelf, string SelecterName)
     {
         switch (language)
         {
             case Language.Japanese:
-                return "報酬を選択してください";
+                return IsSelectingSelf ? "報酬を選択してください" : $"{SelecterName}が報酬を選択しています";
             case Language.English:
-                return "Please select a reward";
+                return IsSelectingSelf ? "Please select your reward" : $"{SelecterName} is selecting a reward";
             default:
-                return "Please select a reward";
+                return IsSelectingSelf ? "Please select your reward" : $"{SelecterName} is selecting a reward";
         }
     }
 

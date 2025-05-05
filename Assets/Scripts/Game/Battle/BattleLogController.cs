@@ -22,11 +22,6 @@ public class BattleLogController : MonoBehaviour
 
     private void Update()
     {
-        if (!isFlipable)
-        {
-            return;
-        }
-
         if (Input.GetMouseButtonDown(0))
         {
             FlipLog();
@@ -46,8 +41,13 @@ public class BattleLogController : MonoBehaviour
         isFlipable = true;
     }
 
-    private void FlipLog()
+    public void FlipLog()
     {
+        if (!isFlipable)
+        {
+            return;
+        }
+
         _logs.Dequeue();
         if (_logs.Count == 0)
         {

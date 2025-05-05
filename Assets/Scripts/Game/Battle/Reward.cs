@@ -41,13 +41,15 @@ public class Reward
 
     private string IncreaseHealth(Entity target)
     {
-        target.TakeDamage(-RewardParameter.HpGain);
+        int newHp = target.Parameter.HitPoint + RewardParameter.HpGain;
+        target.SetHitPoint(newHp);
         return $"{target.name}のHPが{RewardParameter.HpGain}ポイント増加した！";
     }
 
     private string IncreaseMana(Entity target)
     {
-        target.UseManaPoint(-RewardParameter.MpGain);
+        int newMp = target.Parameter.ManaPoint + RewardParameter.MpGain;
+        target.SetManaPoint(newMp);
         return $"{target.name}のMPが{RewardParameter.MpGain}ポイント増加した！";
     }
 

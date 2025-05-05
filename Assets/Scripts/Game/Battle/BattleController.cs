@@ -134,6 +134,9 @@ public class BattleController : MonoBehaviour
         _healthLabelRight.text = _rightEntity.Parameter.HitPoint.ToString();
         _manaLabelRight.text = _rightEntity.Parameter.ManaPoint.ToString();
 
+        _winnerEntity = null;
+        _loserEntity = null;
+
         // アクションエレメントの位置を左側に初期化
         ResetActionElementPosition();
         // リアクティブプロパティの監視を設定
@@ -215,7 +218,7 @@ public class BattleController : MonoBehaviour
         // NPCのターンの場合は行動を実行する
         if (_currentTurnEntity.IsNpc)
         {
-            EnemyActer.ActAsync(this, _currentTurnEntity).Forget();
+            NpcActionController.ActAsync(this, _currentTurnEntity, _waitingTurnEntity).Forget();
         }
         // プレイヤーのターンの場合は待機ログを出す
         else
@@ -349,11 +352,11 @@ public class BattleController : MonoBehaviour
                     HideBattleElement();
                     OpenRewardView();
                     SetRewards();
-                    _battleLogController.AddLog(Constants.GetSentenceWhenSelectingReward(Settings.Language));
+                    _battleLogController.AddLog(Constants.GetSentenceWhenSelectingReward(Settings.Language, _winnerEntity == _userController.MyEntity, _winnerEntity.name));
                     _battleStatus = BattleStatus.SelectReword;
                     if (_winnerEntity.IsNpc)
                     {
-                        EnemyActer.SelectReword(this).Forget();
+                        NpcActionController.SelectReword(this, _battleLogController).Forget();
                     }
                 }
                 else
@@ -455,9 +458,10 @@ public class BattleController : MonoBehaviour
         get
         {
             var rewardChoices = new List<int> { 0 };
-            for (int i = 0; i <= _currentRewardSkills.Count; i++)
+            for (int i = 0; i < _currentRewardSkills.Count; i++)
             {
-                if (_userController.MyEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[i].Name) == null)
+
+                if (_winnerEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[i].Name) == null)
                 {
                     rewardChoices.Add(i + 1);
                 }
@@ -493,7 +497,7 @@ public class BattleController : MonoBehaviour
             skillRewardButton.Add(labelRewardTitle);
             var labelRewardDescription = CreateNewLabelWithDetails(ClassNames.RewardDescription, _currentRewardSkills[index].Description);
             skillRewardButton.Add(labelRewardDescription);
-            if (_userController.MyEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[index].Name) != null)
+            if (_winnerEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[index].Name) != null)
             {
                 skillRewardButton.SetEnabled(false);
                 labelRewardDescription.text = Constants.GetSentenceWhenAlreadyHoldingTheSkill(Settings.Language);
@@ -504,6 +508,11 @@ public class BattleController : MonoBehaviour
         foreach (var button in rewardButtons)
         {
             _rewardElement.Add(button);
+            if (button.enabledSelf == false)
+            {
+                continue;
+            }
+            button.SetEnabled(_winnerEntity == _userController.MyEntity || (_mainController.GameMode == GameMode.Local && !_winnerEntity.IsNpc));
         }
     }
 

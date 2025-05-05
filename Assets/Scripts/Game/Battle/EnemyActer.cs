@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
-public static class EnemyActer
+public static class NpcActionController
 {
-    public static async UniTask ActAsync(BattleController battleController, Entity acter)
+    public static async UniTask ActAsync(BattleController battleController, Entity acter, Entity target)
     {
         // 攻撃かスキルを使用するかをランダムで決定
         int action = Random.Range(0, 2);
@@ -18,7 +18,7 @@ public static class EnemyActer
                 Attack(battleController);
                 break;
             case 1:
-                string skillName = await DecideASkillToUseAsync(acter);
+                string skillName = await DecideASkillToUseAsync(acter, target);
 
                 //　適切なスキルが存在しない場合は通常攻撃をする
                 if (skillName == "None")
@@ -50,29 +50,25 @@ public static class EnemyActer
         battleController.UseSkill(skillName);
     }
 
-    public static async UniTask<string> DecideASkillToUseAsync(Entity acter)
+    public static async UniTask<string> DecideASkillToUseAsync(Entity acter, Entity target)
     {
         var HealSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Heal);
         var DamageSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Damage);
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var defaultParameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == acter.EntityType);
 
-        // 回復スキルがない場合はダメージスキルを返す
-        if (HealSkills.Count == 0 && DamageSkills.Count > 0)
-        {
-            return DamageSkills[Random.Range(0, DamageSkills.Count)].Name;
-        }
-        // HPが半分以下の場合は回復スキルを返す
-        else if (HealSkills.Count > 0 && acter.Parameter.HitPoint < defaultParameter.HitPoint / 2)
+        var hasChanceOfDeath = acter.Parameter.HitPoint < target.Parameter.Power * 1.5f;
+
+        // 回復スキルがありHPが相手の攻撃力以下の場合は回復スキルを返す
+        if (HealSkills.Count > 0 && hasChanceOfDeath)
         {
             return HealSkills[Random.Range(0, HealSkills.Count)].Name;
         }
-        // HPが半分以上の場合はダメージスキルを返す
-        else if (DamageSkills.Count > 0 && acter.Parameter.HitPoint >= defaultParameter.HitPoint / 2)
+        // ダメージスキルがあればダメージスキルを返す
+        else if (DamageSkills.Count > 0)
         {
             return DamageSkills[Random.Range(0, DamageSkills.Count)].Name;
         }
-        // HPが半分以上でダメージスキルがない場合はスキルを使用しない
         else
         {
             return "None";
@@ -102,7 +98,7 @@ public static class EnemyActer
         await acter.MoveTowardsNearestEntity();
     }
 
-    public static async UniTask SelectReword(BattleController battleController)
+    public static async UniTask SelectReword(BattleController battleController, BattleLogController battleLogController)
     {
         await UniTask.Delay(1000);
 
@@ -115,5 +111,7 @@ public static class EnemyActer
         {
             battleController.OnSkillRewardSelected(reward);
         }
+
+        battleLogController.FlipLog();
     }
 }

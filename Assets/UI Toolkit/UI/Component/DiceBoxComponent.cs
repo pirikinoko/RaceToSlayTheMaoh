@@ -105,7 +105,6 @@ namespace UIToolkit
             await BlinkNumberLabel();
 
             IsRolling = false;
-            Debug.Log($"Final number: {_currentNumber}");
         }
 
         public int GetCurrentNumber()

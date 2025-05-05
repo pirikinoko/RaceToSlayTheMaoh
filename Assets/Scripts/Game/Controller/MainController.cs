@@ -97,7 +97,7 @@ public class MainController : MonoBehaviour
 
         if (CurrentTurnPlayerEntity.IsNpc)
         {
-            await EnemyActer.MoveAsync(CurrentTurnPlayerEntity.GetComponent<ControllableEntity>());
+            await NpcActionController.MoveAsync(CurrentTurnPlayerEntity.GetComponent<ControllableEntity>());
         }
 
         TurnCount++;
@@ -117,7 +117,7 @@ public class MainController : MonoBehaviour
 
         if (CurrentTurnPlayerEntity.IsNpc)
         {
-            EnemyActer.StopRolling(_diceBoxComponent);
+            NpcActionController.StopRolling(_diceBoxComponent);
         }
 
         await UniTask.WaitUntil(() => _diceBoxComponent.IsRolling == false);
@@ -133,6 +133,11 @@ public class MainController : MonoBehaviour
         await UniTask.Delay(1000);
         entity.IsAlive = true;
         entity.ChangeVisibility(true);
+        // 復活時のHPとMPを設定
+        var defaultParameter = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
+        var parameter = defaultParameter.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
+        entity.SetHitPoint(parameter.HitPoint);
+        entity.SetManaPoint(Mathf.Max(entity.Parameter.ManaPoint, parameter.ManaPoint));
         _coffinObjects[entity.Id].SetActive(false);
     }
 

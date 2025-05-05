@@ -117,13 +117,13 @@ public static class SkillList
 
             action: (skillUser, opponent) =>
             {
-                skillUser.UseManaPoint(SkillParameters.Heal.ManaCost);
+                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - SkillParameters.Heal.ManaCost);
                 int healAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: SkillParameters.Heal.HealPotential,
                     offsetPercent: SkillParameters.Heal.OffsetPercent,
                     missPotential: 0
                 );
-                skillUser.TakeDamage(-healAmount);
+                skillUser.SetHitPoint(skillUser.Parameter.HitPoint + healAmount);
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
@@ -144,19 +144,19 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyBite,
             action: (skillUser, opponent) =>
             {
-                skillUser.UseManaPoint(SkillParameters.Bite.ManaCost);
+                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - SkillParameters.Bite.ManaCost);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.Parameter.Power,
                     offsetPercent: SkillParameters.Bite.OffsetPercent,
                     missPotential: Constants.MissPotentilaiOnEveryDamageAction
                 );
-                opponent.TakeDamage(damageAmount);
+                opponent.SetHitPoint(opponent.Parameter.HitPoint - damageAmount);
                 int healAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: SkillParameters.Bite.HealPotential,
                     offsetPercent: SkillParameters.Bite.OffsetPercent,
                     missPotential: 0
                 );
-                skillUser.TakeDamage(-healAmount);
+                skillUser.SetHitPoint(skillUser.Parameter.HitPoint + healAmount);
                 return new Skill.SkillResult(
                     logs: new string[]
                     {

@@ -141,7 +141,7 @@ public class ControllableEntity : MonoBehaviour
 
         foreach (var entity in allEntity)
         {
-            if (entity == this.gameObject.GetComponent<Entity>())
+            if (entity == this.gameObject.GetComponent<Entity>() || !entity.IsAlive)
             {
                 continue;
             }
@@ -259,12 +259,12 @@ public class ControllableEntity : MonoBehaviour
         var entityPositions = new HashSet<Vector2>();
         foreach (var player in _playerController.PlayerList)
         {
-            if (player != this.GetComponent<Entity>())
+            if (player != this.GetComponent<Entity>() && player.transform.position != _transform.position)
                 entityPositions.Add((Vector2)player.transform.position);
         }
         foreach (var enemy in _enemyController.EnemyList)
         {
-            if (enemy != this.GetComponent<Entity>())
+            if (enemy != this.GetComponent<Entity>() && enemy.transform.position != _transform.position)
                 entityPositions.Add((Vector2)enemy.transform.position);
         }
 
