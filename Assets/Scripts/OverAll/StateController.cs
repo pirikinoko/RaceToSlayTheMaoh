@@ -1,8 +1,9 @@
 ﻿// Removed unnecessary using directive
 using System;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UIElements; // Label を使うために追加
 
 public class StateController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class StateController : MonoBehaviour
     private MainController _mainController;
     private FieldController _fieldController;
     private PlayerController _playerController;
+    private CameraController _cameraController; // CameraController を追加
     private UIDocument _overAllUi;
     private UIDocument _titleUi;
     private UIDocument _fieldUi;
@@ -27,11 +29,12 @@ public class StateController : MonoBehaviour
 
     private VisualElement _colorEffectPanel;
 
-    public void Initialize(MainController mainController, FieldController fieldController, PlayerController playerController, UIDocument overAllUi, UIDocument titleUi, UIDocument fieldUi, UIDocument battleUi, UIDocument resultUi)
+    public void Initialize(MainController mainController, FieldController fieldController, PlayerController playerController, CameraController cameraController, UIDocument overAllUi, UIDocument titleUi, UIDocument fieldUi, UIDocument battleUi, UIDocument resultUi)
     {
         _mainController = mainController;
         _fieldController = fieldController;
         _playerController = playerController;
+        _cameraController = cameraController;
         _overAllUi = overAllUi;
         _titleUi = titleUi;
         _fieldUi = fieldUi;
@@ -79,7 +82,7 @@ public class StateController : MonoBehaviour
                 SwitchBattleState();
                 break;
             case State.Result:
-                SwitchResultState();
+                SwitchResultState().Forget();
                 break;
         }
     }
@@ -132,12 +135,48 @@ public class StateController : MonoBehaviour
         _battleRoot.style.translate = new StyleTranslate(new Translate(0, 0, 0));
     }
 
-    private void SwitchResultState()
+    private async UniTask SwitchResultState()
     {
-        _resultRoot.style.display = DisplayStyle.Flex;
-        BlackoutField();
-    }
+        Entity winner = _mainController.WinnerEntity;
 
+        RevealField();
+
+        // 勝者にズームイン
+        await _cameraController.ZoomInAsync(winner.transform.position);
+
+        // 勝利メッセージを表示
+        var resultMessageLabel = _resultRoot.Q<Label>("ResultMessageLabel");
+        resultMessageLabel.text = Constants.GetResultMessageWin(Settings.Language, winner.Parameter.Name);
+        resultMessageLabel.style.display = DisplayStyle.None;
+
+        var backToTitleButton = _resultRoot.Q<Button>("BackToTitleButton");
+        backToTitleButton.style.display = DisplayStyle.None;
+
+        _resultRoot.style.display = DisplayStyle.Flex;
+
+        var resultElements = _resultRoot.Q<VisualElement>("ResultElements");
+
+        Color initialColor = resultElements.style.backgroundColor.value;
+        resultElements.style.backgroundColor = new StyleColor(new Color(initialColor.r, initialColor.g, initialColor.b, 0));
+
+        await DOTween.To(
+            () => resultElements.style.backgroundColor.value,
+            x => resultElements.style.backgroundColor = x,
+            new Color(initialColor.r, initialColor.g, initialColor.b, Constants.ResultFadeAlpha),
+            Constants.ResultFadeDuration
+        ).AsyncWaitForCompletion();
+
+        resultMessageLabel.style.display = DisplayStyle.Flex;
+        backToTitleButton.style.display = DisplayStyle.Flex;
+
+        backToTitleButton.text = Constants.GetBackToTitleButtonText(Settings.Language);
+        backToTitleButton.style.display = DisplayStyle.Flex;
+        backToTitleButton.RegisterCallback<ClickEvent>(e =>
+        {
+            // タイトル画面に戻る処理
+            ChangeState(State.Title);
+        });
+    }
 
     public void BlackoutField()
     {

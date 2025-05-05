@@ -65,7 +65,7 @@ MonoBehaviour:
   - EntityType: 7
     IconSprite: {fileID: 21300000, guid: 51deeebefef47cf478d93159728eb67d, type: 3}
     Name: Satan
-    HitPoint: 30
+    HitPoint: 1
     ManaPoint: 10
     Power: 5
     SkillTypes: 01000000

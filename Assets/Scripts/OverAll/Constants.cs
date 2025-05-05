@@ -99,6 +99,11 @@ public class Constants
     public static int MaxManaPoint { get; set; } = 30;
     public static int AttackOffsetPercent { get; set; } = 50;
 
+    // ******* Camera *******
+    public static float CameraMoveDuration { get; set; } = 1f;
+    public static float CameraZoomDuration { get; set; } = 1f;
+    public static float CameraZoomFactor { get; set; } = 0.5f; // ズーム倍率を追加
+
     // ******* Field *******
     public static Vector3 FieldCornerUpLeft { get; set; } = new Vector3(-5, -5, 0);
     public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(-1, -5, 0);
@@ -212,18 +217,6 @@ public class Constants
         }
     }
 
-    public static string GetSentenceWhenBothDied(Language language)
-    {
-        switch (language)
-        {
-            case Language.Japanese:
-                return "相討ちだ!";
-            case Language.English:
-                return "Both died!";
-            default:
-                return "Both died!";
-        }
-    }
 
     public static string GetSentenceWhenEnemyWins(Language language, string enemyName)
     {
@@ -238,16 +231,16 @@ public class Constants
         }
     }
 
-    public static string GetSentenceWhenTurnOver(Language language)
+    public static string GetSentenceWhenGameClear(Language language, string playerName)
     {
         switch (language)
         {
             case Language.Japanese:
-                return "日が暮れてしまったようだ.....";
+                return string.Format("{0}は世界に再び光をもたらした!", playerName);
             case Language.English:
-                return "This battle seems to be endless.....";
+                return string.Format("{0} brought light back to the world!", playerName);
             default:
-                return "This battle seems to be endless.....";
+                return string.Format("{0} brought light back to the world!", playerName);
         }
     }
 
@@ -318,6 +311,36 @@ public class Constants
                 return "Status";
         }
     }
+
+    // ******* Result *******
+    public static string GetResultMessageWin(Language language, string winnerName)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}は真の勇者であった！", winnerName);
+            case Language.English:
+                return string.Format("{0} was the true hero!", winnerName);
+            default:
+                return string.Format("{0} was the true hero!", winnerName);
+        }
+    }
+
+    public static string GetBackToTitleButtonText(Language language)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return "タイトルに戻る";
+            case Language.English:
+                return "Back to Title";
+            default:
+                return "Back to Title";
+        }
+    }
+
+    public static float ResultFadeAlpha { get; set; } = 0.8f;
+    public static float ResultFadeDuration { get; set; } = 1.5f;
 
     // ****** ImageEffectKey *******
     public static string ImageAnimationKeySlash = "SlashAnimationEffect";

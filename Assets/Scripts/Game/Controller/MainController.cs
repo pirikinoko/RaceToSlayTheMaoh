@@ -37,6 +37,8 @@ public class MainController : MonoBehaviour
 
     private Dictionary<int, GameObject> _coffinObjects = new();
 
+    public Entity WinnerEntity { get; set; } = null;
+
     private void Start()
     {
         _diceBoxComponent = GetComponent<UIDocument>().rootVisualElement.Q<DiceBoxComponent>("DiceBoxComponent");
