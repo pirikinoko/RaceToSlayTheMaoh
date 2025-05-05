@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UIToolkit;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -43,7 +44,8 @@ public class FieldController : MonoBehaviour
         _statusBoxComponents.ForEach(statusBox => statusBox.style.display = DisplayStyle.None);
     }
 
-    public bool CheckEncount(Entity entityLeft)
+    // 歩いたほうのエンティティがentityLeftになる
+    public bool CheckEncount(Entity entityLeft, Vector2 entityLeftsPreviousPos)
     {
         var allEntity = new List<Entity>();
         allEntity.AddRange(_playerController.PlayerList);
@@ -61,23 +63,14 @@ public class FieldController : MonoBehaviour
             {
                 _stateController.ChangeState(State.Battle);
 
-                // 敵とプレイヤー衝突した場合はプレイヤーを左側に変換
-                if (entityLeft.EntityType == EntityType.Player && entityRight.EntityType != EntityType.Player)
-                {
-                    _battleController.StartBattle(entityLeft, entityRight);
-                }
-                else
-                {
-                    _battleController.StartBattle(entityRight, entityLeft);
-                }
-                _battleController.StartBattle(entityLeft, entityRight);
+                _battleController.StartBattle(entityLeft, entityRight, entityLeftsPreviousPos);
                 return true;
             }
         }
         return false;
     }
 
-    public void DisplayStatusBoxes()
+    public async UniTask DisplayStatusBoxes()
     {
         _statusBoxComponents.ForEach(statusBox => statusBox.style.display = DisplayStyle.None);
         for (int i = 0; i < _playerController.PlayerList.Count; i++)
@@ -96,6 +89,8 @@ public class FieldController : MonoBehaviour
         {
             _statusBoxComponents[i].UpdateStatuBoxElments(_playerController.PlayerList[i], heartIcon, manaIcon, powerIcon);
             _statusBoxComponents[i].style.scale = Constants.ScaleForWaitingPlayersStatusBox;
+            var playerIcon = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerIcon(i + 1)).Task;
+            _statusBoxComponents[i].Q<VisualElement>("PlayerIcon").style.backgroundImage = new StyleBackground(playerIcon);
         }
         _statusBoxComponents[_mainController.CurrentTurnPlayerId - 1].style.scale = Constants.ScaleForActivePlayerStatusBox;
     }

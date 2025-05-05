@@ -6,8 +6,6 @@ using UnityEngine.UIElements;
 
 public class BattleLogController : MonoBehaviour
 {
-    public bool HasAllLogsRead => _logs.Count == 0;
-
     public Observable<Unit> OnAllLogsRead => _onAllLogsRead;
 
     private Subject<Unit> _onAllLogsRead = new();
@@ -16,7 +14,6 @@ public class BattleLogController : MonoBehaviour
     private Label _label;
 
     private bool isFlipable;
-    private int _waitTimeToBeFilippableMills = 500;
 
     public void Initialize(Label logLabel)
     {
@@ -25,11 +22,6 @@ public class BattleLogController : MonoBehaviour
 
     private void Update()
     {
-        if (!isFlipable)
-        {
-            return;
-        }
-
         if (Input.GetMouseButtonDown(0))
         {
             FlipLog();
@@ -49,8 +41,14 @@ public class BattleLogController : MonoBehaviour
         isFlipable = true;
     }
 
-    private void FlipLog()
+    public void FlipLog()
     {
+        if (!isFlipable)
+        {
+            return;
+        }
+
+        _logs.Dequeue();
         if (_logs.Count == 0)
         {
             isFlipable = false;
@@ -58,6 +56,12 @@ public class BattleLogController : MonoBehaviour
             return;
         }
         _label.text = _logs.Peek();
-        _logs.Dequeue();
+    }
+
+    public void ClearLogs()
+    {
+        _logs.Clear();
+        _label.text = string.Empty;
+        isFlipable = false;
     }
 }

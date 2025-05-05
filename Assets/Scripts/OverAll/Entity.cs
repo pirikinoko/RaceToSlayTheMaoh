@@ -12,6 +12,10 @@ public class Entity : MonoBehaviour
     public ReadOnlyReactiveProperty<int> HitPointRp => _hitPointRp;
     public ReadOnlyReactiveProperty<int> ManaPointRp => _manaPointRp;
 
+    public bool IsAlive { get; set; } = true;
+
+    public bool IsNpc { get; private set; } = false;
+
     private ReactiveProperty<int> _hitPointRp = new ReactiveProperty<int>();
     private ReactiveProperty<int> _manaPointRp = new ReactiveProperty<int>();
 
@@ -19,7 +23,7 @@ public class Entity : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
 
 
-    public void Initialize(Parameter parameter)
+    public void Initialize(Parameter parameter, bool isNpc)
     {
         Parameter = parameter;
 
@@ -33,6 +37,8 @@ public class Entity : MonoBehaviour
 
         _hitPointRp.Value = Parameter.HitPoint;
         _manaPointRp.Value = Parameter.ManaPoint;
+
+        IsNpc = isNpc;
     }
 
     public int Attack(Entity target)
@@ -41,7 +47,7 @@ public class Entity : MonoBehaviour
         int potential = Parameter.Power + _abnormalCondition.PowerGain;
         // 攻撃力のポテンシャルのオフセット内でランダムな値を返す
         int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(potential, Constants.AttackOffsetPercent, 10);
-        target.TakeDamage(damage);
+        target.SetHitPoint(target.Parameter.HitPoint - damage);
         return damage;
     }
 
@@ -51,17 +57,22 @@ public class Entity : MonoBehaviour
         return skill.Execute(skillUser, opponent);
     }
 
-    public void TakeDamage(int damage)
+    public void SetHitPoint(int newHp)
     {
-        // 先にリアクションプロパティを更新してから、エンティティのHPを更新する
-        // これによって、エンティティのHPが変化したことをBattleControllerに通知し，差分を取得できる
-        _hitPointRp.Value = Parameter.HitPoint - damage;
+        // 古いHPも参照して処理をしたいので，先にリアクションプロパティを更新してから、エンティティのHPを更新する
+        _hitPointRp.Value = newHp;
         Parameter.HitPoint = _hitPointRp.Value;
     }
 
-    public void UseManaPoint(int manaCost)
+    public void SetManaPoint(int newMana)
     {
-        _manaPointRp.Value = Parameter.ManaPoint - manaCost;
+        _manaPointRp.Value = newMana;
         Parameter.ManaPoint = _manaPointRp.Value;
+    }
+
+
+    public void ChangeVisibility(bool isVisible)
+    {
+        _spriteRenderer.enabled = isVisible;
     }
 }

@@ -15,10 +15,17 @@ MonoBehaviour:
   m_GroupName: GameObject
   m_GUID: f8e23356bbd42dc4f892f7e90f8ff989
   m_SerializeEntries:
+  - m_GUID: 96b8d1f09e803bd44aa8d2137f39a8e2
+    m_Address: Coffin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GameObject
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: abf0355d7a2a67f4daca02664e63a542
     m_Address: MoveHighlight
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - GameObject
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c15980a2792339542b1da6f13079ad19, type: 2}

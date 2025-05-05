@@ -49,7 +49,7 @@ public class TitleController : MonoBehaviour
     private void IncreasePlayerCount()
     {
         int playerCount = _mainController.PlayerCount + 1;
-        if (playerCount > Constants.MaxPlayerCount) playerCount = Constants.MaxPlayerCount;
+        if (playerCount > Constants.MaxPlayerCountIncludingNpc) playerCount = Constants.MaxPlayerCountIncludingNpc;
         _buttonStartLocal.text = Constants.GetSentenceForLocalPlayButton(Settings.Language, playerCount);
         _mainController.PlayerCount = playerCount;
     }

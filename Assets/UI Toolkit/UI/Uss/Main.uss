@@ -41,6 +41,10 @@
     align-self: center;
     font-size: 50px;
     margin-top: 50px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
 }
 
 .stop-button:hover {

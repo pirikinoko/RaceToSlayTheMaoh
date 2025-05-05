@@ -77,7 +77,7 @@ namespace UIToolkit
             _numberLabel.style.opacity = 1f;
         }
 
-        private async void StopRolling()
+        public async void StopRolling()
         {
             // StartRolling()をキャンセル
             _cancellationTokenSource.Cancel();
@@ -96,7 +96,7 @@ namespace UIToolkit
                 }
                 _numberLabel.text = _currentNumber.ToString();
                 await UniTask.Delay(TimeSpan.FromSeconds(delay));
-                delay += 0.10f;
+                delay += 0.08f;
             }
 
             _numberLabel.text = _currentNumber.ToString();
@@ -105,7 +105,6 @@ namespace UIToolkit
             await BlinkNumberLabel();
 
             IsRolling = false;
-            Debug.Log($"Final number: {_currentNumber}");
         }
 
         public int GetCurrentNumber()

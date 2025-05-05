@@ -5,13 +5,21 @@ public class Constants
     // ******* AssetReference *******   
 
     public static string AssetReferenceParameter = "Parameter";
-    public static string AssetReferencePlayer = "Player";
+    public static string GetAssetReferencePlayer(int playerId)
+    {
+        return string.Format("Player{0}", playerId);
+    }
+    public static string GetAssetReferencePlayerIcon(int playerId)
+    {
+        return string.Format("PlayerIcon{0}", playerId);
+    }
     public static string AssetReferenceEnemy = "Enemy";
     public static string AssetReferencePlayerIcon = "PlayerIcon";
     public static string AssetReferenceHeartIcon = "HeartIcon";
     public static string AssetReferenceManaIcon = "ManaIcon";
     public static string AssetReferencePowerIcon = "PowerIcon";
     public static string AssetReferenceDamageNumberEffect = "DamageNumberEffect";
+    public static string AssetReferenceCoffin = "Coffin";
 
     // ******* General *******
     // 指定されたパーセンテージのオフセット内でランダムな値を返す
@@ -37,6 +45,32 @@ public class Constants
     public static float PlayerMoveSpeed { get; set; } = 2.0f;
     public static int MaxMoves { get; set; } = 3;
 
+    public static string GetPlayerName(Language language, int playerId)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("プレイヤー{0}", playerId);
+            case Language.English:
+                return string.Format("Player{0}", playerId);
+            default:
+                return string.Format("Player{0}", playerId);
+        }
+    }
+
+    public static string[] GetNpcNames(Language language)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return new string[] { "Player1", "アレックス", "モーガン", "テイラー" };
+            case Language.English:
+                return new string[] { "Hero", "Jordan", "Morgan", "Taylor" };
+            default:
+                return new string[] { "Hero", "Jordan", "Morgan", "Taylor" };
+        }
+    }
+
     // ******* Title *******
     public static string GetSentenceForLocalPlayButton(Language language, int playerCount)
     {
@@ -52,12 +86,12 @@ public class Constants
     }
 
     // ******* Main *******
-    public static int MaxPlayerCount { get; set; } = 4;
+    public static int MaxPlayerCountIncludingNpc { get; set; } = 4;
     public static int MinPlayerCount { get; set; } = 1;
-    public static int MaxDiceValue { get; set; } = 4;
-    public static float DiceRollUpdateInterval { get; set; } = 0.03f;
+    public static int MaxDiceValue { get; set; } = 3;
+    public static float DiceRollUpdateInterval { get; set; } = 0.02f;
     public static int DiceHighlightBlinkCount { get; set; } = 5;
-    public static float DiceHighlightBlinkInterval { get; set; } = 0.2f;
+    public static float DiceHighlightBlinkInterval { get; set; } = 0.15f;
 
     // ******* Entity *******
 
@@ -66,10 +100,12 @@ public class Constants
     public static int AttackOffsetPercent { get; set; } = 50;
 
     // ******* Field *******
-    public static Vector3 FieldCornerUpLeft { get; set; } = new Vector3(-7, 7, 0);
-    public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(7, 7, 0);
-    public static Vector3 FieldCornerDownLeft { get; set; } = new Vector3(-7, -7, 0);
-    public static Vector3 FieldCornerDownRight { get; set; } = new Vector3(7, -7, 0);
+    public static Vector3 FieldCornerUpLeft { get; set; } = new Vector3(-5, -5, 0);
+    public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(-1, -5, 0);
+    public static Vector3 FieldCornerDownLeft { get; set; } = new Vector3(1, -5, 0);
+    public static Vector3 FieldCornerDownRight { get; set; } = new Vector3(5, -5, 0);
+
+    public static LayerMask EntityLayerMask { get; set; } = LayerMask.GetMask("Entity");
 
     public static Vector3[] PlayerSpownPositions { get; set; } =
     {
@@ -80,6 +116,8 @@ public class Constants
     };
     public static Vector2 ScaleForActivePlayerStatusBox { get; set; } = new Vector2(1.0f, 1.0f);
     public static Vector2 ScaleForWaitingPlayersStatusBox { get; set; } = new Vector2(0.7f, 0.7f);
+
+    public static float DelayBeforeNewTurnSeconds { get; set; } = 0.6f;
 
     // ******* Battle *******
     public static int MaxTurn = 20;
@@ -140,11 +178,11 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("{0}に{1}のダメージが入った!", damageReciever, damage);
+                return string.Format("{1}のダメージ!", damageReciever, damage);
             case Language.English:
-                return string.Format("{0} has taken {1} damage!", damageReciever, damage);
+                return string.Format("{1} damage!", damageReciever, damage);
             default:
-                return string.Format("{0} has taken {1} damage!", damageReciever, damage);
+                return string.Format("{1} damage!", damageReciever, damage);
         }
     }
 
@@ -187,6 +225,19 @@ public class Constants
         }
     }
 
+    public static string GetSentenceWhenEnemyWins(Language language, string enemyName)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}は誇らしげに佇んでいる", enemyName);
+            case Language.English:
+                return string.Format("{0} is standing proudly", enemyName);
+            default:
+                return string.Format("{0} is standing proudly", enemyName);
+        }
+    }
+
     public static string GetSentenceWhenTurnOver(Language language)
     {
         switch (language)
@@ -200,16 +251,16 @@ public class Constants
         }
     }
 
-    public static string GetSentenceWhenSelectingReward(Language language)
+    public static string GetSentenceWhenSelectingReward(Language language, bool IsSelectingSelf, string SelecterName)
     {
         switch (language)
         {
             case Language.Japanese:
-                return "報酬を選択してください";
+                return IsSelectingSelf ? "報酬を選択してください" : $"{SelecterName}が報酬を選択しています";
             case Language.English:
-                return "Please select a reward";
+                return IsSelectingSelf ? "Please select your reward" : $"{SelecterName} is selecting a reward";
             default:
-                return "Please select a reward";
+                return IsSelectingSelf ? "Please select your reward" : $"{SelecterName} is selecting a reward";
         }
     }
 
@@ -227,45 +278,6 @@ public class Constants
     }
 
     public static string GetSkillGetSentence(Language language)
-    {
-        switch (language)
-        {
-            case Language.Japanese:
-                return "{0}が{1}を習得した!";
-            case Language.English:
-                return "{0} has learned {1}!";
-            default:
-                return "{0} has learned {1}!";
-        }
-    }
-
-    public static string GetHitPointSentence(Language language)
-    {
-        switch (language)
-        {
-            case Language.Japanese:
-                return "{0}のHPが{1}回復した!";
-            case Language.English:
-                return "{0} has healed {1}HP!";
-            default:
-                return "{0} has healed {1}HP!";
-        }
-    }
-
-    public static string GetManaSentence(Language language)
-    {
-        switch (language)
-        {
-            case Language.Japanese:
-                return "{0}のMPが{1}回復した!";
-            case Language.English:
-                return "{0} has refreshed {1}MagicPoint!";
-            default:
-                return "{0} has refreshed {1}MagicPoint!";
-        }
-    }
-
-    public static string GetPowerSentence(Language language)
     {
         switch (language)
         {

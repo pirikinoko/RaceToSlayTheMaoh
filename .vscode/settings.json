@@ -1,11 +1,7 @@
 {
     "dotnet.preferCSharpExtension": true,
-    "editor.fontFamily": "ノスタルドット（M+）",
-    "editor.fontSize": 15,
     "editor.fontWeight": "normal",
     "editor.lineHeight": 1.5,
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
     },
