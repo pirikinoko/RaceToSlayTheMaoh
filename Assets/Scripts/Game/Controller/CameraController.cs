@@ -6,7 +6,6 @@ public class CameraController : MonoBehaviour
 {
     private Camera _camera;
 
-    private float cameraMoveDuration = 1f;
     private readonly float fixedZ = -10f;
 
     private void Awake()
@@ -21,6 +20,13 @@ public class CameraController : MonoBehaviour
     public async UniTask MoveCameraAsync(Vector2 targetPosition)
     {
         Vector3 endPosition = new Vector3(targetPosition.x, targetPosition.y, fixedZ);
-        await _camera.transform.DOMove(endPosition, cameraMoveDuration).AsyncWaitForCompletion();
+        await _camera.transform.DOMove(endPosition, Constants.CameraMoveDuration).AsyncWaitForCompletion();
+    }
+
+    public async UniTask ZoomInAsync(Vector2 targetPosition)
+    {
+        Vector3 endPosition = new Vector3(targetPosition.x, targetPosition.y, fixedZ);
+        await _camera.transform.DOMove(endPosition, Constants.CameraZoomDuration).AsyncWaitForCompletion();
+        await _camera.DOOrthoSize(_camera.orthographicSize * Constants.CameraZoomFactor, Constants.CameraZoomDuration).AsyncWaitForCompletion();
     }
 }

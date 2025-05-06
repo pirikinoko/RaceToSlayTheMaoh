@@ -240,12 +240,12 @@ Transform:
   - {fileID: 1403662308}
   - {fileID: 250471353}
   - {fileID: 252192157}
-  - {fileID: 2001908267}
   - {fileID: 47539833}
   - {fileID: 1070091157}
   - {fileID: 1234252881}
   - {fileID: 778238746}
   - {fileID: 547638746}
+  - {fileID: 2001908267}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &118952726
@@ -1157,6 +1157,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2138056103008628461, guid: 65017bbca7a855a45bb7ee081add56e6, type: 3}
+      propertyPath: sourceAsset
+      value: 
+      objectReference: {fileID: 9197481963319205126, guid: 33f8e5207514fdd4084e90de30dea79a, type: 3}
+    - target: {fileID: 2138056103008628461, guid: 65017bbca7a855a45bb7ee081add56e6, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 0030f903bd95b6b42a2239d45b3a1df1, type: 2}
     - target: {fileID: 6846229313665120115, guid: 65017bbca7a855a45bb7ee081add56e6, type: 3}
       propertyPath: m_Name
       value: ResultController
@@ -10407,7 +10415,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Satan (0.0,5.0)
+      value: Satan (-5.0,-4.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x

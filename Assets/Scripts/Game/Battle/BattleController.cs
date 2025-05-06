@@ -248,6 +248,13 @@ public class BattleController : MonoBehaviour
         _stateController.ChangeState(State.Field);
     }
 
+    private void GoToResult()
+    {
+        HandleDiedEntity(_loserEntity);
+        _mainController.WinnerEntity = _winnerEntity;
+        _stateController.ChangeState(State.Result);
+    }
+
     public void Attack()
     {
         CloseCommandView();
@@ -344,9 +351,6 @@ public class BattleController : MonoBehaviour
         switch (_battleStatus)
         {
             case BattleStatus.LeftWin or BattleStatus.RightWin:
-                _winnerEntity = (_leftEntity.Parameter.HitPoint > 0) ? _leftEntity : _rightEntity;
-                _loserEntity = (_leftEntity.Parameter.HitPoint > 0) ? _rightEntity : _leftEntity;
-
                 if (_winnerEntity.EntityType == EntityType.Player)
                 {
                     HideBattleElement();
@@ -362,19 +366,20 @@ public class BattleController : MonoBehaviour
                 else
                 {
                     _battleLogController.AddLog(Constants.GetSentenceWhenEnemyWins(Settings.Language, _winnerEntity.name));
-                    _battleStatus = BattleStatus.Ending;
+                    _battleStatus = BattleStatus.BattleEnding;
                 }
                 break;
 
-            case BattleStatus.BothDied:
-                _battleLogController.AddLog(Constants.GetSentenceWhenBothDied(Settings.Language));
-                _battleStatus = BattleStatus.Ending;
-                break;
-
-            case BattleStatus.Ending:
+            case BattleStatus.BattleEnding:
                 _disposable.Dispose();
                 _disposable = new CompositeDisposable();
                 BackToField();
+                break;
+
+            case BattleStatus.GameClear:
+                _disposable.Dispose();
+                _disposable = new CompositeDisposable();
+                GoToResult();
                 break;
         }
     }
@@ -389,17 +394,21 @@ public class BattleController : MonoBehaviour
         {
             _battleStatus = BattleStatus.SelectReword;
         }
-        else if (_leftEntity.Parameter.HitPoint <= 0 && _rightEntity.Parameter.HitPoint <= 0)
-        {
-            _battleStatus = BattleStatus.BothDied;
-        }
         else if (_leftEntity.Parameter.HitPoint <= 0)
         {
             _battleStatus = BattleStatus.RightWin;
+            _winnerEntity = _rightEntity;
+            _loserEntity = _leftEntity;
         }
         else if (_rightEntity.Parameter.HitPoint <= 0)
         {
             _battleStatus = BattleStatus.LeftWin;
+            _winnerEntity = _leftEntity;
+            _loserEntity = _rightEntity;
+            if (_rightEntity.EntityType == EntityType.Satan)
+            {
+                _battleStatus = BattleStatus.GameClear;
+            }
         }
         else if (!_hasActionEnded)
         {
@@ -423,16 +432,14 @@ public class BattleController : MonoBehaviour
             case BattleStatus.AfterAction:
                 return;
             case BattleStatus.LeftWin:
-                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _leftEntity.name, _rightEntity.name));
+                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _winnerEntity.name, _loserEntity.name));
                 break;
             case BattleStatus.RightWin:
-                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _rightEntity.name, _leftEntity.name));
+                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _winnerEntity.name, _loserEntity.name));
                 break;
-            case BattleStatus.BothDied:
-                _battleLogController.AddLog(Constants.GetSentenceWhenBothDied(Settings.Language));
-                break;
-            case BattleStatus.TurnOver:
-                _battleLogController.AddLog(Constants.GetSentenceWhenTurnOver(Settings.Language));
+            case BattleStatus.GameClear:
+                _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _winnerEntity.name, _loserEntity.name));
+                _battleLogController.AddLog(Constants.GetSentenceWhenGameClear(Settings.Language, _winnerEntity.name));
                 break;
         }
     }
@@ -442,7 +449,7 @@ public class BattleController : MonoBehaviour
         string result = _currentReward.Execute(_winnerEntity);
         _battleLogController.AddLog(result);
         CloseRewardView();
-        _battleStatus = BattleStatus.Ending;
+        _battleStatus = BattleStatus.BattleEnding;
     }
 
     public void OnSkillRewardSelected(int index)
@@ -450,7 +457,7 @@ public class BattleController : MonoBehaviour
         AddSkillToWinnerEntity(_currentRewardSkills[index], out string log);
         _battleLogController.AddLog(log);
         CloseRewardView();
-        _battleStatus = BattleStatus.Ending;
+        _battleStatus = BattleStatus.BattleEnding;
     }
 
     public List<int> RewardChoices
