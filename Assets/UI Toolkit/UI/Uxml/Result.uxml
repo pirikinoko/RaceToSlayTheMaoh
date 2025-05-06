@@ -1,11 +1,15 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/OverAll.uss?fileID=7433441132597879392&amp;guid=4a4c7c1f77800fa4eb5a604d5e7f58b2&amp;type=3#OverAll" />
+    <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/Result.uss?fileID=7433441132597879392&amp;guid=a2c65d46f1014e344afad6be551f143c&amp;type=3#Result" />
     <engine:VisualElement name="ResultElements" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-        <engine:VisualElement name="TopElements" style="flex-grow: 1;">
-            <engine:Label text="プレイヤー１は真の勇者であった！" name="ResultMessageLabel" selectable="false" class="label" style="font-size: 90px; top: 100px; -unity-font-style: normal; -unity-text-align: upper-center;" />
+        <engine:VisualElement name="TopElements">
+            <engine:Label text="プレイヤー１は真の勇者であった！" name="ResultMessageLabel" selectable="false" class="label" style="font-size: 90px; top: 100px; -unity-font-style: normal; -unity-text-align: upper-center; align-self: flex-start; left: 80px;" />
         </engine:VisualElement>
         <engine:VisualElement name="BottomElements" style="flex-grow: 1; justify-content: flex-end;">
-            <engine:Button text="タイトルへ" name="BackToTitleButton" class="label" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/Frame3To1.png?fileID=2800000&amp;guid=232f03a15e769c542903107880f17b17&amp;type=3#Frame3To1&quot;); -unity-background-scale-mode: scale-to-fit; background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); height: 150px; width: 500px; align-self: flex-end; align-content: stretch; align-items: auto; justify-content: center;" />
+            <engine:VisualElement name="DetailsElement" style="margin-top: 200px; left: 200px;">
+                <engine:Label text="10ターンで世界を救った" name="TurnCountMessageLabel" selectable="false" class="label" style="font-size: 50px; top: auto; -unity-font-style: normal; -unity-text-align: upper-left;" />
+            </engine:VisualElement>
+            <engine:Button text="BackToTitle" name="BackToTitleButton" enable-rich-text="false" class="label buttonBackToTitle" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/Frame3To1.png?fileID=2800000&amp;guid=232f03a15e769c542903107880f17b17&amp;type=3#Frame3To1&quot;); -unity-background-scale-mode: scale-to-fit; background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); height: 180px; width: auto; align-self: flex-end; align-content: stretch; align-items: auto; justify-content: center; font-size: 50px; padding-left: 30px; padding-right: 30px; background-position-y: center 0; -unity-text-align: middle-center;" />
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

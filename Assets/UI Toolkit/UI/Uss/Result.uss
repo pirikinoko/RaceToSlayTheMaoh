@@ -1,0 +1,7 @@
+.buttonBackToTitle {
+}
+
+.buttonBackToTitle:hover {
+    transition-duration: 0.1s;
+    scale: 1.1 1.1;
+}

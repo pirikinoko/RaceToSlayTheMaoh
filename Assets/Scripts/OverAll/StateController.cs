@@ -144,16 +144,22 @@ public class StateController : MonoBehaviour
         // 勝者にズームイン
         await _cameraController.ZoomInAsync(winner.transform.position);
 
-        // 勝利メッセージを表示
+        // リザルト画面のUIを準備
         var resultMessageLabel = _resultRoot.Q<Label>("ResultMessageLabel");
         resultMessageLabel.text = Constants.GetResultMessageWin(Settings.Language, winner.Parameter.Name);
         resultMessageLabel.style.display = DisplayStyle.None;
+
+        var turnCountMessageLabel = _resultRoot.Q<Label>("TurnCountMessageLabel");
+        turnCountMessageLabel.text = Constants.GetTurnCountMessage(Settings.Language, _mainController.TurnCount);
+        turnCountMessageLabel.style.display = DisplayStyle.None;
 
         var backToTitleButton = _resultRoot.Q<Button>("BackToTitleButton");
         backToTitleButton.style.display = DisplayStyle.None;
 
         _resultRoot.style.display = DisplayStyle.Flex;
 
+
+        // 暗転アニメーション
         var resultElements = _resultRoot.Q<VisualElement>("ResultElements");
 
         Color initialColor = resultElements.style.backgroundColor.value;
@@ -166,7 +172,9 @@ public class StateController : MonoBehaviour
             Constants.ResultFadeDuration
         ).AsyncWaitForCompletion();
 
+        // 暗転後にメッセージやボタンを表示
         resultMessageLabel.style.display = DisplayStyle.Flex;
+        turnCountMessageLabel.style.display = DisplayStyle.Flex;
         backToTitleButton.style.display = DisplayStyle.Flex;
 
         backToTitleButton.text = Constants.GetBackToTitleButtonText(Settings.Language);
@@ -174,7 +182,7 @@ public class StateController : MonoBehaviour
         backToTitleButton.RegisterCallback<ClickEvent>(e =>
         {
             // タイトル画面に戻る処理
-            ChangeState(State.Title);
+            _mainController.ResetGame();
         });
     }
 

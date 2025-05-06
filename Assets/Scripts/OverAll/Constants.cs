@@ -326,6 +326,19 @@ public class Constants
         }
     }
 
+    public static string GetTurnCountMessage(Language language, int turnCount)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return $"{turnCount}ターンで世界を救った！";
+            case Language.English:
+                return $"You saved the world in {turnCount} turns!";
+            default:
+                return $"You saved the world in {turnCount} turns!";
+        }
+    }
+
     public static string GetBackToTitleButtonText(Language language)
     {
         switch (language)

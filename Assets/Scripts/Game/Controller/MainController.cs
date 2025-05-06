@@ -4,6 +4,7 @@ using System.Linq;
 using UIToolkit;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class MainController : MonoBehaviour
@@ -102,7 +103,10 @@ public class MainController : MonoBehaviour
             await NpcActionController.MoveAsync(CurrentTurnPlayerEntity.GetComponent<ControllableEntity>());
         }
 
-        TurnCount++;
+        if (_currentTurnPlayerId == 1)
+        {
+            TurnCount++;
+        }
     }
 
     private async UniTask<int> GetDiceResultAsync()
@@ -150,5 +154,10 @@ public class MainController : MonoBehaviour
         _coffinObjects[playerEntity.Id].SetActive(true);
         _coffinObjects[playerEntity.Id].transform.position = coffinPosition;
         playerEntity.transform.position = coffinPosition;
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
     }
 }
