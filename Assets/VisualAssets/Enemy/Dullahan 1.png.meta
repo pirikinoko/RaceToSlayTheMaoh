@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4e0f599b690ec1947b3946fb4b695ac9
+guid: af713fbb749359b4ea2624e9da170491
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 701960432084883088
-    second: Magician_0
+      213: 3737735753037652540
+    second: Dullahan 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,12 +113,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Magician_0
+      name: Dullahan 1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 31
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0969cc83b4dddb900800000000000000
-      internalID: 701960432084883088
+      spriteID: c3226103dda1fd330800000000000000
+      internalID: 3737735753037652540
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Magician_0: 701960432084883088
+      Dullahan 1_0: 3737735753037652540
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

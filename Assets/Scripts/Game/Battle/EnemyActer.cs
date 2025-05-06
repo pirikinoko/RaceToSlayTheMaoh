@@ -111,6 +111,7 @@ public static class NpcActionController
         {
             battleController.OnSkillRewardSelected(reward);
         }
+        Debug.Log($"選択された報酬: {reward}");
 
         battleLogController.FlipLog();
     }

@@ -259,12 +259,12 @@ public class ControllableEntity : MonoBehaviour
         var entityPositions = new HashSet<Vector2>();
         foreach (var player in _playerController.PlayerList)
         {
-            if (player != this.GetComponent<Entity>() && player.transform.position != _transform.position)
+            if (player != this.GetComponent<Entity>() && Vector2.Distance(player.transform.position, _transform.position) > 0.1f && player.IsAlive)
                 entityPositions.Add((Vector2)player.transform.position);
         }
         foreach (var enemy in _enemyController.EnemyList)
         {
-            if (enemy != this.GetComponent<Entity>() && enemy.transform.position != _transform.position)
+            if (enemy != this.GetComponent<Entity>() && Vector2.Distance(enemy.transform.position, _transform.position) > 0.1f && enemy.IsAlive)
                 entityPositions.Add((Vector2)enemy.transform.position);
         }
 

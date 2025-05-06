@@ -133,11 +133,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Cook (-5.0,0.0)
+      value: Magician (-5.0,0.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
@@ -150,7 +150,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 1ea9fa4e92244ca469c752748b3cf923, type: 3}
+      objectReference: {fileID: 21300000, guid: b4c56ca07096ce8479d0f3b95edc6658, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -310,7 +310,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Dullahan (0.0,0.0)
+      value: Shield (0.0,0.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
@@ -323,7 +323,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 119dca6699aa14f459693b0905e3d7d1, type: 3}
+      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -508,20 +508,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Samurai (-3.0,-2.0)
+      value: Bat (-3.0,-2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.18
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: b4c56ca07096ce8479d0f3b95edc6658, type: 3}
+      objectReference: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -594,20 +594,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Samurai (3.0,-2.0)
+      value: Bat (3.0,-2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.18
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: b4c56ca07096ce8479d0f3b95edc6658, type: 3}
+      objectReference: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -868,20 +868,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Shield (-3.0,2.0)
+      value: Magician (-3.0,2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
+      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -950,20 +950,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Shield (3.0,3.0)
+      value: Magician (3.0,3.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
+      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -2464,7 +2464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
@@ -2481,7 +2481,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 119dca6699aa14f459693b0905e3d7d1, type: 3}
+      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -9814,11 +9814,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Cook (5.0,0.0)
+      value: Magician (5.0,0.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
@@ -9831,7 +9831,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 1ea9fa4e92244ca469c752748b3cf923, type: 3}
+      objectReference: {fileID: 21300000, guid: b4c56ca07096ce8479d0f3b95edc6658, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -10100,20 +10100,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Shield (3.0,2.0)
+      value: Magician (3.0,2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
+      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -10330,7 +10330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
@@ -10347,7 +10347,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 119dca6699aa14f459693b0905e3d7d1, type: 3}
+      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -10411,19 +10411,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Satan (-5.0,-4.0)
+      value: Satan (0.0,5.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
@@ -10743,20 +10743,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Shield (-3.0,3.0)
+      value: Magician (-3.0,3.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
+      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1

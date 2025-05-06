@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 119dca6699aa14f459693b0905e3d7d1
+guid: d9bd21097d437e64d976ef1b2bea7738
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7907438029797205379
-    second: Dullahan_0
+      213: 8647823593821616703
+    second: Bat_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
-    textureCompression: 2
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Dullahan_0
+      name: Bat_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 16
-        height: 23
+        y: 8
+        width: 32
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3852a712efcdcbd60800000000000000
-      internalID: 7907438029797205379
+      spriteID: f3abafd8dbd330870800000000000000
+      internalID: 8647823593821616703
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Dullahan_0: 7907438029797205379
+      Bat_0: 8647823593821616703
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// スキルの定義と管理を行うクラス
@@ -33,7 +34,7 @@ public static class SkillList
         public static class Bite
         {
             public const int ManaCost = 1;
-            public const int HealPotential = 1;
+            public const int HealPotential = 2;
             public const int OffsetPercent = 50;
         }
     }
@@ -157,11 +158,20 @@ public static class SkillList
                     missPotential: 0
                 );
                 skillUser.SetHitPoint(skillUser.Parameter.HitPoint + healAmount);
+
+                var logs = new List<string>();
+
+                if (damageAmount > 0)
+                {
+                    logs.Add($"{damageAmount}のダメージを与え,HPを回復した");
+                }
+                else
+                {
+                    logs.Add($"{opponent.name}は攻撃をかわした");
+                }
+
                 return new Skill.SkillResult(
-                    logs: new string[]
-                    {
-                        $"{damageAmount}のダメージを与え,HPを回復した",
-                    },
+                    logs: logs.ToArray(),
                     effectKey: Constants.ImageAnimationKeyBite
                 );
             }
