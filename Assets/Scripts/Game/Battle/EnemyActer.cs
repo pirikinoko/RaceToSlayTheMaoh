@@ -52,7 +52,7 @@ public static class NpcActionController
 
     public static async UniTask<string> DecideASkillToUseAsync(Entity acter, Entity target)
     {
-        var HealSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Heal);
+        var HealSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Buff);
         var DamageSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Damage);
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var defaultParameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == acter.EntityType);

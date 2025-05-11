@@ -39,7 +39,7 @@ public class Constants
         return isMissed ? 0 : randomValue;
     }
 
-    public static int MissPotentilaiOnEveryDamageAction = 10;
+    public static int MissPotentialOnEveryDamageAction = 10;
 
     // ******* Player *******
     public static float PlayerMoveSpeed { get; set; } = 2.0f;
@@ -291,6 +291,18 @@ public class Constants
                 return HealCaption;
             case "噛みつく":
                 return "Bite";
+            case "イグニッション":
+                return "Ignition";
+            case "ドレイン":
+                return "Drain";
+            case "デストロイ":
+                return "Destroy";
+            case "リジェネ":
+                return "Regen";
+            case "スーパーヒール":
+                return "SuperHeal";
+            case "トレーニング":
+                return "Training";
             default:
                 return "Unknown";
         }
@@ -359,4 +371,10 @@ public class Constants
     public static string ImageAnimationKeySlash = "SlashAnimationEffect";
     public static string ImageAnimationKeyHeal = "HealAnimationEffect";
     public static string ImageAnimationKeyBite = "BiteAnimationEffect";
+    public static string ImageAnimationKeyIgnition = "IgnitionAnimationEffect";
+    public static string ImageAnimationKeyDrain = "DrainAnimationEffect";
+    public static string ImageAnimationKeyDestroy = "DestroyAnimationEffect";
+    public static string ImageAnimationKeyRegen = "RegenAnimationEffect";
+    public static string ImageAnimationKeySuperHeal = "SuperHealAnimationEffect";
+    public static string ImageAnimationKeyTraining = "TrainingAnimationEffect";
 }

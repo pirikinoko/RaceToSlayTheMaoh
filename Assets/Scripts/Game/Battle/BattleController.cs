@@ -244,6 +244,7 @@ public class BattleController : MonoBehaviour
 
     private void BackToField()
     {
+        ResetAbnormalCondition();
         HandleDiedEntity(_loserEntity);
         _stateController.ChangeState(State.Field);
     }
@@ -300,7 +301,7 @@ public class BattleController : MonoBehaviour
 
         var skillEffectType = SkillList.GetSkillEffectType(skillName);
         // スキルのエフェクトを再生
-        if (skillEffectType == SkillList.SkillEffectType.Heal)
+        if (skillEffectType == SkillList.SkillEffectType.Buff)
         {
             await PlayImageAnimationAsync(result.EffectKey, _currentTurnEntity);
         }
@@ -568,6 +569,12 @@ public class BattleController : MonoBehaviour
                 _enemyController.EnemyList.Remove(entity);
                 break;
         }
+    }
+
+    private void ResetAbnormalCondition()
+    {
+        _leftEntity.ResetAbnormalCondition();
+        _rightEntity.ResetAbnormalCondition();
     }
 
     private void DisplayBattleElement()

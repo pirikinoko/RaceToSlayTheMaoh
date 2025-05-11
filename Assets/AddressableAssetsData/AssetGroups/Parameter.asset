@@ -18,7 +18,8 @@ MonoBehaviour:
   - m_GUID: 0a5a4de897429a74ba1f73250681006f
     m_Address: Player4
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Entity
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1d7ff081d94552a4381f5b620f70fea5
     m_Address: Assets/ScriptableObjects/Parameter/Parameter.asset
@@ -29,12 +30,14 @@ MonoBehaviour:
   - m_GUID: 45c32b245d8d0b448be0faa883cf1545
     m_Address: Player3
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Entity
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 809252411dcd60949b7e075078285f9b
     m_Address: Player2
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Entity
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 99a768d1d91d9e841918b2124d0fc1bb
     m_Address: Player1
@@ -42,26 +45,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Entity
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9ccf66bfc1ac13e40a8fc9d3978e3ca7
-    m_Address: PlayerIcon3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d54b53dc55fc91440a37a9128826a61b
     m_Address: Enemy
     m_ReadOnly: 0
     m_SerializedLabels:
     - Entity
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ebedd3f959666994db2b14e995ce5236
-    m_Address: PlayerIcon2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fb0ba1fd1e9071641892bd1635422035
-    m_Address: PlayerIcon4
-    m_ReadOnly: 0
-    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c15980a2792339542b1da6f13079ad19, type: 2}

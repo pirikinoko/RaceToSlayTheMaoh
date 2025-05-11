@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7b934c76e07c6534091aa88786ed33ee
+guid: f2a1731b04f68f341a3e2c855c44128c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4764985765180868152
-    second: Green0_0
+      213: -9009568936668124620
+    second: MushRoom_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Green0_0
+      name: MushRoom_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 1
         y: 0
-        width: 32
-        height: 32
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8c9f99a41be5fddb0800000000000000
-      internalID: -4764985765180868152
+      spriteID: 43aa08e69c497f280800000000000000
+      internalID: -9009568936668124620
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Green0_0: -4764985765180868152
+      MushRoom_0: -9009568936668124620
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
