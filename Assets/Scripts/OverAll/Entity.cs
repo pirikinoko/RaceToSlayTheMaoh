@@ -16,6 +16,8 @@ public class Entity : MonoBehaviour
 
     public bool IsNpc { get; private set; } = false;
 
+    public int AttackPower => Parameter.Power + _abnormalCondition.PowerGain;
+
     private ReactiveProperty<int> _hitPointRp = new ReactiveProperty<int>();
     private ReactiveProperty<int> _manaPointRp = new ReactiveProperty<int>();
 
@@ -43,10 +45,8 @@ public class Entity : MonoBehaviour
 
     public int Attack(Entity target)
     {
-        // 攻撃力のポテンシャルを計算
-        int potential = Parameter.Power + _abnormalCondition.PowerGain;
         // 攻撃力のポテンシャルのオフセット内でランダムな値を返す
-        int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(potential, Constants.AttackOffsetPercent, 10);
+        int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(AttackPower, Constants.AttackOffsetPercent, 10);
         target.SetHitPoint(target.Parameter.HitPoint - damage);
         return damage;
     }
@@ -74,5 +74,15 @@ public class Entity : MonoBehaviour
     public void ChangeVisibility(bool isVisible)
     {
         _spriteRenderer.enabled = isVisible;
+    }
+
+    public void SetAbnormalCondition(AbnormalCondition condition)
+    {
+        _abnormalCondition = condition;
+    }
+
+    public void ResetAbnormalCondition()
+    {
+        _abnormalCondition = new AbnormalCondition();
     }
 }

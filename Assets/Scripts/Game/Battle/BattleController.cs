@@ -244,6 +244,7 @@ public class BattleController : MonoBehaviour
 
     private void BackToField()
     {
+        ResetAbnormalCondition();
         HandleDiedEntity(_loserEntity);
         _stateController.ChangeState(State.Field);
     }
@@ -294,24 +295,21 @@ public class BattleController : MonoBehaviour
         // ステップアニメーションを実行
         await AnimateEntityStepAsync(_currentTurnEntity);
 
-        // 相手のHPが減るかそれとも自分のHPが減るかでエフェクトをどちらに出すかを決める(1)
-        int enemyHp = _waitingTurnEntity.Parameter.HitPoint;
-
         // スキルの使用
         Skill.SkillResult result = _currentTurnEntity.UseSkill(skillName, _currentTurnEntity, _waitingTurnEntity);
 
-        // 相手のHPが減るかそれとも自分のHPが減るかでエフェクトをどちらに出すかを決める(2)
-        bool hasEnemyTakenDamage = enemyHp > _waitingTurnEntity.Parameter.HitPoint;
 
+        var skillEffectType = SkillList.GetSkillEffectType(skillName);
         // スキルのエフェクトを再生
-        if (hasEnemyTakenDamage)
-        {
-            await PlayImageAnimationAsync(result.EffectKey, _waitingTurnEntity);
-        }
-        else
+        if (skillEffectType == SkillList.SkillEffectType.Buff)
         {
             await PlayImageAnimationAsync(result.EffectKey, _currentTurnEntity);
         }
+        else if (skillEffectType == SkillList.SkillEffectType.Damage)
+        {
+            await PlayImageAnimationAsync(result.EffectKey, _waitingTurnEntity);
+        }
+
 
         // スキルの結果のログ
         foreach (var log in result.Logs)
@@ -467,7 +465,6 @@ public class BattleController : MonoBehaviour
             var rewardChoices = new List<int> { 0 };
             for (int i = 0; i < _currentRewardSkills.Count; i++)
             {
-
                 if (_winnerEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[i].Name) == null)
                 {
                     rewardChoices.Add(i + 1);
@@ -572,6 +569,12 @@ public class BattleController : MonoBehaviour
                 _enemyController.EnemyList.Remove(entity);
                 break;
         }
+    }
+
+    private void ResetAbnormalCondition()
+    {
+        _leftEntity.ResetAbnormalCondition();
+        _rightEntity.ResetAbnormalCondition();
     }
 
     private void DisplayBattleElement()

@@ -21,6 +21,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Icon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3bf078a63240b2b428988aaaadabbe00
+    m_Address: PlayerIcon4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Icon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51f227ac18428204d9fc390d88bcabe0
+    m_Address: PlayerIcon2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Icon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5919f2f91a6f9b244b463f6e55d9eed9
     m_Address: PowerIcon
     m_ReadOnly: 0
@@ -29,6 +41,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ba13a36b835556449819f7045226e4cd
     m_Address: ManaIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Icon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f77f813f7b7f2334ea9f8820667ce616
+    m_Address: PlayerIcon3
     m_ReadOnly: 0
     m_SerializedLabels:
     - Icon

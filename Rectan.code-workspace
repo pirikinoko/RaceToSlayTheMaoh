@@ -1,10 +1,7 @@
 {
-	"folders": [
-		{
-			"path": ".."
-		}
-	],
-	"settings": {
-		"dotnet.preferCSharpExtension": true
-	}
+    "folders": [
+        {
+            "path": "Assets/Scripts"
+        }
+    ]
 }
