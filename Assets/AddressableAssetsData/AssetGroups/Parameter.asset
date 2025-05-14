@@ -45,6 +45,16 @@ MonoBehaviour:
     m_SerializedLabels:
     - Entity
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd7894cc4aa2f9b4190e357636140604
+    m_Address: HeartIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8ee15c3eb775dd4c9a2171c5a68a92b
+    m_Address: ManaIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d54b53dc55fc91440a37a9128826a61b
     m_Address: Enemy
     m_ReadOnly: 0

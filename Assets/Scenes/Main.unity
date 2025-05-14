@@ -131,13 +131,17 @@ PrefabInstance:
       propertyPath: Identifier
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Magician (-5.0,0.0)
+      value: AxeMan (-5.0,0.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
@@ -150,7 +154,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
+      objectReference: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -304,29 +308,33 @@ PrefabInstance:
       propertyPath: Identifier
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Shield (0.0,0.0)
+      value: Dullahan (0.0,0.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
+      objectReference: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -502,6 +510,10 @@ PrefabInstance:
       propertyPath: Identifier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 2
@@ -587,6 +599,10 @@ PrefabInstance:
     - target: {fileID: 289969190754330846, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: Identifier
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
@@ -846,9 +862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 237a8b8e93fd2554caf89646560abbe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolConfigs:
-  - prefab: {fileID: 1107777886783525053, guid: 8e3a083f100a27d44b81ca52dffc1e44, type: 3}
-    initialSize: 3
+  poolConfigs: []
 --- !u!4 &547638746 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
@@ -862,13 +876,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1744486628}
     m_Modifications:
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Magician (-3.0,2.0)
+      value: SwordMan (-3.0,2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
@@ -881,7 +899,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
+      objectReference: {fileID: 21300000, guid: fe3b428935b89034aa55947675d47ba0, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -944,13 +962,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1744486628}
     m_Modifications:
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Magician (3.0,3.0)
+      value: SwordMan (3.0,3.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
@@ -963,7 +985,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
+      objectReference: {fileID: 21300000, guid: fe3b428935b89034aa55947675d47ba0, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -2441,8 +2463,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyList: []
-  _staticEnemiesParent: {fileID: 77268407}
-  _enemiesToRandomizeParent: {fileID: 1744486628}
+  _staticEnemiesParent: {fileID: 0}
+  _enemiesToRandomizeParent: {fileID: 0}
 --- !u!4 &1070091157 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
@@ -2460,29 +2482,33 @@ PrefabInstance:
       propertyPath: Identifier
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Dullahan (5.0,5.0)
+      value: Magician (5.0,5.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
+      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2660,29 +2686,33 @@ PrefabInstance:
       propertyPath: Identifier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Axe (1.0,-2.0)
+      value: Slime (1.0,-2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: bf0dad1f62408524fa7c854516e3fec2, type: 3}
+      objectReference: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2746,29 +2776,33 @@ PrefabInstance:
       propertyPath: Identifier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Axe (-5.0,-2.0)
+      value: Slime (-5.0,-2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: bf0dad1f62408524fa7c854516e3fec2, type: 3}
+      objectReference: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12339,29 +12373,33 @@ PrefabInstance:
       propertyPath: Identifier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Axe (5.0,-2.0)
+      value: Slime (5.0,-2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: bf0dad1f62408524fa7c854516e3fec2, type: 3}
+      objectReference: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12413,17 +12451,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
   m_PrefabInstance: {fileID: 1403662307}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1408773399 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2138056103008628461, guid: 65017bbca7a855a45bb7ee081add56e6, type: 3}
-  m_PrefabInstance: {fileID: 943923461}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1476832530
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12590,8 +12617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018d6ae5dbe8ce7468d502f9f1a74e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerController: {fileID: 1659839508}
-  Id: 1
+  Id: 0
   MyEntity: {fileID: 0}
 --- !u!4 &1491222407
 Transform:
@@ -12658,11 +12684,11 @@ MonoBehaviour:
   _battleLogController: {fileID: 1129187586}
   _cameraController: {fileID: 519420033}
   _imageAnimationHolder: {fileID: 1701919511}
-  _overAllUi: {fileID: 1646576529}
-  _titleUi: {fileID: 1776394620}
-  _fieldUi: {fileID: 1775989769}
+  _overAllUi: {fileID: 2099803721}
+  _titleUi: {fileID: 1619623715}
+  _fieldUi: {fileID: 2130987272}
   _battleUi: {fileID: 1329990113}
-  _resultUi: {fileID: 1408773399}
+  _resultUi: {fileID: 1992268213}
 --- !u!4 &1521996746
 Transform:
   m_ObjectHideFlags: 0
@@ -12783,10 +12809,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
---- !u!114 &1646576529 stripped
+--- !u!114 &1619623715 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 704762096159928498, guid: 90f91397ad05e84479af4e30d1b05517, type: 3}
-  m_PrefabInstance: {fileID: 1932387158}
+  m_CorrespondingSourceObject: {fileID: 5522266589079446044, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
+  m_PrefabInstance: {fileID: 1582020578}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -12823,7 +12849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a4cebba0694c3488c69337b6f59140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerParent: {fileID: 2121921644}
+  _playerParent: {fileID: 0}
   PlayerList: []
 --- !u!4 &1659839509
 Transform:
@@ -12852,13 +12878,17 @@ PrefabInstance:
       propertyPath: Identifier
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Magician (5.0,0.0)
+      value: AxeMan (5.0,0.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
@@ -12871,7 +12901,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
+      objectReference: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -12965,31 +12995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97f3f2099246f4e4987b403b6af5a3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animatorConfigs:
-  - name: SlashAnimationEffect
-    sprites:
-    - {fileID: 2873468861240947033, guid: 726312363cf957d4f8e794b96eb75fd5, type: 3}
-    - {fileID: -3838399130750711146, guid: 9d219236dfa522b4b8c7aeefba705682, type: 3}
-    - {fileID: -162131718858667924, guid: 90743d18ec079c74496eb28fb9d6ab44, type: 3}
-    - {fileID: 7651652956544365532, guid: 015ab6cfcf92f3346bfe694bafcf21f6, type: 3}
-    - {fileID: 3696961986190806569, guid: de8d5e72001765540aa2fe8689ac4269, type: 3}
-    - {fileID: 2377541833084464458, guid: d1e28131ed7f76048951a8b0fef033eb, type: 3}
-  - name: HealAnimationEffect
-    sprites:
-    - {fileID: 21300000, guid: fe782a26c2061fe49975c3be2f845f65, type: 3}
-    - {fileID: 21300000, guid: 043ebacf12df14d4696601fe09767def, type: 3}
-    - {fileID: 21300000, guid: 300db80f941f59b44b89bc28301c160e, type: 3}
-    - {fileID: 21300000, guid: b0dc483a10134e543857b31a7adb6251, type: 3}
-    - {fileID: 21300000, guid: 4b3633fa7d3d25a429336db51c81d29c, type: 3}
-    - {fileID: 21300000, guid: df2525d189b669e4f8ce8a272d58df53, type: 3}
-    - {fileID: 21300000, guid: 851f07e1017cce543bb4ee65fddf56dc, type: 3}
-    - {fileID: 21300000, guid: 924918ed98985ba40abd3dcff3cc99fe, type: 3}
-  - name: BiteAnimationEffect
-    sprites:
-    - {fileID: -4789370092206297288, guid: 9db0e60e8bf60b248bcea3092dca182f, type: 3}
-    - {fileID: 5540630298499624654, guid: 75366ba6dc2783b41bff3f70bb19f2a5, type: 3}
-    - {fileID: 8647413979306863119, guid: 8c95d0c77c984d746b6c681e064aadf4, type: 3}
-    - {fileID: -7920390214905072387, guid: cabf2a25db8d9a6468b7a265588dc6a7, type: 3}
+  animatorConfigs: []
 --- !u!1 &1744486627
 GameObject:
   m_ObjectHideFlags: 0
@@ -13104,28 +13110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009b3f4fad3c92041b87fd2b264cc049, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1775989769 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 704762096159928498, guid: 0d9ff3347fd252e419bb7016f3698045, type: 3}
-  m_PrefabInstance: {fileID: 155045806}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1776394620 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5522266589079446044, guid: 5a2a36c77cac864418554bef6df2d1cb, type: 3}
-  m_PrefabInstance: {fileID: 1582020578}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1842089275
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13134,13 +13118,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1744486628}
     m_Modifications:
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Magician (3.0,2.0)
+      value: SwordMan (3.0,2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
@@ -13153,7 +13141,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
+      objectReference: {fileID: 21300000, guid: fe3b428935b89034aa55947675d47ba0, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -13256,9 +13244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c09d6bfb97b2cbe46a36924b713b3ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolConfigs:
-  - prefab: {fileID: 6072027815452892033, guid: a2453cc2f52b20b4283f75cccb90f603, type: 3}
-    initialSize: 3
+  poolConfigs: []
 --- !u!1001 &1932387158
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13356,6 +13342,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90f91397ad05e84479af4e30d1b05517, type: 3}
+--- !u!114 &1992268213 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2138056103008628461, guid: 65017bbca7a855a45bb7ee081add56e6, type: 3}
+  m_PrefabInstance: {fileID: 943923461}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1998722763
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13368,29 +13365,33 @@ PrefabInstance:
       propertyPath: Identifier
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Dullahan (-5.0,5.0)
+      value: Magician (-5.0,5.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
+      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13448,6 +13449,10 @@ PrefabInstance:
     - target: {fileID: 289969190754330846, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: Identifier
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
@@ -13664,29 +13669,33 @@ PrefabInstance:
       propertyPath: Identifier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Axe (-1.0,-2.0)
+      value: Slime (-1.0,-2.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.y
-      value: 0.16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: bf0dad1f62408524fa7c854516e3fec2, type: 3}
+      objectReference: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13738,6 +13747,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
   m_PrefabInstance: {fileID: 2088211477}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2099803721 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 704762096159928498, guid: 90f91397ad05e84479af4e30d1b05517, type: 3}
+  m_PrefabInstance: {fileID: 1932387158}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2121921643
 GameObject:
   m_ObjectHideFlags: 0
@@ -13769,6 +13789,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2130987272 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 704762096159928498, guid: 0d9ff3347fd252e419bb7016f3698045, type: 3}
+  m_PrefabInstance: {fileID: 155045806}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4085872158495986685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13777,13 +13808,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1744486628}
     m_Modifications:
+    - target: {fileID: 1836335696870968721, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
+      propertyPath: EntityType
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7518551499629143663, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: EntityType
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7798725038358952894, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Name
-      value: Magician (-3.0,3.0)
+      value: SwordMan (-3.0,3.0)
       objectReference: {fileID: 0}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Size.x
@@ -13796,7 +13831,7 @@ PrefabInstance:
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
+      objectReference: {fileID: 21300000, guid: fe3b428935b89034aa55947675d47ba0, type: 3}
     - target: {fileID: 8189343484903758186, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -13865,8 +13900,8 @@ SceneRoots:
   - {fileID: 1701919510}
   - {fileID: 1932387158}
   - {fileID: 1582020578}
-  - {fileID: 2063207341}
   - {fileID: 155045806}
+  - {fileID: 2063207341}
   - {fileID: 1476832530}
   - {fileID: 943923461}
   - {fileID: 2121921644}

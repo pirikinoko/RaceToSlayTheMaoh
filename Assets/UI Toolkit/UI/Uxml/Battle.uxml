@@ -13,11 +13,11 @@
                                 <engine:Label text="15" name="Label" class="statusLabel label" />
                             </engine:VisualElement>
                             <engine:VisualElement name="Element-ManaPoint" class="statusElement">
-                                <engine:VisualElement name="Icon" class="statusIcon" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/ManaIcon.png?fileID=2800000&amp;guid=ba13a36b835556449819f7045226e4cd&amp;type=3#ManaIcon&quot;);" />
+                                <engine:VisualElement name="Icon" class="statusIcon" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/Mana.png?fileID=2800000&amp;guid=c8ee15c3eb775dd4c9a2171c5a68a92b&amp;type=3#Mana&quot;);" />
                                 <engine:Label text="15" name="Label" class="statusLabel label" />
                             </engine:VisualElement>
                         </engine:VisualElement>
-                        <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/VisualAssets/Player/Player.png?fileID=2800000&amp;guid=fe5fe608913d1b749baf641cc1d6acac&amp;type=3#Player&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: 200px; bottom: 30px;" />
+                        <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/VisualAssets/Object/Players/Player1/Player1.png?fileID=2800000&amp;guid=fe5fe608913d1b749baf641cc1d6acac&amp;type=3#Player1&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: 200px; bottom: 30px;" />
                     </engine:VisualElement>
                     <engine:Label text="Turn:1" emoji-fallback-support="true" name="Label-TurnCount" class="label" style="color: rgb(255, 255, 255); font-size: 60px; margin-top: 10px;" />
                     <engine:VisualElement name="Element-Right" style="flex-grow: 1; align-content: center; flex-shrink: 1; align-items: flex-end; align-self: auto; justify-content: flex-start; width: 0; flex-direction: column;">
@@ -28,11 +28,11 @@
                                 <engine:Label text="15" name="Label" class="statusLabel label" />
                             </engine:VisualElement>
                             <engine:VisualElement name="Element-ManaPoint" class="statusElement">
-                                <engine:VisualElement name="Icon" class="statusIcon" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/ManaIcon.png?fileID=2800000&amp;guid=ba13a36b835556449819f7045226e4cd&amp;type=3#ManaIcon&quot;);" />
+                                <engine:VisualElement name="Icon" class="statusIcon" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/Mana.png?fileID=2800000&amp;guid=c8ee15c3eb775dd4c9a2171c5a68a92b&amp;type=3#Mana&quot;);" />
                                 <engine:Label text="15" name="Label" class="statusLabel label" />
                             </engine:VisualElement>
                         </engine:VisualElement>
-                        <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/VisualAssets/Enemy/Axe.png?fileID=2800000&amp;guid=bf0dad1f62408524fa7c854516e3fec2&amp;type=3#Axe&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: auto; bottom: 30px; right: 200px;" />
+                        <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/VisualAssets/Enemy/Magician.png?fileID=2800000&amp;guid=4e0f599b690ec1947b3946fb4b695ac9&amp;type=3#Magician&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: auto; bottom: 30px; right: 200px;" />
                     </engine:VisualElement>
                 </engine:VisualElement>
                 <engine:VisualElement name="RewardElement" style="flex-grow: 1; flex-direction: row; align-content: auto; justify-content: space-evenly; align-items: stretch; display: none;">

@@ -15,17 +15,21 @@ MonoBehaviour:
   m_GroupName: Sprite
   m_GUID: a0994da785cdaed408fc71ce79aa7912
   m_SerializeEntries:
-  - m_GUID: 0f5d6ec6e752cd642a751d505ff10273
-    m_Address: HeartIcon
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Icon
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3bf078a63240b2b428988aaaadabbe00
     m_Address: PlayerIcon4
     m_ReadOnly: 0
     m_SerializedLabels:
     - Icon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e0f599b690ec1947b3946fb4b695ac9
+    m_Address: Magician
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51deeebefef47cf478d93159728eb67d
+    m_Address: Satan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 51f227ac18428204d9fc390d88bcabe0
     m_Address: PlayerIcon2
@@ -39,17 +43,46 @@ MonoBehaviour:
     m_SerializedLabels:
     - Icon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ba13a36b835556449819f7045226e4cd
-    m_Address: ManaIcon
+  - m_GUID: 5ddb43dcafe8e074a94c8f1a0e57629d
+    m_Address: ShieldMan
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - Icon
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af713fbb749359b4ea2624e9da170491
+    m_Address: Dullahan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd8199a4fa9c05549a4083575f74526b
+    m_Address: AxeMan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9bd21097d437e64d976ef1b2bea7738
+    m_Address: Bat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f24f3374a2210234cb607175de4282b7
+    m_Address: Slime
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2a1731b04f68f341a3e2c855c44128c
+    m_Address: MushRoom
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f77f813f7b7f2334ea9f8820667ce616
     m_Address: PlayerIcon3
     m_ReadOnly: 0
     m_SerializedLabels:
     - Icon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe3b428935b89034aa55947675d47ba0
+    m_Address: SwordMan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe5fe608913d1b749baf641cc1d6acac
     m_Address: PlayerIcon1

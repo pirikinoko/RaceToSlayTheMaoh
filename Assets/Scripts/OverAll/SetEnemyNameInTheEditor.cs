@@ -37,7 +37,6 @@ public class SetEnemyPreferenceTheEditor : MonoBehaviour
         var entity = GetComponent<Entity>();
         var spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // EntityTypeからパスを組み立てる例
         string path = $"Assets/VisualAssets/Enemy/{entity.EntityType}.png";
         var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
         if (sprite == null)

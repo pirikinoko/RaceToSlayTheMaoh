@@ -1,12 +1,13 @@
 public enum EntityType
 {
     Player,
-    Axe,
+    Slime,
     Bat,
-    Samurai,
-    Cook,
+    Mushroom,
+    AxeMan,
+    SwordMan,
+    ShieldMan,
     Magician,
-    Shield,
     Dullahan,
     Satan,
 }

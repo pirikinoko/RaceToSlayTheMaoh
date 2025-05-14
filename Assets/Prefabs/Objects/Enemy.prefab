@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8915144222258663646}
   - component: {fileID: 8189343484903758186}
-  - component: {fileID: 7518551499629143663}
-  - component: {fileID: 6123329035456721336}
+  - component: {fileID: 1836335696870968721}
+  - component: {fileID: 5935513015130164999}
   m_Layer: 7
   m_Name: Player (0.0,0.0)
   m_TagString: Untagged
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7518551499629143663
+--- !u!114 &1836335696870968721
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EntityType: 0
---- !u!114 &6123329035456721336
+--- !u!114 &5935513015130164999
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

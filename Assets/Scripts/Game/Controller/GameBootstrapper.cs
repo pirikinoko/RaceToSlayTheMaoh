@@ -26,6 +26,6 @@ public class GameBootstrapper : MonoBehaviour
         _fieldController.Initialize(_mainController, _stateController, _enemyController, _playerController, _battleController);
         _playerController.Initialize(_mainController);
         _battleController.Initialize(_stateController, _mainController, _userController, _battleLogController, _playerController, _enemyController, _imageAnimationHolder);
-        // 必要に応じて他のControllerも同様にInitializeを呼び出してください
+        _userController.Initialize(_playerController);
     }
 }
