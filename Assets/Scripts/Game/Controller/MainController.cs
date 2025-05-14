@@ -116,7 +116,7 @@ public class MainController : MonoBehaviour
         _diceBoxComponent.style.display = DisplayStyle.Flex;
         _diceBoxComponent.StartRolling();
         _stopButton.style.display = DisplayStyle.Flex;
-        if (CurrentTurnPlayerEntity != _userController.MyEntity || CurrentTurnPlayerEntity.IsNpc)
+        if ((GameMode == GameMode.Online && CurrentTurnPlayerEntity != _userController.MyEntity) || CurrentTurnPlayerEntity.IsNpc)
         {
             _stopButton.style.display = DisplayStyle.None;
         }

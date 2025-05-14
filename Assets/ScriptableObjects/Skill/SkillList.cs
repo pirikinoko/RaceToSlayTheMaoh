@@ -12,7 +12,9 @@ public static class SkillList
         None,
         Heal,
         Bite,
+        PoisonMushroom,
         Ignition,
+        Strike,
         Drain,
         Destroy,
         Regen,
@@ -43,6 +45,8 @@ public static class SkillList
             var name when name == GetSkillNameByLanguage(SkillType.Regen) => SkillEffectType.Buff,
             var name when name == GetSkillNameByLanguage(SkillType.SuperHeal) => SkillEffectType.Buff,
             var name when name == GetSkillNameByLanguage(SkillType.Training) => SkillEffectType.Buff,
+            var name when name == GetSkillNameByLanguage(SkillType.Strike) => SkillEffectType.Damage,
+            var name when name == GetSkillNameByLanguage(SkillType.PoisonMushroom) => SkillEffectType.Damage,
             _ => throw new InvalidOperationException("Unknown skill name")
         };
     }
@@ -63,6 +67,8 @@ public static class SkillList
             SkillType.Regen => CreateRegenSkill(),
             SkillType.SuperHeal => CreateSuperHealSkill(),
             SkillType.Training => CreateTrainingSkill(),
+            SkillType.Strike => CreateStrikeSkill(),
+            SkillType.PoisonMushroom => CreatePoisonMushroomSkill(),
             _ => throw new InvalidOperationException("Unknown skill type")
         };
     }
@@ -84,6 +90,8 @@ public static class SkillList
             SkillType.Regen => GetSkillNameRegenByLanguage(),
             SkillType.SuperHeal => GetSkillNameSuperHealByLanguage(),
             SkillType.Training => GetSkillNameTrainingByLanguage(),
+            SkillType.Strike => GetSkillNameStrikeByLanguage(),
+            SkillType.PoisonMushroom => GetSkillNamePoisonMushroomByLanguage(),
             _ => throw new InvalidOperationException("Unknown skill type")
         };
     }
@@ -103,6 +111,8 @@ public static class SkillList
             SkillType.Regen => GetSkillDescriptionRegenByLanguage(),
             SkillType.SuperHeal => GetSkillDescriptionSuperHealByLanguage(),
             SkillType.Training => GetSkillDescriptionTrainingByLanguage(),
+            SkillType.Strike => GetSkillDescriptionStrikeByLanguage(),
+            SkillType.PoisonMushroom => GetSkillDescriptionPoisonMushroomByLanguage(),
             _ => throw new InvalidOperationException("Unknown skill type")
         };
     }
@@ -263,6 +273,46 @@ public static class SkillList
             Language.Japanese => "攻撃力を上昇させる",
             Language.English => "Increase attack power",
             _ => "Increase attack power" // デフォルト値
+        };
+    }
+
+    public static string GetSkillNameStrikeByLanguage()
+    {
+        return Settings.Language switch
+        {
+            Language.Japanese => "ストライク",
+            Language.English => "Strike",
+            _ => "Strike"
+        };
+    }
+
+    public static string GetSkillDescriptionStrikeByLanguage()
+    {
+        return Settings.Language switch
+        {
+            Language.Japanese => "物理攻撃でダメージを与える",
+            Language.English => "Deal physical damage",
+            _ => "Deal physical damage"
+        };
+    }
+
+    public static string GetSkillNamePoisonMushroomByLanguage()
+    {
+        return Settings.Language switch
+        {
+            Language.Japanese => "毒キノコ",
+            Language.English => "Poison Mushroom",
+            _ => "Poison Mushroom"
+        };
+    }
+
+    public static string GetSkillDescriptionPoisonMushroomByLanguage()
+    {
+        return Settings.Language switch
+        {
+            Language.Japanese => "相手に毒を与え、数ターン継続ダメージ",
+            Language.English => "Inflict poison for several turns of damage",
+            _ => "Inflict poison for several turns of damage"
         };
     }
     #endregion
@@ -535,6 +585,72 @@ public static class SkillList
                         $"{skillUser.name}のトレーニングにより攻撃力が{finalPowerBoost}上昇した"
                     },
                     effectKey: Constants.ImageAnimationKeyTraining
+                );
+            }
+        );
+    }
+
+    private static Skill CreateStrikeSkill()
+    {
+        return new Skill(
+            name: GetSkillNameStrikeByLanguage(),
+            description: GetSkillDescriptionStrikeByLanguage(),
+            manaCost: 1,
+            effectKey: Constants.ImageAnimationKeyStrike,
+            action: (skillUser, opponent) =>
+            {
+                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
+                int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
+                    baseValue: skillUser.Parameter.Power,
+                    offsetPercent: 20,
+                    missPotential: Constants.MissPotentialOnEveryDamageAction
+                );
+                opponent.SetHitPoint(opponent.Parameter.HitPoint - damageAmount);
+                var logs = new List<string>();
+                if (damageAmount > 0)
+                {
+                    logs.Add($"ストライクで{damageAmount}のダメージを与えた");
+                }
+                else
+                {
+                    logs.Add($"{opponent.name}は攻撃をかわした");
+                }
+                return new Skill.SkillResult(
+                    logs: logs.ToArray(),
+                    effectKey: Constants.ImageAnimationKeyStrike
+                );
+            }
+        );
+    }
+
+    private static Skill CreatePoisonMushroomSkill()
+    {
+        return new Skill(
+            name: GetSkillNamePoisonMushroomByLanguage(),
+            description: GetSkillDescriptionPoisonMushroomByLanguage(),
+            manaCost: 2,
+            effectKey: "PoisonMushroomAnimationEffect", // 必要に応じてConstantsに追加してください
+            action: (skillUser, opponent) =>
+            {
+                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 2);
+                int poisonTurns = 3;
+                int poisonDamage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
+                    baseValue: 2,
+                    offsetPercent: 50,
+                    missPotential: 0
+                );
+
+                var abnormalCondition = opponent.GetAbnormalCondition();
+                abnormalCondition.Condition = Condition.Poison;
+                opponent.SetAbnormalCondition(abnormalCondition);
+
+                var logs = new List<string>
+                {
+                    $"{opponent.name}は毒状態になった（{poisonTurns}ターン, 毎ターン{poisonDamage}ダメージ）"
+                };
+                return new Skill.SkillResult(
+                    logs: logs.ToArray(),
+                    effectKey: "PoisonMushroomAnimationEffect"
                 );
             }
         );

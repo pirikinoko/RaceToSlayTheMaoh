@@ -771,7 +771,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -862,7 +862,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 237a8b8e93fd2554caf89646560abbe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolConfigs: []
+  poolConfigs:
+  - prefab: {fileID: 1107777886783525053, guid: 8e3a083f100a27d44b81ca52dffc1e44, type: 3}
+    initialSize: 3
 --- !u!4 &547638746 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
@@ -2463,8 +2465,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyList: []
-  _staticEnemiesParent: {fileID: 0}
-  _enemiesToRandomizeParent: {fileID: 0}
+  _staticEnemiesParent: {fileID: 77268407}
+  _enemiesToRandomizeParent: {fileID: 1744486628}
 --- !u!4 &1070091157 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
@@ -2665,7 +2667,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1904835136}
   - {fileID: 524581638}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12849,7 +12850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a4cebba0694c3488c69337b6f59140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerParent: {fileID: 0}
+  _playerParent: {fileID: 2121921644}
   PlayerList: []
 --- !u!4 &1659839509
 Transform:
@@ -12995,7 +12996,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97f3f2099246f4e4987b403b6af5a3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animatorConfigs: []
+  animatorConfigs:
+  - name: SlashAnimationEffect
+    sprites:
+    - {fileID: 2873468861240947033, guid: 726312363cf957d4f8e794b96eb75fd5, type: 3}
+    - {fileID: -3838399130750711146, guid: 9d219236dfa522b4b8c7aeefba705682, type: 3}
+    - {fileID: -162131718858667924, guid: 90743d18ec079c74496eb28fb9d6ab44, type: 3}
+    - {fileID: 7651652956544365532, guid: 015ab6cfcf92f3346bfe694bafcf21f6, type: 3}
+    - {fileID: 3696961986190806569, guid: de8d5e72001765540aa2fe8689ac4269, type: 3}
+    - {fileID: 2377541833084464458, guid: d1e28131ed7f76048951a8b0fef033eb, type: 3}
+  - name: HealAnimationEffect
+    sprites:
+    - {fileID: 21300000, guid: 300db80f941f59b44b89bc28301c160e, type: 3}
+    - {fileID: 21300000, guid: b0dc483a10134e543857b31a7adb6251, type: 3}
+    - {fileID: 21300000, guid: 4b3633fa7d3d25a429336db51c81d29c, type: 3}
+    - {fileID: 21300000, guid: df2525d189b669e4f8ce8a272d58df53, type: 3}
+    - {fileID: 21300000, guid: 851f07e1017cce543bb4ee65fddf56dc, type: 3}
+    - {fileID: 21300000, guid: 924918ed98985ba40abd3dcff3cc99fe, type: 3}
+    - {fileID: 21300000, guid: fe782a26c2061fe49975c3be2f845f65, type: 3}
+    - {fileID: 21300000, guid: 043ebacf12df14d4696601fe09767def, type: 3}
+  - name: DrainAnimationEffect
+    sprites: []
+  - name: DestroyAnimationEffect
+    sprites:
+    - {fileID: -530034241178878421, guid: 8a7204f8149c20645918b97b3d789734, type: 3}
+    - {fileID: 6028507921123887231, guid: 0ee22b13891e9454a8eb07c06ffac2dd, type: 3}
+    - {fileID: -4217878503464057227, guid: ca35fa416b306244ebc6fe3b152f1651, type: 3}
+    - {fileID: 8433481913278819324, guid: 4fab03507eaeec241becd45fd00b4ea9, type: 3}
+  - name: RegenAnimationEffect
+    sprites: []
+  - name: SuperHealAnimationEffect
+    sprites:
+    - {fileID: 21300000, guid: fe782a26c2061fe49975c3be2f845f65, type: 3}
+    - {fileID: 21300000, guid: 043ebacf12df14d4696601fe09767def, type: 3}
+    - {fileID: 21300000, guid: 300db80f941f59b44b89bc28301c160e, type: 3}
+    - {fileID: 21300000, guid: b0dc483a10134e543857b31a7adb6251, type: 3}
+    - {fileID: 21300000, guid: 4b3633fa7d3d25a429336db51c81d29c, type: 3}
+    - {fileID: 21300000, guid: df2525d189b669e4f8ce8a272d58df53, type: 3}
+    - {fileID: 21300000, guid: 851f07e1017cce543bb4ee65fddf56dc, type: 3}
+    - {fileID: 21300000, guid: 924918ed98985ba40abd3dcff3cc99fe, type: 3}
+  - name: StrikeAnimationEffect
+    sprites: []
+  - name: PoisonMushroomAnimationEffect
+    sprites: []
+  - name: IgnitionAnimationEffect
+    sprites:
+    - {fileID: -2085297131118140966, guid: 97aaa623717ff164e8391e8f267edb93, type: 3}
+    - {fileID: -805413805114763160, guid: bd33c4789340fd740bbce5547450b7f8, type: 3}
+    - {fileID: 1467658710680967802, guid: 1b8ac630b5289cf4b85f981f99a8737a, type: 3}
+    - {fileID: 6518374090288481485, guid: b74aeb76c40231a4f8994a40082c9fd1, type: 3}
+  - name: BiteAnimationEffect
+    sprites:
+    - {fileID: -4789370092206297288, guid: 9db0e60e8bf60b248bcea3092dca182f, type: 3}
+    - {fileID: 5540630298499624654, guid: 75366ba6dc2783b41bff3f70bb19f2a5, type: 3}
+    - {fileID: 8647413979306863119, guid: 8c95d0c77c984d746b6c681e064aadf4, type: 3}
+    - {fileID: -7920390214905072387, guid: cabf2a25db8d9a6468b7a265588dc6a7, type: 3}
+  - name: TrainingAnimationEffect
+    sprites: []
 --- !u!1 &1744486627
 GameObject:
   m_ObjectHideFlags: 0
@@ -13042,6 +13099,8 @@ GameObject:
   - component: {fileID: 1772204082}
   - component: {fileID: 1772204081}
   - component: {fileID: 1772204080}
+  - component: {fileID: 1772204084}
+  - component: {fileID: 1772204083}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -13099,6 +13158,83 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1772204083
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772204079}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0be6d9ffcc62c32488b8cc8afd0f023f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &1772204084
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772204079}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!114 &1775989767 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4052416524511643516, guid: 0d9ff3347fd252e419bb7016f3698045, type: 3}
@@ -13196,55 +13332,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8915144222258663646, guid: d54b53dc55fc91440a37a9128826a61b, type: 3}
   m_PrefabInstance: {fileID: 1842089275}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1904835135
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1904835136}
-  - component: {fileID: 1904835137}
-  m_Layer: 5
-  m_Name: EffectPool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1904835136
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1904835135}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1236318719}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1904835137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1904835135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c09d6bfb97b2cbe46a36924b713b3ea0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolConfigs: []
 --- !u!1001 &1932387158
 PrefabInstance:
   m_ObjectHideFlags: 0

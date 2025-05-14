@@ -103,15 +103,15 @@ public static class NpcActionController
         await UniTask.Delay(1000);
 
         int reward = battleController.RewardChoices[Random.Range(0, battleController.RewardChoices.Count)];
+        Debug.Log($"選択された報酬: {reward}");
         if (reward == 0)
         {
             battleController.OnStatusRewardSelected();
         }
         else
         {
-            battleController.OnSkillRewardSelected(reward);
+            battleController.OnSkillRewardSelected(battleController.RewardChoices[reward]);
         }
-        Debug.Log($"選択された報酬: {reward}");
 
         battleLogController.FlipLog();
     }

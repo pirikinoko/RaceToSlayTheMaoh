@@ -377,4 +377,6 @@ public class Constants
     public static string ImageAnimationKeyRegen = "RegenAnimationEffect";
     public static string ImageAnimationKeySuperHeal = "SuperHealAnimationEffect";
     public static string ImageAnimationKeyTraining = "TrainingAnimationEffect";
+    public static string ImageAnimationKeyStrike = "StrikeAnimationEffect";
+    public static string ImageAnimationKeyPoisonMushroom = "PoisonMushroomAnimationEffect";
 }

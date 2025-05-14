@@ -76,6 +76,11 @@ public class Entity : MonoBehaviour
         _spriteRenderer.enabled = isVisible;
     }
 
+    public AbnormalCondition GetAbnormalCondition()
+    {
+        return _abnormalCondition;
+    }
+
     public void SetAbnormalCondition(AbnormalCondition condition)
     {
         _abnormalCondition = condition;
