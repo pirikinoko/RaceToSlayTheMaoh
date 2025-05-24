@@ -59,6 +59,11 @@ public class FieldController : MonoBehaviour
                 continue;
             }
 
+            if (!entityRight.IsAlive)
+            {
+                continue;
+            }
+
             if (Vector2.Distance(entityLeft.transform.position, entityRight.transform.position) < 0.1f)
             {
                 _stateController.ChangeState(State.Battle);
@@ -89,7 +94,7 @@ public class FieldController : MonoBehaviour
         {
             _statusBoxComponents[i].UpdateStatuBoxElments(_playerController.PlayerList[i], heartIcon, manaIcon, powerIcon);
             _statusBoxComponents[i].style.scale = Constants.ScaleForWaitingPlayersStatusBox;
-            var playerIcon = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerIcon(i + 1)).Task;
+            var playerIcon = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerBattleImage(i + 1)).Task;
             _statusBoxComponents[i].Q<VisualElement>("PlayerIcon").style.backgroundImage = new StyleBackground(playerIcon);
         }
         _statusBoxComponents[_mainController.CurrentTurnPlayerId - 1].style.scale = Constants.ScaleForActivePlayerStatusBox;

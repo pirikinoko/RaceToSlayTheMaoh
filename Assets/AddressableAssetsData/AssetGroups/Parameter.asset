@@ -21,11 +21,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Entity
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1349a394fe94f354d9159a565e5051a3
-    m_Address: PlayerIcon3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1d7ff081d94552a4381f5b620f70fea5
     m_Address: Assets/ScriptableObjects/Parameter/Parameter.asset
     m_ReadOnly: 0
@@ -39,7 +34,7 @@ MonoBehaviour:
     - Entity
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5e12b362e37584f44ba41a9fe38e0692
-    m_Address: PlayerIcon2
+    m_Address: Player2BattleImage
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -48,6 +43,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Entity
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99a29aba5cbc99d478520cae885fbdcb
+    m_Address: Player2FieldImage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 99a768d1d91d9e841918b2124d0fc1bb
     m_Address: Player1
@@ -71,8 +71,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Entity
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f026905c12b63f34fb7f2d9eee3128bf
-    m_Address: PlayerIcon4
+  - m_GUID: fe5fe608913d1b749baf641cc1d6acac
+    m_Address: Player1BattleImage
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

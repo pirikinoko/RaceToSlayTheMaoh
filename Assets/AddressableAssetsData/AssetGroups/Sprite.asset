@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Sprite
   m_GUID: a0994da785cdaed408fc71ce79aa7912
   m_SerializeEntries:
+  - m_GUID: 1349a394fe94f354d9159a565e5051a3
+    m_Address: Player3BattleImage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4e0f599b690ec1947b3946fb4b695ac9
     m_Address: Magician
     m_ReadOnly: 0
@@ -36,6 +41,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ac73ed4eab31ff4d8f36b198f085fd8
+    m_Address: Player4FieldImage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac688a43ca20a6240b67851c25614dcf
+    m_Address: Player1FieldImage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: af713fbb749359b4ea2624e9da170491
     m_Address: Dullahan
     m_ReadOnly: 0
@@ -46,8 +61,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be7891abc6af39646a2fd15dc1232f68
+    m_Address: Player3FieldImage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d9bd21097d437e64d976ef1b2bea7738
     m_Address: Bat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f026905c12b63f34fb7f2d9eee3128bf
+    m_Address: Player4BattleImage
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -65,12 +90,6 @@ MonoBehaviour:
     m_Address: SwordMan
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fe5fe608913d1b749baf641cc1d6acac
-    m_Address: PlayerIcon1
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Icon
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c15980a2792339542b1da6f13079ad19, type: 2}

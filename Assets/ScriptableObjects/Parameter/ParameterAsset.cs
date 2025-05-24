@@ -11,7 +11,8 @@ public class ParameterAsset : ScriptableObject
 public class Parameter
 {
     public EntityType EntityType;
-    public Sprite IconSprite;
+    public Sprite BattleSprite;
+    public Sprite FieldSprite;
     public string Name;
     public int HitPoint;
     public int ManaPoint;
@@ -33,7 +34,8 @@ public class Parameter
             var skill = SkillList.GetSkill(skillType);
             Skills.Add(new Skill(skill.Name, skill.Description, skill.ManaCost, skill.EffectKey, skill.Action));
         }
-        IconSprite = original.IconSprite;
+        BattleSprite = original.BattleSprite;
+        FieldSprite = original.FieldSprite;
     }
 
     public Parameter Clone()

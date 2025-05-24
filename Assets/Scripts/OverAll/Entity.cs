@@ -35,7 +35,7 @@ public class Entity : MonoBehaviour
         _abnormalCondition = new AbnormalCondition();
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = Parameter.IconSprite;
+        _spriteRenderer.sprite = Parameter.FieldSprite;
 
         _hitPointRp.Value = Parameter.HitPoint;
         _manaPointRp.Value = Parameter.ManaPoint;

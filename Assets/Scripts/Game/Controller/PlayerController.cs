@@ -35,16 +35,17 @@ public class PlayerController : MonoBehaviour
             var clonedParameter = parameter.Clone();
             var isNpc = i >= _mainController.PlayerCount;
 
-            clonedParameter.IconSprite = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerIcon(playerId)).ToUniTask();
+            clonedParameter.BattleSprite = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerBattleImage(playerId)).ToUniTask();
+            clonedParameter.FieldSprite = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerFieldImage(playerId)).ToUniTask();
             clonedParameter.Name = isNpc ? $"{Constants.GetNpcNames(Settings.Language)[i]}" : $"{Constants.GetPlayerName(Settings.Language, playerId)}";
             InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i], isNpc);
         }
         _onPlayersInitialized.OnNext(PlayerList);
     }
 
-    private async Task InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector3 spawnPosition, bool isNpc)
+    private async Task InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector2 spawnPosition, bool isNpc)
     {
-        var playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity, _playerParent);
+        var playerGameObject = Instantiate(playerPrefab, new Vector3(spawnPosition.x, spawnPosition.y, playerPrefab.transform.position.z), playerPrefab.transform.rotation, _playerParent);
         var player = playerGameObject.GetComponent<Entity>();
 
         player.Initialize(clonedParameter, isNpc);

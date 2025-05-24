@@ -23,9 +23,12 @@ public class ControllableEntity : MonoBehaviour
 
     private int _remainingMoves = 0;
 
+    private Animator _animator;
+
     private void Start()
     {
         _transform = GetComponent<Transform>();
+        _animator = GetComponent<Animator>();
         _fieldController = FindFirstObjectByType<FieldController>();
         _mainController = FindFirstObjectByType<MainController>();
         _playerController = FindFirstObjectByType<PlayerController>();
@@ -214,12 +217,14 @@ public class ControllableEntity : MonoBehaviour
         Vector2 currentPos = _transform.position;
         Vector2 direction = (targetPos - currentPos).normalized;
 
+        _animator.SetBool("IsMoving", true);
         // 移動
         await UniTask.WaitUntil(() =>
         {
             _transform.position = Vector3.MoveTowards(_transform.position, targetPos, Constants.PlayerMoveSpeed * Time.deltaTime);
             return Vector3.Distance(_transform.position, targetPos) < 0.01f;
         });
+        _animator.SetBool("IsMoving", false);
 
         _remainingMoves--;
         _isMoving = false;

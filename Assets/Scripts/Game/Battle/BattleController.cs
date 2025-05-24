@@ -114,7 +114,7 @@ public class BattleController : MonoBehaviour
     {
         var rootLeftElement = _root.Q<VisualElement>("Element-Left");
         _entityImageLeft = rootLeftElement.Q<VisualElement>("Image-Entity");
-        _entityImageLeft.style.backgroundImage = _leftEntity.Parameter.IconSprite.texture;
+        _entityImageLeft.style.backgroundImage = _leftEntity.Parameter.BattleSprite.texture;
         _entityNameLeft = rootLeftElement.Q<Label>("Label-EntityName");
         _entityNameLeft.text = _leftEntity.name;
         _healthLabelLeft = rootLeftElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
@@ -125,7 +125,7 @@ public class BattleController : MonoBehaviour
 
         var rootRightElement = _root.Q<VisualElement>("Element-Right");
         _entityImageRight = rootRightElement.Q<VisualElement>("Image-Entity");
-        _entityImageRight.style.backgroundImage = _rightEntity.Parameter.IconSprite.texture;
+        _entityImageRight.style.backgroundImage = _rightEntity.Parameter.BattleSprite.texture;
         _entityNameRight = rootRightElement.Q<Label>("Label-EntityName");
         _entityNameRight.text = _rightEntity.name;
         _healthLabelRight = rootRightElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
@@ -358,7 +358,7 @@ public class BattleController : MonoBehaviour
                     _battleStatus = BattleStatus.SelectReword;
                     if (_winnerEntity.IsNpc)
                     {
-                        NpcActionController.SelectReword(this, _battleLogController).Forget();
+                        NpcActionController.SelectReward(this, _battleLogController).Forget();
                     }
                 }
                 else
@@ -467,7 +467,7 @@ public class BattleController : MonoBehaviour
             {
                 if (_winnerEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[i].Name) == null)
                 {
-                    rewardChoices.Add(i + 1);
+                    rewardChoices.Add(i);
                 }
             }
             return rewardChoices;

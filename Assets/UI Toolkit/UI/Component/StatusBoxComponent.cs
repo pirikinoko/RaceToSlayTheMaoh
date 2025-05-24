@@ -142,7 +142,7 @@ namespace UIToolkit
         {
             var parameter = entity.Parameter;
             _parameter = parameter;
-            _playerIcon.style.backgroundImage = parameter.IconSprite.texture;
+            _playerIcon.style.backgroundImage = parameter.BattleSprite.texture;
             _hitPointIcon.style.backgroundImage = heartIcon.texture;
             _manaPointIcon.style.backgroundImage = manaIcon.texture;
             _powerIcon.style.backgroundImage = powerIcon.texture;

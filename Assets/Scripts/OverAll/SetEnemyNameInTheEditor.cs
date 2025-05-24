@@ -37,12 +37,13 @@ public class SetEnemyPreferenceTheEditor : MonoBehaviour
         var entity = GetComponent<Entity>();
         var spriteRenderer = GetComponent<SpriteRenderer>();
 
-        string path = $"Assets/VisualAssets/Enemy/{entity.EntityType}.png";
+        string path = $"Assets/VisualAssets/Enemy/{entity.EntityType}OnField.png";
         var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
         if (sprite == null)
         {
-            Debug.LogWarning($"Texture not found at path: {path}");
-            return;
+            path = $"Assets/VisualAssets/Enemy/{entity.EntityType}.png";
+            sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            Debug.LogWarning($"{entity.EntityType}のフィールド用のスプライトが見つからなかったため戦闘用を使用します");
         }
 
         if (spriteRenderer != null && sprite != null)

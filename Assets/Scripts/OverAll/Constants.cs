@@ -9,10 +9,16 @@ public class Constants
     {
         return string.Format("Player{0}", playerId);
     }
-    public static string GetAssetReferencePlayerIcon(int playerId)
+    public static string GetAssetReferencePlayerBattleImage(int playerId)
     {
-        return string.Format("PlayerIcon{0}", playerId);
+        return string.Format("Player{0}BattleImage", playerId);
     }
+
+    public static string GetAssetReferencePlayerFieldImage(int playerId)
+    {
+        return string.Format("Player{0}FieldImage", playerId);
+    }
+
     public static string AssetReferenceEnemy = "Enemy";
     public static string AssetReferencePlayerIcon = "PlayerIcon";
     public static string AssetReferenceHeartIcon = "HeartIcon";
@@ -63,11 +69,11 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return new string[] { "Player1", "アレックス", "モーガン", "テイラー" };
+                return new string[] { "Player1", "Player2", "Player3", "Player4" };
             case Language.English:
-                return new string[] { "Hero", "Jordan", "Morgan", "Taylor" };
+                return new string[] { "Player1", "Player2", "Player3", "Player4" };
             default:
-                return new string[] { "Hero", "Jordan", "Morgan", "Taylor" };
+                return new string[] { "Player1", "Player2", "Player3", "Player4" };
         }
     }
 
@@ -105,14 +111,14 @@ public class Constants
     public static float CameraZoomFactor { get; set; } = 0.5f; // ズーム倍率を追加
 
     // ******* Field *******
-    public static Vector3 FieldCornerUpLeft { get; set; } = new Vector3(-5, -5, 0);
-    public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(-1, -5, 0);
-    public static Vector3 FieldCornerDownLeft { get; set; } = new Vector3(1, -5, 0);
-    public static Vector3 FieldCornerDownRight { get; set; } = new Vector3(5, -5, 0);
+    public static Vector2 FieldCornerUpLeft { get; set; } = new Vector2(-5, -5);
+    public static Vector2 FieldCornerUpRight { get; set; } = new Vector2(-1, -5);
+    public static Vector2 FieldCornerDownLeft { get; set; } = new Vector2(1, -5);
+    public static Vector2 FieldCornerDownRight { get; set; } = new Vector2(5, -5);
 
     public static LayerMask EntityLayerMask { get; set; } = LayerMask.GetMask("Entity");
 
-    public static Vector3[] PlayerSpownPositions { get; set; } =
+    public static Vector2[] PlayerSpownPositions { get; set; } =
     {
         FieldCornerUpLeft,
         FieldCornerUpRight,

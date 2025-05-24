@@ -17,7 +17,7 @@ public class Reward
     public class RewardParameter
     {
         public static int HpGain = 10;
-        public static int MpGain = 7;
+        public static int MpGain = 5;
         public static int PowerGain = 1;
     }
 
