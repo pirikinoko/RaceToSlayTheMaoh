@@ -198,7 +198,7 @@ public class BattleController : MonoBehaviour
     private void StartNewTurn()
     {
         _hasActionEnded = false;
-        ApplyCurrentBattleStatus(isInResult: false);
+        ApplyCurrentBattleStatus();
         bool isFirstTurn = _turnCount == 0;
 
         // _currentTurnEntityと_waitingTurnEntityを入れ替える
@@ -336,7 +336,7 @@ public class BattleController : MonoBehaviour
     private void OnActionEnded()
     {
         _hasActionEnded = true;
-        ApplyCurrentBattleStatus(isInResult: false);
+        ApplyCurrentBattleStatus();
         AddLogByCurrentBattleStatus();
     }
 
@@ -353,6 +353,7 @@ public class BattleController : MonoBehaviour
                 if (CheckAbnormalCondition())
                 {
                     _battleStatus = BattleStatus.CheckAbnormalCondition;
+                    ApplyCurrentBattleStatus();
                 }
                 else
                 {
@@ -400,14 +401,9 @@ public class BattleController : MonoBehaviour
     /// <summary>
     ///  現在のバトルステータスを判定する
     /// </summary>
-    /// <param name="isInResult"></param>
-    private void ApplyCurrentBattleStatus(bool isInResult)
+    private void ApplyCurrentBattleStatus()
     {
-        if (isInResult)
-        {
-            _battleStatus = BattleStatus.SelectReward;
-        }
-        else if (_leftEntity.Parameter.HitPoint <= 0)
+        if (_leftEntity.Parameter.HitPoint <= 0)
         {
             _battleStatus = BattleStatus.RightWin;
             _winnerEntity = _rightEntity;
@@ -597,7 +593,6 @@ public class BattleController : MonoBehaviour
             return rewardChoices;
         }
     }
-
 
     private void SetRewards()
     {
