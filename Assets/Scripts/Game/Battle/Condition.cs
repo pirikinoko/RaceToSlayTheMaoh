@@ -1,7 +1,7 @@
 public enum Condition
 {
     None,
-    Regeneration,
+    Regen,
     Poison,
     Stun,
     Fire,

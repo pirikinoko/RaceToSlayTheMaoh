@@ -3,6 +3,7 @@ using DG.Tweening;
 using R3;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
 public class BattleController : MonoBehaviour
@@ -179,13 +180,14 @@ public class BattleController : MonoBehaviour
         _battleStatus = BattleStatus.BeforeAction;
         _entityLeftsPreviousPos = entityLeftsPreviousPos;
 
+        _leftEntity = _currentTurnEntity = leftEntity;
+        _rightEntity = _waitingTurnEntity = rightEntity;
+
         DisplayBattleElement();
         CloseCommandView();
         CloseSkillScroll();
         CloseRewardView();
-
-        _leftEntity = _currentTurnEntity = leftEntity;
-        _rightEntity = _waitingTurnEntity = rightEntity;
+        SetConditionImage();
 
         SetEntities();
 
@@ -240,7 +242,6 @@ public class BattleController : MonoBehaviour
 
         _turnCountLabel.text = $"Turn:{_turnCount}";
     }
-
 
     private void BackToField()
     {
@@ -341,13 +342,27 @@ public class BattleController : MonoBehaviour
 
     private void OnAllLogsRead()
     {
-        if (_battleStatus == BattleStatus.AfterAction || _turnCount == 0)
+        if (_turnCount == 0)
         {
             StartNewTurn();
             return;
         }
         switch (_battleStatus)
         {
+            case BattleStatus.AfterAction:
+                if (CheckAbnormalCondition())
+                {
+                    _battleStatus = BattleStatus.CheckAbnormalCondition;
+                }
+                else
+                {
+                    StartNewTurn();
+                }
+                break;
+            case BattleStatus.CheckAbnormalCondition:
+                StartNewTurn();
+                break;
+
             case BattleStatus.LeftWin or BattleStatus.RightWin:
                 if (_winnerEntity.EntityType == EntityType.Player)
                 {
@@ -355,7 +370,7 @@ public class BattleController : MonoBehaviour
                     OpenRewardView();
                     SetRewards();
                     _battleLogController.AddLog(Constants.GetSentenceWhenSelectingReward(Settings.Language, _winnerEntity == _userController.MyEntity, _winnerEntity.name));
-                    _battleStatus = BattleStatus.SelectReword;
+                    _battleStatus = BattleStatus.SelectReward;
                     if (_winnerEntity.IsNpc)
                     {
                         NpcActionController.SelectReward(this, _battleLogController).Forget();
@@ -390,7 +405,7 @@ public class BattleController : MonoBehaviour
     {
         if (isInResult)
         {
-            _battleStatus = BattleStatus.SelectReword;
+            _battleStatus = BattleStatus.SelectReward;
         }
         else if (_leftEntity.Parameter.HitPoint <= 0)
         {
@@ -442,6 +457,115 @@ public class BattleController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 状態異常の際の処理を行う
+    /// </summary>
+    private bool CheckAbnormalCondition()
+    {
+        bool anyAbnormalCondition = false;
+        //　状態異常の画像をセット
+        SetConditionImage();
+
+        var currentTurnEntitiesCondition = _currentTurnEntity.GetAbnormalCondition().Condition;
+        switch (currentTurnEntitiesCondition)
+        {
+            case Condition.Poison:
+                int poisonDamage = (int)(_currentTurnEntity.Parameter.HitPoint * Constants.PoisonDamageRateOfHitPoint);
+                _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint - poisonDamage);
+                _battleLogController.AddLog(Constants.GetPoisonSentence(Settings.Language, _currentTurnEntity.name));
+                anyAbnormalCondition = true;
+                break;
+
+            case Condition.Fire:
+                int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
+                        Constants.FireDamage,
+                        Constants.FireDamageOffsetPercent,
+                        0
+                    );
+
+                _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint - damage);
+                _battleLogController.AddLog(Constants.GetFireDamageSentence(Settings.Language, _currentTurnEntity.name));
+                anyAbnormalCondition = true;
+                break;
+
+            case Condition.Regen:
+                int regenAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
+                        Constants.RegenAmount,
+                        Constants.RegenAmountOffsetPercent,
+                        20
+                    );
+                _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint + regenAmount);
+                _battleLogController.AddLog(Constants.GetRegenSentence(Settings.Language, _currentTurnEntity.name, regenAmount));
+                anyAbnormalCondition = true;
+                break;
+
+            default:
+                break;
+        }
+
+        var waitingTurnEntitiesCondition = _waitingTurnEntity.GetAbnormalCondition().Condition;
+        switch (waitingTurnEntitiesCondition)
+        {
+            case Condition.Stun:
+                _battleLogController.AddLog(Constants.GetStunSentence(Settings.Language, _waitingTurnEntity.name));
+                anyAbnormalCondition = true;
+                StartNewTurn();
+                StartNewTurn();
+                break;
+
+            default:
+                break;
+        }
+        return anyAbnormalCondition;
+    }
+
+    private void SetConditionImage()
+    {
+        var leftCondition = _leftEntity.GetAbnormalCondition().Condition;
+        var rightCondition = _rightEntity.GetAbnormalCondition().Condition;
+
+        var leftConditionImage = _root.Q<VisualElement>("Element-Left").Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon");
+        var rightConditionImage = _root.Q<VisualElement>("Element-Right").Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon");
+        switch (leftCondition)
+        {
+            case Condition.Poison:
+                leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferencePoisonCondition).WaitForCompletion().texture;
+                break;
+            case Condition.Regen:
+                leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceRegenCondition).WaitForCompletion().texture;
+                break;
+            case Condition.Stun:
+                leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceStunCondition).WaitForCompletion().texture;
+                break;
+            case Condition.Fire:
+                leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceFireCondition).WaitForCompletion().texture;
+                break;
+            default:
+                leftConditionImage.style.display = DisplayStyle.None;
+                break;
+        }
+
+        switch (rightCondition)
+        {
+            case Condition.Poison:
+                rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferencePoisonCondition).WaitForCompletion().texture;
+                break;
+            case Condition.Regen:
+                rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceRegenCondition).WaitForCompletion().texture;
+                break;
+            case Condition.Stun:
+                rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceStunCondition).WaitForCompletion().texture;
+                break;
+            case Condition.Fire:
+                rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceFireCondition).WaitForCompletion().texture;
+                break;
+            default:
+                rightConditionImage.style.display = DisplayStyle.None;
+                break;
+        }
+
+    }
+
     public void OnStatusRewardSelected()
     {
         string result = _currentReward.Execute(_winnerEntity);
@@ -489,7 +613,7 @@ public class BattleController : MonoBehaviour
         rewardButtons.Add(statusRewardButton);
 
         // スキル報酬のセット
-        List<Skill> loserSkills = _loserEntity.Parameter.Skills;
+        List<Skill> loserSkills = new List<Skill>(_loserEntity.Parameter.Skills);
         _currentRewardSkills = GetListOfRandomTwoElementsFromList(loserSkills);
 
         for (int i = 0; i < _currentRewardSkills.Count; i++)

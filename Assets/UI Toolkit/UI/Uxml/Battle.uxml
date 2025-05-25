@@ -7,7 +7,7 @@
                 <engine:VisualElement name="BattleElement" style="flex-grow: 1; flex-direction: row; display: flex;">
                     <engine:VisualElement name="Element-Left" style="flex-grow: 1; align-content: center; flex-shrink: 1; align-items: flex-start; align-self: auto; justify-content: flex-start; width: 0;">
                         <engine:Label text="Label" name="Label-EntityName" display-tooltip-when-elided="true" class="label entity-name__label" style="color: rgb(255, 255, 255); right: 100px; align-self: center; margin-top: 10px;" />
-                        <engine:VisualElement name="StatusElementContainer" class="statusElementContainer">
+                        <engine:VisualElement name="StatusElementContainer" class="statusElementContainer" style="left: 50px;">
                             <engine:VisualElement name="Element-HitPoint" class="statusElement">
                                 <engine:VisualElement name="Icon" class="statusIcon" />
                                 <engine:Label text="15" name="Label" class="statusLabel label" />
@@ -15,6 +15,9 @@
                             <engine:VisualElement name="Element-ManaPoint" class="statusElement">
                                 <engine:VisualElement name="Icon" class="statusIcon" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/Mana.png?fileID=2800000&amp;guid=c8ee15c3eb775dd4c9a2171c5a68a92b&amp;type=3#Mana&quot;);" />
                                 <engine:Label text="15" name="Label" class="statusLabel label" />
+                            </engine:VisualElement>
+                            <engine:VisualElement name="Element-Condition" class="statusElement">
+                                <engine:VisualElement name="Icon" class="statusIcon" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/Poison.png?fileID=2800000&amp;guid=690601d770425be4a8400e552965d958&amp;type=3#Poison&quot;);" />
                             </engine:VisualElement>
                         </engine:VisualElement>
                         <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/VisualAssets/Object/Players/Player1/Player1.png?fileID=2800000&amp;guid=fe5fe608913d1b749baf641cc1d6acac&amp;type=3#Player1&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: 200px; bottom: 30px;" />
@@ -22,7 +25,7 @@
                     <engine:Label text="Turn:1" emoji-fallback-support="true" name="Label-TurnCount" class="label" style="color: rgb(255, 255, 255); font-size: 60px; margin-top: 10px;" />
                     <engine:VisualElement name="Element-Right" style="flex-grow: 1; align-content: center; flex-shrink: 1; align-items: flex-end; align-self: auto; justify-content: flex-start; width: 0; flex-direction: column;">
                         <engine:Label text="Label" name="Label-EntityName" display-tooltip-when-elided="true" class="label entity-name__label" style="color: rgb(255, 255, 255); left: 100px; align-self: center; margin-top: 10px;" />
-                        <engine:VisualElement name="StatusElementContainer" class="statusElementContainer" style="left: auto; align-self: flex-end; right: 100px;">
+                        <engine:VisualElement name="StatusElementContainer" class="statusElementContainer" style="left: auto; align-self: flex-end; right: 100px; margin-right: -30px;">
                             <engine:VisualElement name="Element-HitPoint" class="statusElement">
                                 <engine:VisualElement name="Icon" class="statusIcon" />
                                 <engine:Label text="15" name="Label" class="statusLabel label" />
@@ -30,6 +33,9 @@
                             <engine:VisualElement name="Element-ManaPoint" class="statusElement">
                                 <engine:VisualElement name="Icon" class="statusIcon" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/Mana.png?fileID=2800000&amp;guid=c8ee15c3eb775dd4c9a2171c5a68a92b&amp;type=3#Mana&quot;);" />
                                 <engine:Label text="15" name="Label" class="statusLabel label" />
+                            </engine:VisualElement>
+                            <engine:VisualElement name="Element-Condition" class="statusElement">
+                                <engine:VisualElement name="Icon" class="statusIcon" style="background-image: url(&quot;project://database/Assets/VisualAssets/UI/Fire.png?fileID=2800000&amp;guid=f3037cf43720e384888edbd7a1eee09e&amp;type=3#Fire&quot;);" />
                             </engine:VisualElement>
                         </engine:VisualElement>
                         <engine:VisualElement name="Image-Entity" class="entity" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/VisualAssets/Enemy/Magician.png?fileID=2800000&amp;guid=4e0f599b690ec1947b3946fb4b695ac9&amp;type=3#Magician&quot;); align-self: auto; align-items: auto; -unity-background-scale-mode: scale-to-fit; left: auto; bottom: 30px; right: 200px;" />

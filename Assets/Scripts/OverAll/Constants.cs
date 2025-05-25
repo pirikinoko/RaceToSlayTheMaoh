@@ -27,6 +27,11 @@ public class Constants
     public static string AssetReferenceDamageNumberEffect = "DamageNumberEffect";
     public static string AssetReferenceCoffin = "Coffin";
 
+    public static string AssetReferenceFireCondition = "FireConditionIcon";
+    public static string AssetReferencePoisonCondition = "PoisonConditionIcon";
+    public static string AssetReferenceRegenCondition = "RegenConditionIcon";
+    public static string AssetReferenceStunCondition = "StunConditionIcon";
+
     // ******* General *******
     // 指定されたパーセンテージのオフセット内でランダムな値を返す
     // 例: baseValue = 100, offsetPercent = 20 の場合, 80から120の間でランダムな値を返す
@@ -372,6 +377,74 @@ public class Constants
 
     public static float ResultFadeAlpha { get; set; } = 0.8f;
     public static float ResultFadeDuration { get; set; } = 1.5f;
+
+    // ******* AbnormalCondition *******
+    public static int FireDamage { get; set; } = 2;
+    public static int FireDamageOffsetPercent { get; set; } = 50;
+    public static float PoisonDamageRateOfHitPoint { get; set; } = 0.2f;
+    public static int RegenAmount { get; set; } = 2;
+    public static int RegenAmountOffsetPercent { get; set; } = 50;
+
+    public static string GetPoisonSentence(Language language, string entityName)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}は毒のダメージを受けた", entityName);
+            case Language.English:
+                return string.Format("{0} is damaged by poison", entityName);
+            default:
+                return string.Format("{0} is damaged by poison", entityName);
+        }
+    }
+
+    public static string GetRegenSentence(Language language, string entityName, int regenAmount)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                if (regenAmount > 0)
+                    return string.Format("{0}は再生の力で回復した", entityName);
+                else
+                    return string.Format("体が再生し始めている", entityName);
+            case Language.English:
+                if (regenAmount > 0)
+                    return string.Format("{0} is healed by regeneration", entityName);
+                else
+                    return string.Format("{0} is starting to regenerate", entityName);
+            default:
+                if (regenAmount > 0)
+                    return string.Format("{0} is healed by regeneration", entityName);
+                else
+                    return string.Format("{0} is starting to regenerate", entityName);
+        }
+    }
+
+    public static string GetFireDamageSentence(Language language, string entityName)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}は炎のダメージを受けた", entityName);
+            case Language.English:
+                return string.Format("{0} is damaged by fire", entityName);
+            default:
+                return string.Format("{0} is damaged by fire", entityName);
+        }
+    }
+
+    public static string GetStunSentence(Language language, string entityName)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}は気絶して動けない", entityName);
+            case Language.English:
+                return string.Format("{0} is unable to move", entityName);
+            default:
+                return string.Format("{0} is unable to move", entityName);
+        }
+    }
 
     // ****** ImageEffectKey *******
     public static string ImageAnimationKeySlash = "SlashAnimationEffect";

@@ -27,6 +27,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Parameter
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f2db94f487680742b0dfce94110da53
+    m_Address: StunConditionIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 45c32b245d8d0b448be0faa883cf1545
     m_Address: Player3
     m_ReadOnly: 0

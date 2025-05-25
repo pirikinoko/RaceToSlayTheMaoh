@@ -41,6 +41,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 690601d770425be4a8400e552965d958
+    m_Address: Assets/VisualAssets/UI/Poison.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9ac73ed4eab31ff4d8f36b198f085fd8
     m_Address: Player4FieldImage
     m_ReadOnly: 0
@@ -71,6 +76,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e281157d40322ae4594e2f0d2f1faa95
+    m_Address: RegenConditionIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f026905c12b63f34fb7f2d9eee3128bf
     m_Address: Player4BattleImage
     m_ReadOnly: 0
@@ -83,6 +93,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f2a1731b04f68f341a3e2c855c44128c
     m_Address: MushRoom
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3037cf43720e384888edbd7a1eee09e
+    m_Address: FireConditionIcon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

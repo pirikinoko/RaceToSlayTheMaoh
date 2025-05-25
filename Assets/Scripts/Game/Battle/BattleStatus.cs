@@ -2,9 +2,10 @@ public enum BattleStatus
 {
     BeforeAction,
     AfterAction,
+    CheckAbnormalCondition,
     LeftWin,
     RightWin,
-    SelectReword,
+    SelectReward,
     BattleEnding,
     GameClear,
 }
