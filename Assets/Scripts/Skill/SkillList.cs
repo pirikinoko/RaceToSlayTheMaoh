@@ -24,8 +24,9 @@ public static class SkillList
 
     public enum SkillEffectType
     {
-        Buff,
-        Damage
+        Heal,
+        Damage,
+        Buff
     }
     #endregion
 
@@ -37,13 +38,13 @@ public static class SkillList
     {
         return skillName switch
         {
-            var name when name == GetSkillNameByLanguage(SkillType.Heal) => SkillEffectType.Buff,
+            var name when name == GetSkillNameByLanguage(SkillType.Heal) => SkillEffectType.Heal,
             var name when name == GetSkillNameByLanguage(SkillType.Bite) => SkillEffectType.Damage,
             var name when name == GetSkillNameByLanguage(SkillType.Ignition) => SkillEffectType.Damage,
             var name when name == GetSkillNameByLanguage(SkillType.Drain) => SkillEffectType.Damage,
             var name when name == GetSkillNameByLanguage(SkillType.Destroy) => SkillEffectType.Damage,
             var name when name == GetSkillNameByLanguage(SkillType.Regen) => SkillEffectType.Buff,
-            var name when name == GetSkillNameByLanguage(SkillType.SuperHeal) => SkillEffectType.Buff,
+            var name when name == GetSkillNameByLanguage(SkillType.SuperHeal) => SkillEffectType.Heal,
             var name when name == GetSkillNameByLanguage(SkillType.Training) => SkillEffectType.Buff,
             var name when name == GetSkillNameByLanguage(SkillType.Strike) => SkillEffectType.Damage,
             var name when name == GetSkillNameByLanguage(SkillType.PoisonMushroom) => SkillEffectType.Damage,

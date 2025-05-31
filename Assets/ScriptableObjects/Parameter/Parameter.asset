@@ -41,7 +41,7 @@ MonoBehaviour:
     BattleSprite: {fileID: 21300000, guid: f2a1731b04f68f341a3e2c855c44128c, type: 3}
     FieldSprite: {fileID: 21300000, guid: ad7990e0afdfac141853a8a75aabd60e, type: 3}
     Name: MushRoom
-    HitPoint: 10
+    HitPoint: 158
     ManaPoint: 3
     Power: 2
     SkillTypes: 03000000
@@ -75,7 +75,7 @@ MonoBehaviour:
     Name: Magician
     HitPoint: 15
     ManaPoint: 8
-    Power: 5
+    Power: 3
     SkillTypes: 06000000
   - EntityType: 8
     BattleSprite: {fileID: 21300000, guid: af713fbb749359b4ea2624e9da170491, type: 3}
@@ -83,8 +83,8 @@ MonoBehaviour:
     Name: Dullahan
     HitPoint: 20
     ManaPoint: 8
-    Power: 4
-    SkillTypes: 0900000006000000
+    Power: 3
+    SkillTypes: 09000000
   - EntityType: 9
     BattleSprite: {fileID: 21300000, guid: 51deeebefef47cf478d93159728eb67d, type: 3}
     FieldSprite: {fileID: 21300000, guid: 3dbe7276f4b49864fb69b83790a26153, type: 3}

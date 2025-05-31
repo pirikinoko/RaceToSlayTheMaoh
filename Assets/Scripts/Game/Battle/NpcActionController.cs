@@ -52,15 +52,22 @@ public static class NpcActionController
 
     public static async UniTask<string> DecideASkillToUseAsync(Entity acter, Entity target)
     {
-        var HealSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Buff);
+        var HealSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Heal);
         var DamageSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Damage);
+        var BuffSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Buff);
+
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var defaultParameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == acter.EntityType);
 
         var hasChanceOfDeath = acter.Parameter.HitPoint < target.Parameter.Power * 1.5f;
 
+        // バフスキルがあれば1/3の確率でバフスキルを返す
+        if (BuffSkills.Count > 0 && Random.Range(0, 3) == 0)
+        {
+            return BuffSkills[Random.Range(0, BuffSkills.Count)].Name;
+        }
         // 回復スキルがありHPが相手の攻撃力以下の場合は回復スキルを返す
-        if (HealSkills.Count > 0 && hasChanceOfDeath)
+        else if (HealSkills.Count > 0 && hasChanceOfDeath)
         {
             return HealSkills[Random.Range(0, HealSkills.Count)].Name;
         }

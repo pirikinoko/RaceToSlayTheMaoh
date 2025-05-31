@@ -43,7 +43,10 @@ public class EnemyController : MonoBehaviour
 
     private EntityType GetRandomEntityIdentifier()
     {
-        Array values = Enum.GetValues(typeof(EntityType));
+        var values = Enum.GetValues(typeof(EntityType))
+            .Cast<EntityType>()
+            .Where(entityType => entityType != EntityType.Satan)
+            .ToArray();
         int randomIndex = UnityEngine.Random.Range(1, values.Length);
         return (EntityType)values.GetValue(randomIndex);
     }

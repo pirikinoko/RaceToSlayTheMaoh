@@ -15,6 +15,7 @@ public class BattleLogController : MonoBehaviour
 
     private bool isFlipable;
 
+
     public void Initialize(Label logLabel)
     {
         _label = logLabel;
@@ -63,5 +64,15 @@ public class BattleLogController : MonoBehaviour
         _logs.Clear();
         _label.text = string.Empty;
         isFlipable = false;
+    }
+
+    public void PauseFlip()
+    {
+        isFlipable = false;
+    }
+
+    public void ResumeFlip()
+    {
+        isFlipable = true;
     }
 }

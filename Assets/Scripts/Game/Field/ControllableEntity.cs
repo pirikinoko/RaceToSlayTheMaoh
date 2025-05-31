@@ -262,9 +262,12 @@ public class ControllableEntity : MonoBehaviour
 
         // ゴール候補（Entityの位置）をHashSetで取得
         var entityPositions = new HashSet<Vector2>();
+
+        // 一番近い敵がプレイヤーであることが多いため二分の一の確率でプレイヤーは除外する
+        bool includePlayersAsTarget = UnityEngine.Random.Range(0, 2) == 0;
         foreach (var player in _playerController.PlayerList)
         {
-            if (player != this.GetComponent<Entity>() && Vector2.Distance(player.transform.position, _transform.position) > 0.1f && player.IsAlive)
+            if (includePlayersAsTarget && player != this.GetComponent<Entity>() && Vector2.Distance(player.transform.position, _transform.position) > 0.1f && player.IsAlive)
                 entityPositions.Add((Vector2)player.transform.position);
         }
         foreach (var enemy in _enemyController.EnemyList)

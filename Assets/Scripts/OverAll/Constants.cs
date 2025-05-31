@@ -130,8 +130,8 @@ public class Constants
         FieldCornerDownLeft,
         FieldCornerDownRight
     };
-    public static Vector2 ScaleForActivePlayerStatusBox { get; set; } = new Vector2(1.0f, 1.0f);
-    public static Vector2 ScaleForWaitingPlayersStatusBox { get; set; } = new Vector2(0.7f, 0.7f);
+    public static Vector2 ScaleForActivePlayerStatusBox { get; set; } = new Vector2(0.9f, 0.9f);
+    public static Vector2 ScaleForWaitingPlayersStatusBox { get; set; } = new Vector2(0.55f, 0.55f);
 
     public static float DelayBeforeNewTurnSeconds { get; set; } = 0.6f;
 

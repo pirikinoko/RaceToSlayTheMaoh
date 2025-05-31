@@ -268,6 +268,8 @@ public class BattleController : MonoBehaviour
     {
         // 「○○の攻撃！」のログ
         _battleLogController.AddLog(Constants.GetAttackSentence(Settings.Language, _currentTurnEntity.name));
+        _battleLogController.PauseFlip();
+
         // ステップアニメーションを実行
         await AnimateEntityStepAsync(_currentTurnEntity);
         // 攻撃時のエフェクトを再生
@@ -277,9 +279,13 @@ public class BattleController : MonoBehaviour
         int damage = _currentTurnEntity.Attack(_waitingTurnEntity);
 
         // 結果のログ
-        _battleLogController.AddLog(Constants.GetAttackResultSentence(Settings.Language, _waitingTurnEntity.name, damage));
+        if (damage == 0)
+        {
+            _battleLogController.AddLog(Constants.GetAttackResultSentence(Settings.Language, _waitingTurnEntity.name, damage));
+        }
 
         OnActionEnded();
+        _battleLogController.ResumeFlip();
     }
 
     public void UseSkill(string skillName)
@@ -292,6 +298,7 @@ public class BattleController : MonoBehaviour
     {
         // 「○○のヒール！」(例)のログ
         _battleLogController.AddLog(Constants.GetSkillSentence(Settings.Language, _currentTurnEntity.name, skillName));
+        _battleLogController.PauseFlip();
 
         // ステップアニメーションを実行
         await AnimateEntityStepAsync(_currentTurnEntity);
@@ -302,7 +309,7 @@ public class BattleController : MonoBehaviour
 
         var skillEffectType = SkillList.GetSkillEffectType(skillName);
         // スキルのエフェクトを再生
-        if (skillEffectType == SkillList.SkillEffectType.Buff)
+        if (skillEffectType == SkillList.SkillEffectType.Heal)
         {
             await PlayImageAnimationAsync(result.EffectKey, _currentTurnEntity);
         }
@@ -311,14 +318,14 @@ public class BattleController : MonoBehaviour
             await PlayImageAnimationAsync(result.EffectKey, _waitingTurnEntity);
         }
 
-
         // スキルの結果のログ
-        foreach (var log in result.Logs)
-        {
-            _battleLogController.AddLog(log);
-        }
+        // foreach (var log in result.Logs)
+        // {
+        //     _battleLogController.AddLog(log);
+        // }
 
         OnActionEnded();
+        _battleLogController.ResumeFlip();
     }
 
     private void OnOpenSkillScrollClicked()
@@ -423,7 +430,7 @@ public class BattleController : MonoBehaviour
         {
             _battleStatus = BattleStatus.BeforeAction;
         }
-        else
+        else if (_battleStatus != BattleStatus.CheckAbnormalCondition)
         {
             _battleStatus = BattleStatus.AfterAction;
         }
