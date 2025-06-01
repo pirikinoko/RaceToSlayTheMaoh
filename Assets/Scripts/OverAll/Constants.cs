@@ -109,6 +109,7 @@ public class Constants
     public static int MaxHitPoint { get; set; } = 50;
     public static int MaxManaPoint { get; set; } = 30;
     public static int AttackOffsetPercent { get; set; } = 50;
+    public static int AttackMissRatePercent { get; set; } = 10;
 
     // ******* Camera *******
     public static float CameraMoveDuration { get; set; } = 1f;
@@ -382,8 +383,8 @@ public class Constants
     public static int FireDamage { get; set; } = 2;
     public static int FireDamageOffsetPercent { get; set; } = 50;
     public static float PoisonDamageRateOfHitPoint { get; set; } = 0.2f;
-    public static int RegenAmount { get; set; } = 2;
-    public static int RegenAmountOffsetPercent { get; set; } = 50;
+    public static int RegenAmount { get; set; } = 1;
+    public static int RegenAmountOffsetPercent { get; set; } = 100;
 
     public static string GetPoisonSentence(Language language, string entityName)
     {
@@ -406,7 +407,7 @@ public class Constants
                 if (regenAmount > 0)
                     return string.Format("{0}は再生の力で回復した", entityName);
                 else
-                    return string.Format("体が再生し始めている", entityName);
+                    return string.Format("{0}は体が再生し始めている", entityName);
             case Language.English:
                 if (regenAmount > 0)
                     return string.Format("{0} is healed by regeneration", entityName);

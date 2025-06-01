@@ -41,7 +41,7 @@ MonoBehaviour:
     BattleSprite: {fileID: 21300000, guid: f2a1731b04f68f341a3e2c855c44128c, type: 3}
     FieldSprite: {fileID: 21300000, guid: ad7990e0afdfac141853a8a75aabd60e, type: 3}
     Name: MushRoom
-    HitPoint: 158
+    HitPoint: 15
     ManaPoint: 3
     Power: 2
     SkillTypes: 03000000

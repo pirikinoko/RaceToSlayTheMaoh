@@ -42,7 +42,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 690601d770425be4a8400e552965d958
-    m_Address: Assets/VisualAssets/UI/Poison.png
+    m_Address: PoisonConditionIcon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
