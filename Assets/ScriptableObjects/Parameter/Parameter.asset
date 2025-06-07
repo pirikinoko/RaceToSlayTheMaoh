@@ -33,7 +33,7 @@ MonoBehaviour:
     BattleSprite: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
     FieldSprite: {fileID: 21300000, guid: e03843a4d024fba4bb9c2105376b3d11, type: 3}
     Name: Bat
-    HitPoint: 8
+    HitPoint: 7
     ManaPoint: 3
     Power: 2
     SkillTypes: 02000000
@@ -41,7 +41,7 @@ MonoBehaviour:
     BattleSprite: {fileID: 21300000, guid: f2a1731b04f68f341a3e2c855c44128c, type: 3}
     FieldSprite: {fileID: 21300000, guid: ad7990e0afdfac141853a8a75aabd60e, type: 3}
     Name: MushRoom
-    HitPoint: 15
+    HitPoint: 7
     ManaPoint: 3
     Power: 2
     SkillTypes: 03000000
@@ -49,7 +49,7 @@ MonoBehaviour:
     BattleSprite: {fileID: 21300000, guid: bd8199a4fa9c05549a4083575f74526b, type: 3}
     FieldSprite: {fileID: 21300000, guid: a9548bf485a3fe44db89e60e9f47c172, type: 3}
     Name: AxeMan
-    HitPoint: 15
+    HitPoint: 10
     ManaPoint: 3
     Power: 2
     SkillTypes: 0a000000
@@ -57,39 +57,39 @@ MonoBehaviour:
     BattleSprite: {fileID: 21300000, guid: fe3b428935b89034aa55947675d47ba0, type: 3}
     FieldSprite: {fileID: 21300000, guid: e92d5b76177d7d2408c91970b53d85f7, type: 3}
     Name: SwordMan
-    HitPoint: 12
+    HitPoint: 10
     ManaPoint: 5
-    Power: 3
+    Power: 2
     SkillTypes: 04000000
   - EntityType: 6
     BattleSprite: {fileID: 21300000, guid: 5ddb43dcafe8e074a94c8f1a0e57629d, type: 3}
     FieldSprite: {fileID: 21300000, guid: 0341b7a3f41a8ac42b2a0930a18bdbfd, type: 3}
     Name: ShieldMan
-    HitPoint: 20
+    HitPoint: 10
     ManaPoint: 4
     Power: 2
-    SkillTypes: 04000000
+    SkillTypes: 05000000
   - EntityType: 7
     BattleSprite: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
     FieldSprite: {fileID: 21300000, guid: da477b8e98a563149b366d626eeb9832, type: 3}
     Name: Magician
-    HitPoint: 15
-    ManaPoint: 8
-    Power: 3
+    HitPoint: 12
+    ManaPoint: 6
+    Power: 2
     SkillTypes: 06000000
   - EntityType: 8
     BattleSprite: {fileID: 21300000, guid: af713fbb749359b4ea2624e9da170491, type: 3}
     FieldSprite: {fileID: 21300000, guid: 6d69ca5ac16fcad47b75a1608c52b754, type: 3}
     Name: Dullahan
-    HitPoint: 20
-    ManaPoint: 8
-    Power: 3
+    HitPoint: 12
+    ManaPoint: 6
+    Power: 2
     SkillTypes: 09000000
   - EntityType: 9
     BattleSprite: {fileID: 21300000, guid: 51deeebefef47cf478d93159728eb67d, type: 3}
     FieldSprite: {fileID: 21300000, guid: 3dbe7276f4b49864fb69b83790a26153, type: 3}
     Name: Satan
-    HitPoint: 30
-    ManaPoint: 12
-    Power: 4
+    HitPoint: 20
+    ManaPoint: 10
+    Power: 3
     SkillTypes: 0700000006000000

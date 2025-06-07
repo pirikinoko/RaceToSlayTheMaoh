@@ -263,18 +263,21 @@ public class ControllableEntity : MonoBehaviour
         // ゴール候補（Entityの位置）をHashSetで取得
         var entityPositions = new HashSet<Vector2>();
 
-        // 一番近い敵がプレイヤーであることが多いため二分の一の確率でプレイヤーは除外する
-        bool includePlayersAsTarget = UnityEngine.Random.Range(0, 2) == 0;
-        foreach (var player in _playerController.PlayerList)
-        {
-            if (includePlayersAsTarget && player != this.GetComponent<Entity>() && Vector2.Distance(player.transform.position, _transform.position) > 0.1f && player.IsAlive)
-                entityPositions.Add((Vector2)player.transform.position);
-        }
+        // 一番近い敵がプレイヤーであることが多いため3分の2の確率でプレイヤーは除外する
+        bool includePlayersAsTarget = UnityEngine.Random.Range(0, 3) == 0;
+
         foreach (var enemy in _enemyController.EnemyList)
         {
             if (enemy != this.GetComponent<Entity>() && Vector2.Distance(enemy.transform.position, _transform.position) > 0.1f && enemy.IsAlive)
                 entityPositions.Add((Vector2)enemy.transform.position);
         }
+
+        foreach (var player in _playerController.PlayerList)
+        {
+            if (includePlayersAsTarget && player != this.GetComponent<Entity>() && Vector2.Distance(player.transform.position, _transform.position) > 0.1f && player.IsAlive)
+                entityPositions.Add((Vector2)player.transform.position);
+        }
+
 
         // BFS用キュー: (現在地, 経路)
         var queue = new Queue<(Vector2 pos, Queue<Vector2> path)>();

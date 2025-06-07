@@ -18,7 +18,6 @@ public class Reward
     {
         public static int HpGain = 10;
         public static int MpGain = 5;
-        public static int PowerGain = 1;
     }
 
     private void SetRandomReword()
@@ -28,7 +27,6 @@ public class Reward
         {
             (IncreaseHealth, $"HPが{RewardParameter.HpGain}ポイント増加する"),
             (IncreaseMana, $"MPが{RewardParameter.MpGain}ポイント増加する"),
-            (IncreasePower, $"攻撃力が{RewardParameter.PowerGain}ポイント増加する")
         };
 
         // ランダムにインデックスを選択
@@ -51,12 +49,6 @@ public class Reward
         int newMp = target.Parameter.ManaPoint + RewardParameter.MpGain;
         target.SetManaPoint(newMp);
         return $"{target.name}のMPが{RewardParameter.MpGain}ポイント増加した！";
-    }
-
-    private string IncreasePower(Entity target)
-    {
-        target.Parameter.Power += RewardParameter.PowerGain;
-        return $"{target.name}の攻撃力が{RewardParameter.PowerGain}ポイント増加した！";
     }
 
     public string Execute(Entity target)

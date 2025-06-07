@@ -126,6 +126,7 @@ public class BattleController : MonoBehaviour
 
         _healthLabelLeft.text = _leftEntity.Parameter.HitPoint.ToString();
         _manaLabelLeft.text = _leftEntity.Parameter.ManaPoint.ToString();
+        _root.Q<VisualElement>("Element-Left").Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon").style.backgroundImage = null;
 
         var rootRightElement = _root.Q<VisualElement>("Element-Right");
         _entityImageRight = rootRightElement.Q<VisualElement>("Image-Entity");
@@ -134,6 +135,7 @@ public class BattleController : MonoBehaviour
         _entityNameRight.text = _rightEntity.name;
         _healthLabelRight = rootRightElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
         _manaLabelRight = rootRightElement.Q<VisualElement>("Element-ManaPoint").Q<Label>("Label");
+        _root.Q<VisualElement>("Element-Right").Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon").style.backgroundImage = null;
 
         _healthLabelRight.text = _rightEntity.Parameter.HitPoint.ToString();
         _manaLabelRight.text = _rightEntity.Parameter.ManaPoint.ToString();
@@ -494,7 +496,7 @@ public class BattleController : MonoBehaviour
                 int regenAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                         Constants.RegenAmount,
                         Constants.RegenAmountOffsetPercent,
-                        20
+                        30
                     );
                 _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint + regenAmount);
                 _battleLogController.AddLog(Constants.GetRegenSentence(Settings.Language, _currentTurnEntity.name, regenAmount));
@@ -542,9 +544,6 @@ public class BattleController : MonoBehaviour
             case Condition.Fire:
                 leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceFireCondition).WaitForCompletion().texture;
                 break;
-            default:
-                leftConditionImage.style.display = DisplayStyle.None;
-                break;
         }
 
         switch (rightCondition)
@@ -560,9 +559,6 @@ public class BattleController : MonoBehaviour
                 break;
             case Condition.Fire:
                 rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceFireCondition).WaitForCompletion().texture;
-                break;
-            default:
-                rightConditionImage.style.display = DisplayStyle.None;
                 break;
         }
     }

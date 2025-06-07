@@ -62,7 +62,7 @@ public static class NpcActionController
         var hasChanceOfDeath = acter.Parameter.HitPoint < target.Parameter.Power * 1.5f;
 
         // バフスキルがあれば1/3の確率でバフスキルを返す
-        if (BuffSkills.Count > 0 && Random.Range(0, 3) == 0)
+        if (acter.GetAbnormalCondition().Condition != Condition.Regen && BuffSkills.Count > 0 && Random.Range(0, 3) == 0)
         {
             return BuffSkills[Random.Range(0, BuffSkills.Count)].Name;
         }
@@ -111,7 +111,7 @@ public static class NpcActionController
 
         int randomValue = Random.Range(0, battleController.RewardChoices.Count);
         int reward = battleController.RewardChoices[randomValue];
-        Debug.Log($"選択された報酬: {reward}");
+
         if (randomValue == 0)
         {
             battleController.OnStatusRewardSelected();

@@ -46,7 +46,7 @@ public class Entity : MonoBehaviour
     public int Attack(Entity target)
     {
         // 攻撃力のポテンシャルのオフセット内でランダムな値を返す
-        int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(AttackPower, Constants.AttackOffsetPercent, Constants.AttackMissRatePercent);
+        int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(AttackPower, Constants.AttackOffsetPercent, Constants.MissPotentialOnEveryDamageAction);
         target.SetHitPoint(target.Parameter.HitPoint - damage);
         return damage;
     }

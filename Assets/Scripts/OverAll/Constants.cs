@@ -98,8 +98,7 @@ public class Constants
 
     // ******* Main *******
     public static int MaxPlayerCountIncludingNpc { get; set; } = 4;
-    public static int MinPlayerCount { get; set; } = 1;
-    public static int MaxDiceValue { get; set; } = 3;
+    public static int MaxDiceValue { get; set; } = 4;
     public static float DiceRollUpdateInterval { get; set; } = 0.02f;
     public static int DiceHighlightBlinkCount { get; set; } = 5;
     public static float DiceHighlightBlinkInterval { get; set; } = 0.15f;
@@ -108,8 +107,7 @@ public class Constants
 
     public static int MaxHitPoint { get; set; } = 50;
     public static int MaxManaPoint { get; set; } = 30;
-    public static int AttackOffsetPercent { get; set; } = 50;
-    public static int AttackMissRatePercent { get; set; } = 10;
+    public static int AttackOffsetPercent { get; set; } = 100;
 
     // ******* Camera *******
     public static float CameraMoveDuration { get; set; } = 1f;
