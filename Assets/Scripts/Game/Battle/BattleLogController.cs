@@ -38,8 +38,6 @@ public class BattleLogController : MonoBehaviour
     {
         _logs.Enqueue(log);
         _label.text = _logs.Peek();
-
-        isFlipable = true;
     }
 
     public void FlipLog()
@@ -66,12 +64,7 @@ public class BattleLogController : MonoBehaviour
         isFlipable = false;
     }
 
-    public void PauseFlip()
-    {
-        isFlipable = false;
-    }
-
-    public void ResumeFlip()
+    public void EnableFlip()
     {
         isFlipable = true;
     }

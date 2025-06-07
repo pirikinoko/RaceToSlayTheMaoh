@@ -195,6 +195,7 @@ public class BattleController : MonoBehaviour
 
         _battleLogController.ClearLogs();
         _battleLogController.AddLog(Constants.GetSentenceWhenStartBattle(Settings.Language.ToString(), _leftEntity.name, _rightEntity.name));
+        _battleLogController.EnableFlip();
     }
     private void StartNewTurn()
     {
@@ -262,7 +263,6 @@ public class BattleController : MonoBehaviour
     {
         // 「○○の攻撃！」のログ
         _battleLogController.AddLog(Constants.GetAttackSentence(Settings.Language, _currentTurnEntity.name));
-        _battleLogController.PauseFlip();
 
         // ステップアニメーションを実行
         await AnimateEntityStepAsync(_currentTurnEntity);
@@ -279,7 +279,7 @@ public class BattleController : MonoBehaviour
         }
 
         OnActionEnded();
-        ResumeFlipIfAllReactiveAnimationsEndsAsync().Forget();
+        await ResumeFlipIfAllReactiveAnimationsEndsAsync();
     }
 
     public void UseSkill(string skillName)
@@ -292,14 +292,12 @@ public class BattleController : MonoBehaviour
     {
         // 「○○のヒール！」(例)のログ
         _battleLogController.AddLog(Constants.GetSkillSentence(Settings.Language, _currentTurnEntity.name, skillName));
-        _battleLogController.PauseFlip();
 
         // ステップアニメーションを実行
         await AnimateEntityStepAsync(_currentTurnEntity);
 
         // スキルの使用
         Skill.SkillResult result = _currentTurnEntity.UseSkill(skillName, _currentTurnEntity, _waitingTurnEntity);
-
 
         var skillEffectType = SkillList.GetSkillEffectType(skillName);
         // スキルのエフェクトを再生
@@ -319,7 +317,7 @@ public class BattleController : MonoBehaviour
         // }
 
         OnActionEnded();
-        ResumeFlipIfAllReactiveAnimationsEndsAsync().Forget();
+        await ResumeFlipIfAllReactiveAnimationsEndsAsync();
     }
 
     private void OnOpenSkillScrollClicked()
@@ -348,20 +346,20 @@ public class BattleController : MonoBehaviour
             StartNewTurn();
             return;
         }
+
         switch (_battleStatus)
         {
             case BattleStatus.AfterAction:
-                _battleLogController.PauseFlip();
                 if (CheckAbnormalCondition())
                 {
                     _battleStatus = BattleStatus.CheckAbnormalCondition;
                     ApplyCurrentBattleStatus();
+                    ResumeFlipIfAllReactiveAnimationsEndsAsync().Forget();
                 }
                 else
                 {
                     StartNewTurn();
                 }
-                ResumeFlipIfAllReactiveAnimationsEndsAsync().Forget();
                 break;
             case BattleStatus.CheckAbnormalCondition:
                 StartNewTurn();
@@ -374,6 +372,7 @@ public class BattleController : MonoBehaviour
                     OpenRewardView();
                     SetRewards();
                     _battleLogController.AddLog(Constants.GetSentenceWhenSelectingReward(Settings.Language, _winnerEntity == _userController.MyEntity, _winnerEntity.name));
+                    _battleLogController.EnableFlip();
                     _battleStatus = BattleStatus.SelectReward;
                     if (_winnerEntity.IsNpc)
                     {
@@ -383,6 +382,7 @@ public class BattleController : MonoBehaviour
                 else
                 {
                     _battleLogController.AddLog(Constants.GetSentenceWhenEnemyWins(Settings.Language, _winnerEntity.name));
+                    _battleLogController.EnableFlip();
                     _battleStatus = BattleStatus.BattleEnding;
                 }
                 break;
@@ -445,13 +445,16 @@ public class BattleController : MonoBehaviour
                 return;
             case BattleStatus.LeftWin:
                 _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _winnerEntity.name, _loserEntity.name));
+                _battleLogController.EnableFlip();
                 break;
             case BattleStatus.RightWin:
                 _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _winnerEntity.name, _loserEntity.name));
+                _battleLogController.EnableFlip();
                 break;
             case BattleStatus.GameClear:
                 _battleLogController.AddLog(Constants.GetResultSentence(Settings.Language, _winnerEntity.name, _loserEntity.name));
                 _battleLogController.AddLog(Constants.GetSentenceWhenGameClear(Settings.Language, _winnerEntity.name));
+                _battleLogController.EnableFlip();
                 break;
         }
     }
@@ -562,13 +565,13 @@ public class BattleController : MonoBehaviour
                 rightConditionImage.style.display = DisplayStyle.None;
                 break;
         }
-
     }
 
     public void OnStatusRewardSelected()
     {
         string result = _currentReward.Execute(_winnerEntity);
         _battleLogController.AddLog(result);
+        _battleLogController.EnableFlip();
         CloseRewardView();
         _battleStatus = BattleStatus.BattleEnding;
     }
@@ -577,6 +580,7 @@ public class BattleController : MonoBehaviour
     {
         AddSkillToWinnerEntity(_currentRewardSkills[index], out string log);
         _battleLogController.AddLog(log);
+        _battleLogController.EnableFlip();
         CloseRewardView();
         _battleStatus = BattleStatus.BattleEnding;
     }
@@ -912,10 +916,11 @@ public class BattleController : MonoBehaviour
 
     private async UniTask ResumeFlipIfAllReactiveAnimationsEndsAsync()
     {
+        await UniTask.DelayFrame(2);
         while (!AreAllReactiveAnimationsEnded())
         {
             await UniTask.Delay(200);
         }
-        _battleLogController.ResumeFlip();
+        _battleLogController.EnableFlip();
     }
 }
