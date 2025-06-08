@@ -44,11 +44,16 @@ public class BattleController : MonoBehaviour
     private VisualElement _skillView;
     private VisualElement _skillScrollContainer;
 
+    private VisualElement _currentActionerArrowLeft;
+    private VisualElement _currentActionerArrowRight;
     private Label _entityNameLeft;
     private Label _entityNameRight;
 
     private VisualElement _entityImageLeft;
     private VisualElement _entityImageRight;
+
+    private VisualElement _leftConditionImage;
+    private VisualElement _rightConditionImage;
 
     private Button _closeSkillScrollViewButton;
     private List<(Button, int)> _skillButtons = new();
@@ -103,6 +108,24 @@ public class BattleController : MonoBehaviour
         _root.Q<Button>("Button-Skill").clicked += OnOpenSkillScrollClicked;
         _closeSkillScrollViewButton = _root.Q<Button>("Button-CloseSkillScroll");
         _closeSkillScrollViewButton.clicked += OnCloseSkillScrollClicked;
+
+        var rootLeftElement = _root.Q<VisualElement>("Element-Left");
+        _entityImageLeft = rootLeftElement.Q<VisualElement>("Image-Entity");
+        _entityNameLeft = rootLeftElement.Q<Label>("Label-EntityName");
+        _currentActionerArrowLeft = rootLeftElement.Q<VisualElement>("Image-Arrow");
+
+        _healthLabelLeft = rootLeftElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
+        _manaLabelLeft = rootLeftElement.Q<VisualElement>("Element-ManaPoint").Q<Label>("Label");
+        _leftConditionImage = rootLeftElement.Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon");
+
+        var rootRightElement = _root.Q<VisualElement>("Element-Right");
+        _entityImageRight = rootRightElement.Q<VisualElement>("Image-Entity");
+        _entityNameRight = rootRightElement.Q<Label>("Label-EntityName");
+        _currentActionerArrowRight = rootRightElement.Q<VisualElement>("Image-Arrow");
+
+        _healthLabelRight = rootRightElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
+        _manaLabelRight = rootRightElement.Q<VisualElement>("Element-ManaPoint").Q<Label>("Label");
+        _rightConditionImage = rootRightElement.Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon");
     }
 
     private void InitializeBattleLogController()
@@ -116,29 +139,21 @@ public class BattleController : MonoBehaviour
 
     private void SetEntities()
     {
-        var rootLeftElement = _root.Q<VisualElement>("Element-Left");
-        _entityImageLeft = rootLeftElement.Q<VisualElement>("Image-Entity");
-        _entityImageLeft.style.backgroundImage = _leftEntity.Parameter.BattleSprite.texture;
-        _entityNameLeft = rootLeftElement.Q<Label>("Label-EntityName");
+        // 左側のエンティティのUIの設定
         _entityNameLeft.text = _leftEntity.name;
-        _healthLabelLeft = rootLeftElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
-        _manaLabelLeft = rootLeftElement.Q<VisualElement>("Element-ManaPoint").Q<Label>("Label");
+        _entityImageLeft.style.backgroundImage = _leftEntity.Parameter.BattleSprite.texture;
 
         _healthLabelLeft.text = _leftEntity.Parameter.HitPoint.ToString();
         _manaLabelLeft.text = _leftEntity.Parameter.ManaPoint.ToString();
-        _root.Q<VisualElement>("Element-Left").Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon").style.backgroundImage = null;
+        _leftConditionImage.style.display = DisplayStyle.None;
 
-        var rootRightElement = _root.Q<VisualElement>("Element-Right");
-        _entityImageRight = rootRightElement.Q<VisualElement>("Image-Entity");
-        _entityImageRight.style.backgroundImage = _rightEntity.Parameter.BattleSprite.texture;
-        _entityNameRight = rootRightElement.Q<Label>("Label-EntityName");
+        // 右側のエンティティのUIの設定
         _entityNameRight.text = _rightEntity.name;
-        _healthLabelRight = rootRightElement.Q<VisualElement>("Element-HitPoint").Q<Label>("Label");
-        _manaLabelRight = rootRightElement.Q<VisualElement>("Element-ManaPoint").Q<Label>("Label");
-        _root.Q<VisualElement>("Element-Right").Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon").style.backgroundImage = null;
+        _entityImageRight.style.backgroundImage = _rightEntity.Parameter.BattleSprite.texture;
 
         _healthLabelRight.text = _rightEntity.Parameter.HitPoint.ToString();
         _manaLabelRight.text = _rightEntity.Parameter.ManaPoint.ToString();
+        _rightConditionImage.style.display = DisplayStyle.None;
 
         _winnerEntity = null;
         _loserEntity = null;
@@ -187,6 +202,9 @@ public class BattleController : MonoBehaviour
         _leftEntity = _currentTurnEntity = leftEntity;
         _rightEntity = _waitingTurnEntity = rightEntity;
 
+        _currentActionerArrowLeft.style.visibility = Visibility.Visible;
+        _currentActionerArrowRight.style.visibility = Visibility.Hidden;
+
         DisplayBattleElement();
         CloseCommandView();
         CloseSkillScroll();
@@ -202,8 +220,8 @@ public class BattleController : MonoBehaviour
     private void StartNewTurn()
     {
         _hasActionEnded = false;
+        _battleStatus = BattleStatus.BeforeAction;
 
-        ApplyCurrentBattleStatus();
         bool isFirstTurn = _turnCount == 0;
 
         // _currentTurnEntityと_waitingTurnEntityを入れ替える
@@ -212,8 +230,42 @@ public class BattleController : MonoBehaviour
             Entity tmp = _currentTurnEntity;
             _currentTurnEntity = _waitingTurnEntity;
             _waitingTurnEntity = tmp;
+            SwitchArrowVisibility();
         }
 
+        // ターン数を更新
+        if (_currentTurnEntity == _leftEntity)
+        {
+            _turnCount++;
+        }
+
+        if (_currentTurnEntity.GetAbnormalCondition().Condition == Condition.Stun)
+        {
+            _currentTurnEntity.SetAbnormalCondition(new AbnormalCondition { Condition = Condition.None });
+            SetConditionImage();
+            StartNewTurn();
+            return;
+        }
+
+        HandleTurnStartActions();
+    }
+
+    private void SwitchArrowVisibility()
+    {
+        if (_currentTurnEntity == _leftEntity)
+        {
+            _currentActionerArrowLeft.style.visibility = Visibility.Visible;
+            _currentActionerArrowRight.style.visibility = Visibility.Hidden;
+        }
+        else
+        {
+            _currentActionerArrowLeft.style.visibility = Visibility.Hidden;
+            _currentActionerArrowRight.style.visibility = Visibility.Visible;
+        }
+    }
+
+    private void HandleTurnStartActions()
+    {
         // ローカルモードまたはユーザーのターンの場合、コマンドビューを開く
         if (_mainController.GameMode == GameMode.Local || _currentTurnEntity == _userController.MyEntity)
         {
@@ -231,12 +283,6 @@ public class BattleController : MonoBehaviour
         else
         {
             _battleLogController.SetText(Constants.GetSentenceWhileWaitingAction(Settings.Language.ToString(), _currentTurnEntity.name));
-        }
-
-        // ターン数を更新
-        if (_currentTurnEntity == _leftEntity)
-        {
-            _turnCount++;
         }
     }
 
@@ -313,10 +359,10 @@ public class BattleController : MonoBehaviour
         }
 
         // スキルの結果のログ
-        // foreach (var log in result.Logs)
-        // {
-        //     _battleLogController.AddLog(log);
-        // }
+        foreach (var log in result.Logs)
+        {
+            _battleLogController.AddLog(log);
+        }
 
         OnActionEnded();
         await ResumeFlipIfAllReactiveAnimationsEndsAsync();
@@ -352,7 +398,8 @@ public class BattleController : MonoBehaviour
         switch (_battleStatus)
         {
             case BattleStatus.AfterAction:
-                if (CheckAbnormalCondition())
+                Condition condition = CheckAbnormalCondition();
+                if (condition is Condition.Poison or Condition.Regen or Condition.Fire or Condition.Stun)
                 {
                     _battleStatus = BattleStatus.CheckAbnormalCondition;
                     ApplyCurrentBattleStatus();
@@ -464,9 +511,9 @@ public class BattleController : MonoBehaviour
     /// <summary>
     /// 状態異常の際の処理を行う
     /// </summary>
-    private bool CheckAbnormalCondition()
+    private Condition CheckAbnormalCondition()
     {
-        bool anyAbnormalCondition = false;
+        Condition condition = Condition.None;
         //　状態異常の画像をセット
         SetConditionImage();
 
@@ -477,7 +524,8 @@ public class BattleController : MonoBehaviour
                 int poisonDamage = (int)(_currentTurnEntity.Parameter.HitPoint * Constants.PoisonDamageRateOfHitPoint);
                 _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint - poisonDamage);
                 _battleLogController.AddLog(Constants.GetPoisonSentence(Settings.Language, _currentTurnEntity.name));
-                anyAbnormalCondition = true;
+                PlayImageAnimationAsync(Constants.ImageAnimationKeyPoisonMushroom, _currentTurnEntity).Forget();
+                condition = Condition.Poison;
                 break;
 
             case Condition.Fire:
@@ -489,7 +537,8 @@ public class BattleController : MonoBehaviour
 
                 _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint - damage);
                 _battleLogController.AddLog(Constants.GetFireDamageSentence(Settings.Language, _currentTurnEntity.name));
-                anyAbnormalCondition = true;
+                PlayImageAnimationAsync(Constants.ImageAnimationKeyIgnition, _currentTurnEntity).Forget();
+                condition = Condition.Fire;
                 break;
 
             case Condition.Regen:
@@ -500,7 +549,11 @@ public class BattleController : MonoBehaviour
                     );
                 _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint + regenAmount);
                 _battleLogController.AddLog(Constants.GetRegenSentence(Settings.Language, _currentTurnEntity.name, regenAmount));
-                anyAbnormalCondition = true;
+                if (regenAmount > 0)
+                {
+                    PlayImageAnimationAsync(Constants.ImageAnimationKeyRegen, _currentTurnEntity).Forget();
+                }
+                condition = Condition.Regen;
                 break;
 
             default:
@@ -512,15 +565,13 @@ public class BattleController : MonoBehaviour
         {
             case Condition.Stun:
                 _battleLogController.AddLog(Constants.GetStunSentence(Settings.Language, _waitingTurnEntity.name));
-                anyAbnormalCondition = true;
-                StartNewTurn();
-                StartNewTurn();
+                condition = Condition.Stun;
                 break;
 
             default:
                 break;
         }
-        return anyAbnormalCondition;
+        return condition;
     }
 
     private void SetConditionImage()
@@ -528,37 +579,38 @@ public class BattleController : MonoBehaviour
         var leftCondition = _leftEntity.GetAbnormalCondition().Condition;
         var rightCondition = _rightEntity.GetAbnormalCondition().Condition;
 
-        var leftConditionImage = _root.Q<VisualElement>("Element-Left").Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon");
-        var rightConditionImage = _root.Q<VisualElement>("Element-Right").Q<VisualElement>("Element-Condition").Q<VisualElement>("Icon");
+        _leftConditionImage.style.display = leftCondition == Condition.None ? DisplayStyle.None : DisplayStyle.Flex;
+        _rightConditionImage.style.display = rightCondition == Condition.None ? DisplayStyle.None : DisplayStyle.Flex;
+
         switch (leftCondition)
         {
             case Condition.Poison:
-                leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferencePoisonCondition).WaitForCompletion().texture;
+                _leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferencePoisonCondition).WaitForCompletion().texture;
                 break;
             case Condition.Regen:
-                leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceRegenCondition).WaitForCompletion().texture;
+                _leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceRegenCondition).WaitForCompletion().texture;
                 break;
             case Condition.Stun:
-                leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceStunCondition).WaitForCompletion().texture;
+                _leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceStunCondition).WaitForCompletion().texture;
                 break;
             case Condition.Fire:
-                leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceFireCondition).WaitForCompletion().texture;
+                _leftConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceFireCondition).WaitForCompletion().texture;
                 break;
         }
 
         switch (rightCondition)
         {
             case Condition.Poison:
-                rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferencePoisonCondition).WaitForCompletion().texture;
+                _rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferencePoisonCondition).WaitForCompletion().texture;
                 break;
             case Condition.Regen:
-                rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceRegenCondition).WaitForCompletion().texture;
+                _rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceRegenCondition).WaitForCompletion().texture;
                 break;
             case Condition.Stun:
-                rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceStunCondition).WaitForCompletion().texture;
+                _rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceStunCondition).WaitForCompletion().texture;
                 break;
             case Condition.Fire:
-                rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceFireCondition).WaitForCompletion().texture;
+                _rightConditionImage.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceFireCondition).WaitForCompletion().texture;
                 break;
         }
     }

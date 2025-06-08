@@ -1,5 +1,25 @@
+.nameLabel {
+    left: 50px;
+    width: 400px;
+    -unity-text-align: upper-left;
+}
+
+.elementContainer {
+    flex-grow: 1;
+}
+
+.nameLabelContainer {
+    flex-direction: row;
+    margin-top: 30px;
+    -unity-text-align: upper-center;
+}
+
 .entity {
+    background-image: url("project://database/Assets/VisualAssets/Enemy/Dullahan%201.png?fileID=2800000&guid=af713fbb749359b4ea2624e9da170491&type=3#Dullahan 1");
+    -unity-background-scale-mode: scale-to-fit;
     width: 200px;
+    height: 200px;
+    align-self: auto;
 }
 
 .actionbutton {
@@ -100,10 +120,6 @@
 
 .statusElementContainer {
     flex-direction: row;
-    align-items: auto;
-    justify-content: flex-start;
-    align-self: flex-start;
-    left: 100px;
     height: 100px;
 }
 

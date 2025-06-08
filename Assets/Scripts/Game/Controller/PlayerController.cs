@@ -3,12 +3,12 @@ using R3;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 public class PlayerController : MonoBehaviour
 {
-    private MainController _mainController;
     [SerializeField]
     private Transform _playerParent;
 
@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     public Observable<List<Entity>> OnPlayersInitialized => _onPlayersInitialized;
 
     public Subject<List<Entity>> _onPlayersInitialized = new();
+
+    private MainController _mainController;
 
     public void Initialize(MainController mainController)
     {
@@ -38,7 +40,8 @@ public class PlayerController : MonoBehaviour
             clonedParameter.BattleSprite = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerBattleImage(playerId)).ToUniTask();
             clonedParameter.FieldSprite = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerFieldImage(playerId)).ToUniTask();
             clonedParameter.Name = isNpc ? $"{Constants.GetNpcNames(Settings.Language)[i]}" : $"{Constants.GetPlayerName(Settings.Language, playerId)}";
-            InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i], isNpc);
+            await InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i], isNpc);
+            PlayerList[i].SetName(Constants.GetPlayerName(Settings.Language, playerId));
         }
         _onPlayersInitialized.OnNext(PlayerList);
     }

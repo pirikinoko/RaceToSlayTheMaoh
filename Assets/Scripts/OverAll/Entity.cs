@@ -1,9 +1,12 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using R3;
+using TMPro;
 
 public class Entity : MonoBehaviour
 {
+    [SerializeField]
+    private TextMeshProUGUI _nameLabel;
     public int Id { get; private set; }
 
     public EntityType EntityType;
@@ -89,5 +92,10 @@ public class Entity : MonoBehaviour
     public void ResetAbnormalCondition()
     {
         _abnormalCondition = new AbnormalCondition();
+    }
+
+    public void SetName(string name)
+    {
+        _nameLabel.text = name;
     }
 }

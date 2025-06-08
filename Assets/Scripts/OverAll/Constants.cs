@@ -50,7 +50,7 @@ public class Constants
         return isMissed ? 0 : randomValue;
     }
 
-    public static int MissPotentialOnEveryDamageAction = 10;
+    public static int MissPotentialOnEveryDamageAction = 15;
 
     // ******* Player *******
     public static float PlayerMoveSpeed { get; set; } = 2.0f;
@@ -61,7 +61,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("プレイヤー{0}", playerId);
+                return string.Format("Player{0}", playerId);
             case Language.English:
                 return string.Format("Player{0}", playerId);
             default:

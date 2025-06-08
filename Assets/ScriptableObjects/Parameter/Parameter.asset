@@ -20,7 +20,7 @@ MonoBehaviour:
     HitPoint: 6
     ManaPoint: 3
     Power: 2
-    SkillTypes: 01000000
+    SkillTypes: 0100000005000000
   - EntityType: 1
     BattleSprite: {fileID: 21300000, guid: f24f3374a2210234cb607175de4282b7, type: 3}
     FieldSprite: {fileID: 21300000, guid: 6d99c99017f371241b756f03f8f9bd45, type: 3}
@@ -89,7 +89,7 @@ MonoBehaviour:
     BattleSprite: {fileID: 21300000, guid: 51deeebefef47cf478d93159728eb67d, type: 3}
     FieldSprite: {fileID: 21300000, guid: 3dbe7276f4b49864fb69b83790a26153, type: 3}
     Name: Satan
-    HitPoint: 20
+    HitPoint: 30
     ManaPoint: 10
     Power: 3
     SkillTypes: 0700000006000000

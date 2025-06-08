@@ -26,7 +26,7 @@ public class FieldController : MonoBehaviour
         _battleController = battleController;
     }
 
-    private async UniTask Start()
+    private void Start()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
         var topStatusBoxComponents = root.Q<VisualElement>("TopElements").Children()
@@ -75,7 +75,7 @@ public class FieldController : MonoBehaviour
         return false;
     }
 
-    public async UniTask DisplayStatusBoxes()
+    public void DisplayStatusBoxes()
     {
         _statusBoxComponents.ForEach(statusBox => statusBox.style.display = DisplayStyle.None);
         for (int i = 0; i < _playerController.PlayerList.Count; i++)

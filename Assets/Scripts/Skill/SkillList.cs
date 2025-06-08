@@ -338,7 +338,7 @@ public static class SkillList
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
-                        $"{skillUser.name}はHPを{healAmount}回復した"
+                        //$"{skillUser.name}はHPを{healAmount}回復した"
                     },
                     effectKey: Constants.ImageAnimationKeyHeal
                 );
@@ -373,7 +373,7 @@ public static class SkillList
                 if (damageAmount > 0)
                 {
                     skillUser.SetHitPoint(skillUser.Parameter.HitPoint + healAmount);
-                    logs.Add($"{damageAmount}のダメージを与え,HPを{healAmount}回復した");
+                    //logs.Add($"{damageAmount}のダメージを与え,HPを{healAmount}回復した");
                 }
                 else
                 {
@@ -411,7 +411,7 @@ public static class SkillList
                 {
                     var abnormalCondition = opponent.GetAbnormalCondition();
                     abnormalCondition.Condition = Condition.Fire;
-                    logs.Add($"炎の力で{damageAmount}のダメージを与えた");
+                    //logs.Add($"炎の力で{damageAmount}のダメージを与えた");
                 }
                 else
                 {
@@ -448,7 +448,7 @@ public static class SkillList
                 if (damageAmount > 0)
                 {
                     skillUser.SetHitPoint(skillUser.Parameter.HitPoint + damageAmount);
-                    logs.Add($"{opponent.name}から{damageAmount}HP吸収した");
+                    // logs.Add($"{opponent.name}から{damageAmount}HP吸収した");
                 }
                 else
                 {
@@ -476,7 +476,7 @@ public static class SkillList
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.AttackPower + 3,
                     offsetPercent: 50,
-                    missPotential: Constants.MissPotentialOnEveryDamageAction + 10
+                    missPotential: Constants.MissPotentialOnEveryDamageAction
                 );
                 opponent.SetHitPoint(opponent.Parameter.HitPoint - damageAmount);
 
@@ -484,7 +484,7 @@ public static class SkillList
 
                 if (damageAmount > 0)
                 {
-                    logs.Add($"強力な一撃で{damageAmount}のダメージを与えた");
+                    //  logs.Add($"強力な一撃で{damageAmount}のダメージを与えた");
                 }
                 else
                 {
@@ -516,7 +516,7 @@ public static class SkillList
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
-                        $"{skillUser.name}は回復の力を得た"
+                       // $"{skillUser.name}は回復の力を得た"
                     },
                     effectKey: Constants.ImageAnimationKeyRegen
                 );
@@ -544,7 +544,7 @@ public static class SkillList
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
-                        $"{skillUser.name}のHPが{healAmount}回復した"
+                       // $"{skillUser.name}のHPが{healAmount}回復した"
                     },
                     effectKey: Constants.ImageAnimationKeySuperHeal
                 );
@@ -571,7 +571,7 @@ public static class SkillList
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
-                        $"{skillUser.name}のトレーニングにより攻撃力が{powerBoost}上昇した"
+                        //$"{skillUser.name}のトレーニングにより攻撃力が{powerBoost}上昇した"
                     },
                     effectKey: Constants.ImageAnimationKeyTraining
                 );
@@ -592,7 +592,7 @@ public static class SkillList
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.Parameter.Power,
                     offsetPercent: 50,
-                    missPotential: 30 // ストライクは高いミス率
+                    missPotential: Constants.MissPotentialOnEveryDamageAction + 15
                 );
                 opponent.SetHitPoint(opponent.Parameter.HitPoint - damageAmount);
                 var logs = new List<string>();
@@ -602,7 +602,7 @@ public static class SkillList
                     abnormalCondition.Condition = Condition.Stun;
                     opponent.SetAbnormalCondition(abnormalCondition);
 
-                    logs.Add($"{damageAmount}のダメージを与え,相手をスタンさせた");
+                    //  logs.Add($"{damageAmount}のダメージを与え,相手をスタンさせた");
                 }
                 else
                 {
@@ -633,7 +633,7 @@ public static class SkillList
 
                 var logs = new List<string>
                 {
-                    $"{opponent.name}は毒状態になった"
+                    // $"{opponent.name}は毒状態になった"
                 };
                 return new Skill.SkillResult(
                     logs: logs.ToArray(),
