@@ -113,7 +113,7 @@ public class Constants
     public static float CameraMoveDuration { get; set; } = 1f;
     public static float CameraZoomDuration { get; set; } = 1f;
     public static float CameraZoomFactor { get; set; } = 0.5f; // ズーム倍率を追加
-
+    public static Vector2 BaseScreenSize { get; set; } = new Vector2(1920, 1080);
     // ******* Field *******
     public static Vector2 FieldCornerUpLeft { get; set; } = new Vector2(-5, -5);
     public static Vector2 FieldCornerUpRight { get; set; } = new Vector2(-1, -5);

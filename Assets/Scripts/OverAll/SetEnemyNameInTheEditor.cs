@@ -3,12 +3,11 @@ using UnityEngine.AddressableAssets;
 
 #if UNITY_EDITOR
 using UnityEditor;
-#endif
+
 
 [RequireComponent(typeof(Entity))]
 public class SetEnemyPreferenceTheEditor : MonoBehaviour
 {
-#if UNITY_EDITOR
     private void OnValidate()
     {
         SetEnemyName();

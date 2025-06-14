@@ -393,11 +393,11 @@ public static class SkillList
         return new Skill(
             name: GetSkillNameIgnitionByLanguage(),
             description: GetSkillDescriptionIgnitionByLanguage(),
-            manaCost: 2,
+            manaCost: 1,
             effectKey: Constants.ImageAnimationKeyIgnition,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 2);
+                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.AttackPower,
                     offsetPercent: 50,
@@ -431,11 +431,11 @@ public static class SkillList
         return new Skill(
             name: GetSkillNameDrainByLanguage(),
             description: GetSkillDescriptionDrainByLanguage(),
-            manaCost: 2,
+            manaCost: 1,
             effectKey: Constants.ImageAnimationKeyDrain,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 2);
+                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.AttackPower,
                     offsetPercent: 50,
@@ -468,11 +468,11 @@ public static class SkillList
         return new Skill(
             name: GetSkillNameDestroyByLanguage(),
             description: GetSkillDescriptionDestroyByLanguage(),
-            manaCost: 3,
+            manaCost: 1,
             effectKey: Constants.ImageAnimationKeyDestroy,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 3);
+                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.AttackPower + 3,
                     offsetPercent: 50,
@@ -529,11 +529,11 @@ public static class SkillList
         return new Skill(
             name: GetSkillNameSuperHealByLanguage(),
             description: GetSkillDescriptionSuperHealByLanguage(),
-            manaCost: 2,
+            manaCost: 1,
             effectKey: Constants.ImageAnimationKeySuperHeal,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 2);
+                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
                 int healAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: 10,
                     offsetPercent: 50,
@@ -584,13 +584,13 @@ public static class SkillList
         return new Skill(
             name: GetSkillNameStrikeByLanguage(),
             description: GetSkillDescriptionStrikeByLanguage(),
-            manaCost: 2,
+            manaCost: 1,
             effectKey: Constants.ImageAnimationKeyStrike,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 2);
+                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
-                    baseValue: skillUser.Parameter.Power,
+                    baseValue: skillUser.Parameter.Power + 2,
                     offsetPercent: 50,
                     missPotential: Constants.MissPotentialOnEveryDamageAction + 15
                 );

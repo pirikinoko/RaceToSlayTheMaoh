@@ -420,8 +420,7 @@ public class BattleController : MonoBehaviour
                     HideBattleElement();
                     OpenRewardView();
                     SetRewards();
-                    _battleLogController.AddLog(Constants.GetSentenceWhenSelectingReward(Settings.Language, _winnerEntity == _userController.MyEntity, _winnerEntity.name));
-                    _battleLogController.EnableFlip();
+                    _battleLogController.SetText(Constants.GetSentenceWhenSelectingReward(Settings.Language, _winnerEntity == _userController.MyEntity, _winnerEntity.name));
                     _battleStatus = BattleStatus.SelectReward;
                     if (_winnerEntity.IsNpc)
                     {
@@ -430,8 +429,7 @@ public class BattleController : MonoBehaviour
                 }
                 else
                 {
-                    _battleLogController.AddLog(Constants.GetSentenceWhenEnemyWins(Settings.Language, _winnerEntity.name));
-                    _battleLogController.EnableFlip();
+                    _battleLogController.SetText(Constants.GetSentenceWhenEnemyWins(Settings.Language, _winnerEntity.name));
                     _battleStatus = BattleStatus.BattleEnding;
                 }
                 break;
@@ -861,16 +859,17 @@ public class BattleController : MonoBehaviour
         var imageAnimation = ImageAnimationPool.Instance.GetFromPool<ImageAnimation>("ImageAnimation");
         imageAnimation.SetSprites(_imageAnimationHolder.GetSpriteps(key));
 
+        var ratio = Screen.width / Constants.BaseScreenSize.x;
         if (targetEntity == _leftEntity)
         {
             var rect = _entityImageLeft.worldBound;
-            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            var screenPos = new Vector3(rect.center.x * ratio, Screen.height - rect.center.y * ratio, 0);
             imageAnimation.transform.position = screenPos;
         }
         else if (targetEntity == _rightEntity)
         {
             var rect = _entityImageRight.worldBound;
-            var screenPos = new Vector3(rect.center.x, Screen.height - rect.center.y, 0);
+            var screenPos = new Vector3(rect.center.x * ratio, Screen.height - rect.center.y * ratio, 0);
             imageAnimation.transform.position = screenPos;
         }
 
