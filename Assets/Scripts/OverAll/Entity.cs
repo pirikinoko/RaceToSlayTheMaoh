@@ -1,9 +1,12 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using R3;
+using TMPro;
 
 public class Entity : MonoBehaviour
 {
+    [SerializeField]
+    private TextMeshProUGUI _nameLabel;
     public int Id { get; private set; }
 
     public EntityType EntityType;
@@ -35,7 +38,7 @@ public class Entity : MonoBehaviour
         _abnormalCondition = new AbnormalCondition();
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = Parameter.IconSprite;
+        _spriteRenderer.sprite = Parameter.FieldSprite;
 
         _hitPointRp.Value = Parameter.HitPoint;
         _manaPointRp.Value = Parameter.ManaPoint;
@@ -46,7 +49,7 @@ public class Entity : MonoBehaviour
     public int Attack(Entity target)
     {
         // 攻撃力のポテンシャルのオフセット内でランダムな値を返す
-        int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(AttackPower, Constants.AttackOffsetPercent, 10);
+        int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(AttackPower, Constants.AttackOffsetPercent, Constants.MissPotentialOnEveryDamageAction);
         target.SetHitPoint(target.Parameter.HitPoint - damage);
         return damage;
     }
@@ -76,6 +79,11 @@ public class Entity : MonoBehaviour
         _spriteRenderer.enabled = isVisible;
     }
 
+    public AbnormalCondition GetAbnormalCondition()
+    {
+        return _abnormalCondition;
+    }
+
     public void SetAbnormalCondition(AbnormalCondition condition)
     {
         _abnormalCondition = condition;
@@ -84,5 +92,10 @@ public class Entity : MonoBehaviour
     public void ResetAbnormalCondition()
     {
         _abnormalCondition = new AbnormalCondition();
+    }
+
+    public void SetName(string name)
+    {
+        _nameLabel.text = name;
     }
 }

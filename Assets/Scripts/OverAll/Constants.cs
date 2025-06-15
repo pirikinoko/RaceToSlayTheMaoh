@@ -9,10 +9,16 @@ public class Constants
     {
         return string.Format("Player{0}", playerId);
     }
-    public static string GetAssetReferencePlayerIcon(int playerId)
+    public static string GetAssetReferencePlayerBattleImage(int playerId)
     {
-        return string.Format("PlayerIcon{0}", playerId);
+        return string.Format("Player{0}BattleImage", playerId);
     }
+
+    public static string GetAssetReferencePlayerFieldImage(int playerId)
+    {
+        return string.Format("Player{0}FieldImage", playerId);
+    }
+
     public static string AssetReferenceEnemy = "Enemy";
     public static string AssetReferencePlayerIcon = "PlayerIcon";
     public static string AssetReferenceHeartIcon = "HeartIcon";
@@ -20,6 +26,11 @@ public class Constants
     public static string AssetReferencePowerIcon = "PowerIcon";
     public static string AssetReferenceDamageNumberEffect = "DamageNumberEffect";
     public static string AssetReferenceCoffin = "Coffin";
+
+    public static string AssetReferenceFireCondition = "FireConditionIcon";
+    public static string AssetReferencePoisonCondition = "PoisonConditionIcon";
+    public static string AssetReferenceRegenCondition = "RegenConditionIcon";
+    public static string AssetReferenceStunCondition = "StunConditionIcon";
 
     // ******* General *******
     // 指定されたパーセンテージのオフセット内でランダムな値を返す
@@ -39,7 +50,7 @@ public class Constants
         return isMissed ? 0 : randomValue;
     }
 
-    public static int MissPotentialOnEveryDamageAction = 10;
+    public static int MissPotentialOnEveryDamageAction = 15;
 
     // ******* Player *******
     public static float PlayerMoveSpeed { get; set; } = 2.0f;
@@ -50,7 +61,7 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return string.Format("プレイヤー{0}", playerId);
+                return string.Format("Player{0}", playerId);
             case Language.English:
                 return string.Format("Player{0}", playerId);
             default:
@@ -63,11 +74,11 @@ public class Constants
         switch (language)
         {
             case Language.Japanese:
-                return new string[] { "Player1", "アレックス", "モーガン", "テイラー" };
+                return new string[] { "Player1", "Player2", "Player3", "Player4" };
             case Language.English:
-                return new string[] { "Hero", "Jordan", "Morgan", "Taylor" };
+                return new string[] { "Player1", "Player2", "Player3", "Player4" };
             default:
-                return new string[] { "Hero", "Jordan", "Morgan", "Taylor" };
+                return new string[] { "Player1", "Player2", "Player3", "Player4" };
         }
     }
 
@@ -87,8 +98,7 @@ public class Constants
 
     // ******* Main *******
     public static int MaxPlayerCountIncludingNpc { get; set; } = 4;
-    public static int MinPlayerCount { get; set; } = 1;
-    public static int MaxDiceValue { get; set; } = 3;
+    public static int MaxDiceValue { get; set; } = 4;
     public static float DiceRollUpdateInterval { get; set; } = 0.02f;
     public static int DiceHighlightBlinkCount { get; set; } = 5;
     public static float DiceHighlightBlinkInterval { get; set; } = 0.15f;
@@ -97,30 +107,30 @@ public class Constants
 
     public static int MaxHitPoint { get; set; } = 50;
     public static int MaxManaPoint { get; set; } = 30;
-    public static int AttackOffsetPercent { get; set; } = 50;
+    public static int AttackOffsetPercent { get; set; } = 100;
 
     // ******* Camera *******
     public static float CameraMoveDuration { get; set; } = 1f;
     public static float CameraZoomDuration { get; set; } = 1f;
     public static float CameraZoomFactor { get; set; } = 0.5f; // ズーム倍率を追加
-
+    public static Vector2 BaseScreenSize { get; set; } = new Vector2(1920, 1080);
     // ******* Field *******
-    public static Vector3 FieldCornerUpLeft { get; set; } = new Vector3(-5, -5, 0);
-    public static Vector3 FieldCornerUpRight { get; set; } = new Vector3(-1, -5, 0);
-    public static Vector3 FieldCornerDownLeft { get; set; } = new Vector3(1, -5, 0);
-    public static Vector3 FieldCornerDownRight { get; set; } = new Vector3(5, -5, 0);
+    public static Vector2 FieldCornerUpLeft { get; set; } = new Vector2(-5, -5);
+    public static Vector2 FieldCornerUpRight { get; set; } = new Vector2(-1, -5);
+    public static Vector2 FieldCornerDownLeft { get; set; } = new Vector2(1, -5);
+    public static Vector2 FieldCornerDownRight { get; set; } = new Vector2(5, -5);
 
     public static LayerMask EntityLayerMask { get; set; } = LayerMask.GetMask("Entity");
 
-    public static Vector3[] PlayerSpownPositions { get; set; } =
+    public static Vector2[] PlayerSpownPositions { get; set; } =
     {
         FieldCornerUpLeft,
         FieldCornerUpRight,
         FieldCornerDownLeft,
         FieldCornerDownRight
     };
-    public static Vector2 ScaleForActivePlayerStatusBox { get; set; } = new Vector2(1.0f, 1.0f);
-    public static Vector2 ScaleForWaitingPlayersStatusBox { get; set; } = new Vector2(0.7f, 0.7f);
+    public static Vector2 ScaleForActivePlayerStatusBox { get; set; } = new Vector2(0.9f, 0.9f);
+    public static Vector2 ScaleForWaitingPlayersStatusBox { get; set; } = new Vector2(0.55f, 0.55f);
 
     public static float DelayBeforeNewTurnSeconds { get; set; } = 0.6f;
 
@@ -367,6 +377,74 @@ public class Constants
     public static float ResultFadeAlpha { get; set; } = 0.8f;
     public static float ResultFadeDuration { get; set; } = 1.5f;
 
+    // ******* AbnormalCondition *******
+    public static int FireDamage { get; set; } = 2;
+    public static int FireDamageOffsetPercent { get; set; } = 50;
+    public static float PoisonDamageRateOfHitPoint { get; set; } = 0.2f;
+    public static int RegenAmount { get; set; } = 1;
+    public static int RegenAmountOffsetPercent { get; set; } = 100;
+
+    public static string GetPoisonSentence(Language language, string entityName)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}は毒のダメージを受けた", entityName);
+            case Language.English:
+                return string.Format("{0} is damaged by poison", entityName);
+            default:
+                return string.Format("{0} is damaged by poison", entityName);
+        }
+    }
+
+    public static string GetRegenSentence(Language language, string entityName, int regenAmount)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                if (regenAmount > 0)
+                    return string.Format("{0}は再生の力で回復した", entityName);
+                else
+                    return string.Format("{0}は体が再生し始めている", entityName);
+            case Language.English:
+                if (regenAmount > 0)
+                    return string.Format("{0} is healed by regeneration", entityName);
+                else
+                    return string.Format("{0} is starting to regenerate", entityName);
+            default:
+                if (regenAmount > 0)
+                    return string.Format("{0} is healed by regeneration", entityName);
+                else
+                    return string.Format("{0} is starting to regenerate", entityName);
+        }
+    }
+
+    public static string GetFireDamageSentence(Language language, string entityName)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}は炎のダメージを受けた", entityName);
+            case Language.English:
+                return string.Format("{0} is damaged by fire", entityName);
+            default:
+                return string.Format("{0} is damaged by fire", entityName);
+        }
+    }
+
+    public static string GetStunSentence(Language language, string entityName)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return string.Format("{0}は気絶して動けない", entityName);
+            case Language.English:
+                return string.Format("{0} is unable to move", entityName);
+            default:
+                return string.Format("{0} is unable to move", entityName);
+        }
+    }
+
     // ****** ImageEffectKey *******
     public static string ImageAnimationKeySlash = "SlashAnimationEffect";
     public static string ImageAnimationKeyHeal = "HealAnimationEffect";
@@ -377,4 +455,6 @@ public class Constants
     public static string ImageAnimationKeyRegen = "RegenAnimationEffect";
     public static string ImageAnimationKeySuperHeal = "SuperHealAnimationEffect";
     public static string ImageAnimationKeyTraining = "TrainingAnimationEffect";
+    public static string ImageAnimationKeyStrike = "StrikeAnimationEffect";
+    public static string ImageAnimationKeyPoisonMushroom = "PoisonMushroomAnimationEffect";
 }

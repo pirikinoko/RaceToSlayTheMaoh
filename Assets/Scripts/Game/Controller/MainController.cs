@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UIToolkit;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -83,6 +84,8 @@ public class MainController : MonoBehaviour
 
         _fieldController.UpdateStatusBoxesAsync().Forget();
         CurrentTurnPlayerEntity = _playerController.PlayerList.FirstOrDefault(p => p.Id == CurrentTurnPlayerId);
+        // 現在のターンのプレイヤーを最前面に表示する
+        CurrentTurnPlayerEntity.gameObject.GetComponent<SpriteRenderer>().sortingOrder++;
 
         await _cameraController.MoveCameraAsync(CurrentTurnPlayerEntity.transform.position);
 
@@ -103,6 +106,9 @@ public class MainController : MonoBehaviour
             await NpcActionController.MoveAsync(CurrentTurnPlayerEntity.GetComponent<ControllableEntity>());
         }
 
+        // レイヤーの順序を戻す
+        CurrentTurnPlayerEntity.gameObject.GetComponent<SpriteRenderer>().sortingOrder--;
+
         if (_currentTurnPlayerId == 1)
         {
             TurnCount++;
@@ -116,7 +122,7 @@ public class MainController : MonoBehaviour
         _diceBoxComponent.style.display = DisplayStyle.Flex;
         _diceBoxComponent.StartRolling();
         _stopButton.style.display = DisplayStyle.Flex;
-        if (CurrentTurnPlayerEntity != _userController.MyEntity || CurrentTurnPlayerEntity.IsNpc)
+        if ((GameMode == GameMode.Online && CurrentTurnPlayerEntity != _userController.MyEntity) || CurrentTurnPlayerEntity.IsNpc)
         {
             _stopButton.style.display = DisplayStyle.None;
         }

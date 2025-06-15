@@ -6,11 +6,12 @@ public class CameraController : MonoBehaviour
 {
     private Camera _camera;
 
-    private readonly float fixedZ = -10f;
+    private float fixedZ = -10f;
 
     private void Awake()
     {
         _camera = GetComponent<Camera>();
+        fixedZ = _camera.transform.position.z;
     }
 
     /// <summary>

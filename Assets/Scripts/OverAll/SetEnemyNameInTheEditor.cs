@@ -3,12 +3,11 @@ using UnityEngine.AddressableAssets;
 
 #if UNITY_EDITOR
 using UnityEditor;
-#endif
+
 
 [RequireComponent(typeof(Entity))]
 public class SetEnemyPreferenceTheEditor : MonoBehaviour
 {
-#if UNITY_EDITOR
     private void OnValidate()
     {
         SetEnemyName();
@@ -37,13 +36,13 @@ public class SetEnemyPreferenceTheEditor : MonoBehaviour
         var entity = GetComponent<Entity>();
         var spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // EntityTypeからパスを組み立てる例
-        string path = $"Assets/VisualAssets/Enemy/{entity.EntityType}.png";
+        string path = $"Assets/VisualAssets/Enemy/{entity.EntityType}OnField.png";
         var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
         if (sprite == null)
         {
-            Debug.LogWarning($"Texture not found at path: {path}");
-            return;
+            path = $"Assets/VisualAssets/Enemy/{entity.EntityType}.png";
+            sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            Debug.LogWarning($"{entity.EntityType}のフィールド用のスプライトが見つからなかったため戦闘用を使用します");
         }
 
         if (spriteRenderer != null && sprite != null)

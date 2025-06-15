@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UserController : MonoBehaviour
 {
-    [SerializeField]
     private PlayerController _playerController;
 
     public int Id;
@@ -17,6 +16,11 @@ public class UserController : MonoBehaviour
         {
             GetMyEntity(playerList);
         });
+    }
+
+    public void Initialize(PlayerController playerController)
+    {
+        _playerController = playerController;
     }
 
     private void GetMyEntity(List<Entity> playerList)

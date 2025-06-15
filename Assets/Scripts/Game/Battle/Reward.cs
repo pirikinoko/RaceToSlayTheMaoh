@@ -17,8 +17,7 @@ public class Reward
     public class RewardParameter
     {
         public static int HpGain = 10;
-        public static int MpGain = 7;
-        public static int PowerGain = 1;
+        public static int MpGain = 5;
     }
 
     private void SetRandomReword()
@@ -26,9 +25,8 @@ public class Reward
         // 報酬の候補となるアクションと説明をリストにまとめる
         List<(StatusReword action, string description)> rewordActions = new List<(StatusReword, string)>
         {
-            (IncreaseHealth, $"HPが{RewardParameter.HpGain}ポイント増加する"),
-            (IncreaseMana, $"MPが{RewardParameter.MpGain}ポイント増加する"),
-            (IncreasePower, $"攻撃力が{RewardParameter.PowerGain}ポイント増加する")
+            (IncreaseHealth, $"HPが{RewardParameter.HpGain}ポイント回復する"),
+            (IncreaseMana, $"MPが{RewardParameter.MpGain}ポイント回復する"),
         };
 
         // ランダムにインデックスを選択
@@ -43,20 +41,14 @@ public class Reward
     {
         int newHp = target.Parameter.HitPoint + RewardParameter.HpGain;
         target.SetHitPoint(newHp);
-        return $"{target.name}のHPが{RewardParameter.HpGain}ポイント増加した！";
+        return $"{target.name}のHPが{RewardParameter.HpGain}ポイント回復した！";
     }
 
     private string IncreaseMana(Entity target)
     {
         int newMp = target.Parameter.ManaPoint + RewardParameter.MpGain;
         target.SetManaPoint(newMp);
-        return $"{target.name}のMPが{RewardParameter.MpGain}ポイント増加した！";
-    }
-
-    private string IncreasePower(Entity target)
-    {
-        target.Parameter.Power += RewardParameter.PowerGain;
-        return $"{target.name}の攻撃力が{RewardParameter.PowerGain}ポイント増加した！";
+        return $"{target.name}のMPが{RewardParameter.MpGain}ポイント回復した！";
     }
 
     public string Execute(Entity target)

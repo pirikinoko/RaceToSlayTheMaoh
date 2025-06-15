@@ -14,65 +14,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ParameterList:
   - EntityType: 0
-    IconSprite: {fileID: 21300000, guid: fe5fe608913d1b749baf641cc1d6acac, type: 3}
+    BattleSprite: {fileID: 0}
+    FieldSprite: {fileID: 0}
     Name: Player
     HitPoint: 6
     ManaPoint: 3
     Power: 2
     SkillTypes: 01000000
   - EntityType: 1
-    IconSprite: {fileID: 21300000, guid: bd8199a4fa9c05549a4083575f74526b, type: 3}
-    Name: Axe
+    BattleSprite: {fileID: 21300000, guid: f24f3374a2210234cb607175de4282b7, type: 3}
+    FieldSprite: {fileID: 21300000, guid: 6d99c99017f371241b756f03f8f9bd45, type: 3}
+    Name: Slime
     HitPoint: 6
     ManaPoint: 2
     Power: 2
-    SkillTypes: 01000000
-  - EntityType: 3
-    IconSprite: {fileID: 21300000, guid: b4c56ca07096ce8479d0f3b95edc6658, type: 3}
-    Name: Samurai
-    HitPoint: 6
-    ManaPoint: 2
-    Power: 3
-    SkillTypes: 01000000
-  - EntityType: 4
-    IconSprite: {fileID: 21300000, guid: 1ea9fa4e92244ca469c752748b3cf923, type: 3}
-    Name: Cook
-    HitPoint: 10
+    SkillTypes: 08000000
+  - EntityType: 2
+    BattleSprite: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
+    FieldSprite: {fileID: 21300000, guid: e03843a4d024fba4bb9c2105376b3d11, type: 3}
+    Name: Bat
+    HitPoint: 7
     ManaPoint: 3
     Power: 2
-    SkillTypes: 0100000002000000
-  - EntityType: 5
-    IconSprite: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
-    Name: Magician
-    HitPoint: 10
-    ManaPoint: 7
+    SkillTypes: 02000000
+  - EntityType: 3
+    BattleSprite: {fileID: 21300000, guid: f2a1731b04f68f341a3e2c855c44128c, type: 3}
+    FieldSprite: {fileID: 21300000, guid: ad7990e0afdfac141853a8a75aabd60e, type: 3}
+    Name: MushRoom
+    HitPoint: 7
+    ManaPoint: 3
     Power: 2
-    SkillTypes: 01000000
-  - EntityType: 6
-    IconSprite: {fileID: 21300000, guid: 2075a0815b0fab644bf984ffcb64b455, type: 3}
-    Name: Shield
+    SkillTypes: 03000000
+  - EntityType: 4
+    BattleSprite: {fileID: 21300000, guid: bd8199a4fa9c05549a4083575f74526b, type: 3}
+    FieldSprite: {fileID: 21300000, guid: a9548bf485a3fe44db89e60e9f47c172, type: 3}
+    Name: AxeMan
     HitPoint: 15
     ManaPoint: 3
     Power: 2
-    SkillTypes: 01000000
-  - EntityType: 7
-    IconSprite: {fileID: 21300000, guid: af713fbb749359b4ea2624e9da170491, type: 3}
-    Name: Dullahan
-    HitPoint: 20
-    ManaPoint: 6
-    Power: 3
-    SkillTypes: 0100000002000000
-  - EntityType: 8
-    IconSprite: {fileID: 21300000, guid: 51deeebefef47cf478d93159728eb67d, type: 3}
-    Name: Satan
-    HitPoint: 30
-    ManaPoint: 10
-    Power: 5
-    SkillTypes: 01000000
-  - EntityType: 2
-    IconSprite: {fileID: 21300000, guid: d9bd21097d437e64d976ef1b2bea7738, type: 3}
-    Name: Bat
+    SkillTypes: 0a000000
+  - EntityType: 5
+    BattleSprite: {fileID: 21300000, guid: fe3b428935b89034aa55947675d47ba0, type: 3}
+    FieldSprite: {fileID: 21300000, guid: e92d5b76177d7d2408c91970b53d85f7, type: 3}
+    Name: SwordMan
     HitPoint: 10
+    ManaPoint: 4
+    Power: 2
+    SkillTypes: 04000000
+  - EntityType: 6
+    BattleSprite: {fileID: 21300000, guid: 5ddb43dcafe8e074a94c8f1a0e57629d, type: 3}
+    FieldSprite: {fileID: 21300000, guid: 0341b7a3f41a8ac42b2a0930a18bdbfd, type: 3}
+    Name: ShieldMan
+    HitPoint: 10
+    ManaPoint: 4
+    Power: 2
+    SkillTypes: 05000000
+  - EntityType: 7
+    BattleSprite: {fileID: 21300000, guid: 4e0f599b690ec1947b3946fb4b695ac9, type: 3}
+    FieldSprite: {fileID: 21300000, guid: da477b8e98a563149b366d626eeb9832, type: 3}
+    Name: Magician
+    HitPoint: 8
+    ManaPoint: 5
+    Power: 2
+    SkillTypes: 06000000
+  - EntityType: 8
+    BattleSprite: {fileID: 21300000, guid: af713fbb749359b4ea2624e9da170491, type: 3}
+    FieldSprite: {fileID: 21300000, guid: 6d69ca5ac16fcad47b75a1608c52b754, type: 3}
+    Name: Dullahan
+    HitPoint: 12
     ManaPoint: 3
     Power: 3
-    SkillTypes: 02000000
+    SkillTypes: 09000000
+  - EntityType: 9
+    BattleSprite: {fileID: 21300000, guid: 51deeebefef47cf478d93159728eb67d, type: 3}
+    FieldSprite: {fileID: 21300000, guid: 3dbe7276f4b49864fb69b83790a26153, type: 3}
+    Name: Satan
+    HitPoint: 30
+    ManaPoint: 8
+    Power: 3
+    SkillTypes: 0700000006000000

@@ -23,9 +23,12 @@ public class ControllableEntity : MonoBehaviour
 
     private int _remainingMoves = 0;
 
+    private Animator _animator;
+
     private void Start()
     {
         _transform = GetComponent<Transform>();
+        _animator = GetComponent<Animator>();
         _fieldController = FindFirstObjectByType<FieldController>();
         _mainController = FindFirstObjectByType<MainController>();
         _playerController = FindFirstObjectByType<PlayerController>();
@@ -214,12 +217,14 @@ public class ControllableEntity : MonoBehaviour
         Vector2 currentPos = _transform.position;
         Vector2 direction = (targetPos - currentPos).normalized;
 
+        _animator.SetBool("IsMoving", true);
         // 移動
         await UniTask.WaitUntil(() =>
         {
             _transform.position = Vector3.MoveTowards(_transform.position, targetPos, Constants.PlayerMoveSpeed * Time.deltaTime);
             return Vector3.Distance(_transform.position, targetPos) < 0.01f;
         });
+        _animator.SetBool("IsMoving", false);
 
         _remainingMoves--;
         _isMoving = false;
@@ -257,16 +262,22 @@ public class ControllableEntity : MonoBehaviour
 
         // ゴール候補（Entityの位置）をHashSetで取得
         var entityPositions = new HashSet<Vector2>();
-        foreach (var player in _playerController.PlayerList)
-        {
-            if (player != this.GetComponent<Entity>() && Vector2.Distance(player.transform.position, _transform.position) > 0.1f && player.IsAlive)
-                entityPositions.Add((Vector2)player.transform.position);
-        }
+
+        // 一番近い敵がプレイヤーであることが多いため3分の2の確率でプレイヤーは除外する
+        bool includePlayersAsTarget = UnityEngine.Random.Range(0, 3) == 0;
+
         foreach (var enemy in _enemyController.EnemyList)
         {
             if (enemy != this.GetComponent<Entity>() && Vector2.Distance(enemy.transform.position, _transform.position) > 0.1f && enemy.IsAlive)
                 entityPositions.Add((Vector2)enemy.transform.position);
         }
+
+        foreach (var player in _playerController.PlayerList)
+        {
+            if (includePlayersAsTarget && player != this.GetComponent<Entity>() && Vector2.Distance(player.transform.position, _transform.position) > 0.1f && player.IsAlive)
+                entityPositions.Add((Vector2)player.transform.position);
+        }
+
 
         // BFS用キュー: (現在地, 経路)
         var queue = new Queue<(Vector2 pos, Queue<Vector2> path)>();
