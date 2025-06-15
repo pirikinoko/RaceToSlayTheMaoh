@@ -357,7 +357,7 @@ public static class SkillList
             {
                 skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
-                    baseValue: skillUser.Parameter.Power,
+                    baseValue: skillUser.Parameter.Power + 1,
                     offsetPercent: 50,
                     missPotential: Constants.MissPotentialOnEveryDamageAction
                 );

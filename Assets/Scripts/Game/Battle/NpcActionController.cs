@@ -120,7 +120,5 @@ public static class NpcActionController
         {
             battleController.OnSkillRewardSelected(reward);
         }
-
-        battleLogController.FlipLog();
     }
 }

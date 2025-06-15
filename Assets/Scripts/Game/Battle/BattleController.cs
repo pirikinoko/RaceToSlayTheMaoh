@@ -429,7 +429,8 @@ public class BattleController : MonoBehaviour
                 }
                 else
                 {
-                    _battleLogController.SetText(Constants.GetSentenceWhenEnemyWins(Settings.Language, _winnerEntity.name));
+                    _battleLogController.AddLog(Constants.GetSentenceWhenEnemyWins(Settings.Language, _winnerEntity.name));
+                    _battleLogController.EnableFlip();
                     _battleStatus = BattleStatus.BattleEnding;
                 }
                 break;
@@ -618,6 +619,7 @@ public class BattleController : MonoBehaviour
         string result = _currentReward.Execute(_winnerEntity);
         _battleLogController.AddLog(result);
         _battleLogController.EnableFlip();
+
         CloseRewardView();
         _battleStatus = BattleStatus.BattleEnding;
     }
