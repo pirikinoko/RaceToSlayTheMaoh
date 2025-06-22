@@ -2,8 +2,9 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using R3;
 using TMPro;
+using Fusion;
 
-public class Entity : MonoBehaviour
+public class Entity : NetworkBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI _nameLabel;
@@ -17,6 +18,7 @@ public class Entity : MonoBehaviour
 
     public bool IsAlive { get; set; } = true;
 
+    [Networked]
     public bool IsNpc { get; private set; } = false;
 
     public int AttackPower => Parameter.Power + _abnormalCondition.PowerGain;
@@ -72,7 +74,6 @@ public class Entity : MonoBehaviour
         _manaPointRp.Value = newMana;
         Parameter.ManaPoint = _manaPointRp.Value;
     }
-
 
     public void ChangeVisibility(bool isVisible)
     {

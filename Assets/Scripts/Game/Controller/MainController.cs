@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Fusion;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -8,8 +9,10 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class MainController : MonoBehaviour
+public class MainController : NetworkBehaviour
 {
+    [SerializeField]
+    private NetworkManager _networkManager;
     [SerializeField]
     private Transform _objectsParent;
     private UserController _userController;
@@ -41,11 +44,14 @@ public class MainController : MonoBehaviour
 
     public Entity WinnerEntity { get; set; } = null;
 
+    [Networked]
+    private bool _isGameInitialized { get; set; } = false;
+
     private void Start()
     {
         _diceBoxComponent = GetComponent<UIDocument>().rootVisualElement.Q<DiceBoxComponent>("DiceBoxComponent");
         _diceBoxComponent.style.display = DisplayStyle.None;
-        for (int i = 0; i < Constants.MaxPlayerCountIncludingNpc; i++)
+        for (int i = 0; i < Constants.MaxPlayerCount; i++)
         {
             int coffinId = i + 1;
             var coffinObjectPrefab = Addressables.LoadAssetAsync<GameObject>(Constants.AssetReferenceCoffin).WaitForCompletion();
@@ -67,6 +73,19 @@ public class MainController : MonoBehaviour
 
     public async UniTask InitializeGame()
     {
+        if (_gameMode == GameMode.Online && _networkManager.GetNetworkRunner().IsSharedModeMasterClient)
+        {
+            await _playerController.InitializePlayersAsync();
+            await _enemyController.InitializeAllEnemiesAsync();
+            _isGameInitialized = true;
+            return;
+        }
+        else if (_gameMode == GameMode.Online)
+        {
+            await UniTask.WaitUntil(() => _isGameInitialized == true);
+            return;
+        }
+
         await _playerController.InitializePlayersAsync();
         await _enemyController.InitializeAllEnemiesAsync();
     }
@@ -76,7 +95,7 @@ public class MainController : MonoBehaviour
         if (TurnCount != 0)
         {
             CurrentTurnPlayerId++;
-            if (CurrentTurnPlayerId > Constants.MaxPlayerCountIncludingNpc)
+            if (CurrentTurnPlayerId > Constants.MaxPlayerCount)
             {
                 CurrentTurnPlayerId = 1;
             }

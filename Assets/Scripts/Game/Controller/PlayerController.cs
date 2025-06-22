@@ -10,6 +10,8 @@ using UnityEngine.AddressableAssets;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
+    private NetworkManager _networkManager;
+    [SerializeField]
     private Transform _playerParent;
 
     public List<Entity> PlayerList = new();
@@ -30,7 +32,7 @@ public class PlayerController : MonoBehaviour
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
         var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
 
-        for (int i = 0; i < Constants.MaxPlayerCountIncludingNpc; i++)
+        for (int i = 0; i < Constants.MaxPlayerCount; i++)
         {
             var playerId = i + 1;
             var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.GetAssetReferencePlayer(playerId)).ToUniTask();
@@ -48,7 +50,15 @@ public class PlayerController : MonoBehaviour
 
     private async Task InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector2 spawnPosition, bool isNpc)
     {
-        var playerGameObject = Instantiate(playerPrefab, new Vector3(spawnPosition.x, spawnPosition.y, playerPrefab.transform.position.z), playerPrefab.transform.rotation, _playerParent);
+        GameObject playerGameObject = null;
+        if (_mainController.GameMode == GameMode.Online)
+        {
+            _networkManager.SpawnPlayer(playerPrefab, new Vector3(spawnPosition.x, spawnPosition.y, playerPrefab.transform.position.z), _playerParent);
+        }
+        else
+        {
+            playerGameObject = Instantiate(playerPrefab, new Vector3(spawnPosition.x, spawnPosition.y, playerPrefab.transform.position.z), playerPrefab.transform.rotation, _playerParent);
+        }
         var player = playerGameObject.GetComponent<Entity>();
 
         player.Initialize(clonedParameter, isNpc);

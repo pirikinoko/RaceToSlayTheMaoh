@@ -97,7 +97,7 @@ public class Constants
     }
 
     // ******* Main *******
-    public static int MaxPlayerCountIncludingNpc { get; set; } = 4;
+    public static int MaxPlayerCount { get; set; } = 4;
     public static int MaxDiceValue { get; set; } = 4;
     public static float DiceRollUpdateInterval { get; set; } = 0.02f;
     public static int DiceHighlightBlinkCount { get; set; } = 5;
