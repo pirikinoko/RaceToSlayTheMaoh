@@ -102,7 +102,7 @@ public class MainController : NetworkBehaviour
         }
 
         _fieldController.UpdateStatusBoxesAsync().Forget();
-        CurrentTurnPlayerEntity = _playerController.PlayerList.FirstOrDefault(p => p.Id == CurrentTurnPlayerId);
+        CurrentTurnPlayerEntity = _playerController.SyncedPlayerList.FirstOrDefault(p => p.Id == CurrentTurnPlayerId);
         // 現在のターンのプレイヤーを最前面に表示する
         CurrentTurnPlayerEntity.gameObject.GetComponent<SpriteRenderer>().sortingOrder++;
 

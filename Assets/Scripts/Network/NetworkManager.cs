@@ -39,10 +39,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
-    public void SpawnPlayer(GameObject playerPrefab, Vector3 spawnPosition, Transform parentTransform)
+    public NetworkObject SpawnPlayer(GameObject playerPrefab, Vector3 spawnPosition, Transform parentTransform)
     {
         var playerObject = _networkRunner.Spawn(playerPrefab, spawnPosition, Quaternion.identity);
         playerObject.transform.SetParent(parentTransform);
+        return playerObject;
     }
 
     public NetworkRunner GetNetworkRunner()

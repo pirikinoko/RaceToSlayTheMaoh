@@ -138,7 +138,7 @@ public class ControllableEntity : MonoBehaviour
     {
         // 敵がいるかどうかをチェック
         var allEntity = new List<Entity>();
-        allEntity.AddRange(_playerController.PlayerList);
+        allEntity.AddRange(_playerController.SyncedPlayerList);
         allEntity.AddRange(_enemyController.EnemyList);
 
 
@@ -272,7 +272,7 @@ public class ControllableEntity : MonoBehaviour
                 entityPositions.Add((Vector2)enemy.transform.position);
         }
 
-        foreach (var player in _playerController.PlayerList)
+        foreach (var player in _playerController.SyncedPlayerList)
         {
             if (includePlayersAsTarget && player != this.GetComponent<Entity>() && Vector2.Distance(player.transform.position, _transform.position) > 0.1f && player.IsAlive)
                 entityPositions.Add((Vector2)player.transform.position);

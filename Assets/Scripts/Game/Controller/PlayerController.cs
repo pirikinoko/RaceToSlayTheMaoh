@@ -2,19 +2,21 @@ using Cysharp.Threading.Tasks;
 using R3;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Fusion;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     [SerializeField]
     private NetworkManager _networkManager;
     [SerializeField]
     private Transform _playerParent;
 
-    public List<Entity> PlayerList = new();
+    [Networked, Capacity(4), OnChangedRender(nameof(OnPlayerListChanged))]
+    public NetworkArray<NetworkObject> PlayerNetworkObjectList { get; }
+
+    public List<Entity> SyncedPlayerList { get; } = new List<Entity>();
 
     public Observable<List<Entity>> OnPlayersInitialized => _onPlayersInitialized;
 
@@ -27,42 +29,53 @@ public class PlayerController : MonoBehaviour
         _mainController = mainController;
     }
 
+    // PlayerEntitiesが変更されたときに呼ばれるコールバック
+    private void OnPlayerListChanged()
+    {
+        UpdateLocalPlayerList();
+    }
+
+    private void UpdateLocalPlayerList()
+    {
+        SyncedPlayerList.Clear();
+        foreach (var netObj in PlayerNetworkObjectList)
+        {
+            if (netObj != null)
+            {
+                SyncedPlayerList.Add(netObj.GetComponent<Entity>());
+            }
+        }
+    }
+
     public async UniTask InitializePlayersAsync()
     {
         var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
-        var parameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
+        var playerParameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
 
         for (int i = 0; i < Constants.MaxPlayerCount; i++)
         {
             var playerId = i + 1;
             var playerPrefab = await Addressables.LoadAssetAsync<GameObject>(Constants.GetAssetReferencePlayer(playerId)).ToUniTask();
-            var clonedParameter = parameter.Clone();
+            var clonedParameter = playerParameter.Clone();
             var isNpc = i >= _mainController.PlayerCount;
 
             clonedParameter.BattleSprite = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerBattleImage(playerId)).ToUniTask();
             clonedParameter.FieldSprite = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerFieldImage(playerId)).ToUniTask();
             clonedParameter.Name = isNpc ? $"{Constants.GetNpcNames(Settings.Language)[i]}" : $"{Constants.GetPlayerName(Settings.Language, playerId)}";
-            await InitializePlayer(playerPrefab, clonedParameter, Constants.PlayerSpownPositions[i], isNpc);
-            PlayerList[i].SetName(Constants.GetPlayerName(Settings.Language, playerId));
-        }
-        _onPlayersInitialized.OnNext(PlayerList);
-    }
 
-    private async Task InitializePlayer(GameObject playerPrefab, Parameter clonedParameter, Vector2 spawnPosition, bool isNpc)
-    {
-        GameObject playerGameObject = null;
-        if (_mainController.GameMode == GameMode.Online)
-        {
-            _networkManager.SpawnPlayer(playerPrefab, new Vector3(spawnPosition.x, spawnPosition.y, playerPrefab.transform.position.z), _playerParent);
-        }
-        else
-        {
-            playerGameObject = Instantiate(playerPrefab, new Vector3(spawnPosition.x, spawnPosition.y, playerPrefab.transform.position.z), playerPrefab.transform.rotation, _playerParent);
-        }
-        var player = playerGameObject.GetComponent<Entity>();
+            // プレイヤーをスポーンさせる
+            var playerGameObject = _networkManager.SpawnPlayer(playerPrefab, new Vector3(Constants.PlayerSpownPositions[i].x, Constants.PlayerSpownPositions[i].y, playerPrefab.transform.position.z), _playerParent);
 
-        player.Initialize(clonedParameter, isNpc);
+            // スポーンしたオブジェクトのEntityコンポーネントを初期化
+            var playerEntity = playerGameObject.GetComponent<Entity>();
+            playerEntity.Initialize(clonedParameter, isNpc);
+            playerEntity.SetName(Constants.GetPlayerName(Settings.Language, playerId));
 
-        PlayerList.Add(player);
+            PlayerNetworkObjectList.Set(i, playerGameObject.GetComponent<NetworkObject>());
+        }
+
+        // OnChangedコールバックが全クライアントで呼ばれ、SyncedPlayerListが更新されるので、
+        // ここで手動でOnNextを呼ぶ必要はなくなります。
+        // _onPlayersInitialized.OnNext(SyncedPlayerList);
     }
 }

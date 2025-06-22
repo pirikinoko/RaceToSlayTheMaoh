@@ -43,3 +43,5 @@ mode: ask
 - 回答には、関連するファイルやシンボルへのリンク（例: [`StateController`](p:\UnityProjects\BossSlayingTourney\Assets\Scripts\OverAll\StateController.cs) や [`Constants.cs`](p:\UnityProjects\BossSlayingTourney\Assets\Scripts\OverAll\Constants.cs)）を必ず含めてください。
 - 回答は日本語で、簡潔かつ正確に記述してください。
 - コードの提案は、プロジェクトの設計思想や既存のコーディングスタイルに沿ったものにしてください。
+- 本ゲームはオフライン・オンラインの両方でプレイできる設計にしなければなりません。ネットワーク機能に関する質問には、Photon Fusionの使用を前提に回答してください。
+- オンライン時のFusionのモードは共有モードです。

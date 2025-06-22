@@ -48,7 +48,7 @@ public class FieldController : MonoBehaviour
     public bool CheckEncount(Entity entityLeft, Vector2 entityLeftsPreviousPos)
     {
         var allEntity = new List<Entity>();
-        allEntity.AddRange(_playerController.PlayerList);
+        allEntity.AddRange(_playerController.SyncedPlayerList);
         allEntity.AddRange(_enemyController.EnemyList);
 
         foreach (var entityRight in allEntity)
@@ -78,7 +78,7 @@ public class FieldController : MonoBehaviour
     public void DisplayStatusBoxes()
     {
         _statusBoxComponents.ForEach(statusBox => statusBox.style.display = DisplayStyle.None);
-        for (int i = 0; i < _playerController.PlayerList.Count; i++)
+        for (int i = 0; i < _playerController.SyncedPlayerList.Count; i++)
         {
             _statusBoxComponents[i].style.display = DisplayStyle.Flex;
         }
@@ -90,9 +90,9 @@ public class FieldController : MonoBehaviour
         var manaIcon = await Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferenceManaIcon).Task;
         var powerIcon = await Addressables.LoadAssetAsync<Sprite>(Constants.AssetReferencePowerIcon).Task;
 
-        for (int i = 0; i < _playerController.PlayerList.Count; i++)
+        for (int i = 0; i < _playerController.SyncedPlayerList.Count; i++)
         {
-            _statusBoxComponents[i].UpdateStatuBoxElments(_playerController.PlayerList[i], heartIcon, manaIcon, powerIcon);
+            _statusBoxComponents[i].UpdateStatuBoxElments(_playerController.SyncedPlayerList[i], heartIcon, manaIcon, powerIcon);
             _statusBoxComponents[i].style.scale = Constants.ScaleForWaitingPlayersStatusBox;
             var playerIcon = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerBattleImage(i + 1)).Task;
             _statusBoxComponents[i].Q<VisualElement>("PlayerIcon").style.backgroundImage = new StyleBackground(playerIcon);
