@@ -3,6 +3,7 @@ using UnityEngine;
 using R3;
 using TMPro;
 using Fusion;
+using System.Collections.Generic;
 
 public class Entity : NetworkBehaviour
 {
@@ -16,8 +17,23 @@ public class Entity : NetworkBehaviour
     public ReadOnlyReactiveProperty<int> HitPointRp => _hitPointRp;
     public ReadOnlyReactiveProperty<int> ManaPointRp => _manaPointRp;
 
-    public bool IsAlive { get; set; } = true;
+    [Networked, OnChangedRender(nameof(OnHpChanged))]
+    public int Hp { get; set; }
 
+    [Networked, OnChangedRender(nameof(OnMpChanged))]
+    public int Mp { get; set; }
+
+    [Networked]
+    public int Power { get; set; }
+
+    // NetworkArrayを使ってスキルリストを同期する
+    [Networked, Capacity(16), OnChangedRender(nameof(OnSkillsChanged))]
+    public NetworkArray<SkillList.SkillType> SkillTypes { get; }
+
+    // --- ローカルでのみ使用するデータ ---
+    public Parameter BaseParameter { get; private set; }
+    public List<Skill> SyncedSkills { get; private set; } = new List<Skill>();
+    public bool IsAlive => Hp > 0; // IsAliveは現在のHPから算出する
     [Networked]
     public bool IsNpc { get; private set; } = false;
 
@@ -29,6 +45,15 @@ public class Entity : NetworkBehaviour
     private AbnormalCondition _abnormalCondition;
     private SpriteRenderer _spriteRenderer;
 
+
+    public override void Spawned()
+    {
+        // 初期化時に一度コールバックを呼んでおくことで、
+        // スポーン直後の値がUIに反映されることを保証します。
+        OnHpChanged();
+        OnMpChanged();
+        OnSkillsChanged();
+    }
 
     public void Initialize(Parameter parameter, bool isNpc)
     {
@@ -74,6 +99,34 @@ public class Entity : NetworkBehaviour
         _manaPointRp.Value = newMana;
         Parameter.ManaPoint = _manaPointRp.Value;
     }
+
+    private void OnHpChanged()
+    {
+        _hitPointRp.Value = Hp;
+    }
+
+    private void OnMpChanged()
+    {
+        _manaPointRp.Value = Mp;
+    }
+
+    private void OnSkillsChanged()
+    {
+        UpdateLocalSkillList();
+    }
+
+    private void UpdateLocalSkillList()
+    {
+        SyncedSkills.Clear();
+        foreach (var skillType in SkillTypes)
+        {
+            if (skillType != default)
+            {
+                SyncedSkills.Add(SkillList.GetSkill(skillType));
+            }
+        }
+    }
+
 
     public void ChangeVisibility(bool isVisible)
     {

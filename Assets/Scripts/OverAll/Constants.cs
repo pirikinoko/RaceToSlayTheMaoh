@@ -96,6 +96,32 @@ public class Constants
         }
     }
 
+    public static string GetSentenceForOnlinePlayButton(Language language)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return "オンラインランダムマッチ";
+            case Language.English:
+                return "Online Random Match";
+            default:
+                return "Online Random Match";
+        }
+    }
+
+    public static string GetSentenceForMatchingButton(Language language)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return "マッチングをやめる";
+            case Language.English:
+                return "Stop Matching";
+            default:
+                return "Stop Matching";
+        }
+    }
+
     // ******* Main *******
     public static int MaxPlayerCount { get; set; } = 4;
     public static int MaxDiceValue { get; set; } = 4;

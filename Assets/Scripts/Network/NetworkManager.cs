@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
@@ -33,9 +34,55 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         _networkRunner = Instantiate(networkRunnerPrefab);
         _networkRunner.AddCallbacks(this);
-        var result = await _networkRunner.StartGame(new StartGameArgs
+    }
+
+    public async UniTask StartGame(Fusion.GameMode gameMode)
+    {
+        // Start the network runner
+        await _networkRunner.StartGame(new StartGameArgs
         {
-            GameMode = Fusion.GameMode.Shared
+            GameMode = gameMode,
+            SceneManager = _networkRunner.SceneManager
+        });
+    }
+
+    public async UniTask StartLocalGameAsync()
+    {
+        await _networkRunner.StartGame(new StartGameArgs
+        {
+            GameMode = Fusion.GameMode.Single,
+            SceneManager = _networkRunner.SceneManager,
+            PlayerCount = 1,
+            IsVisible = false,
+            IsOpen = false,
+        });
+    }
+
+    public async UniTask JoinOldestRoomAsync()
+    {
+        await _networkRunner.StartGame(new StartGameArgs
+        {
+            GameMode = Fusion.GameMode.Shared,
+            SceneManager = _networkRunner.SceneManager,
+            PlayerCount = Constants.MaxPlayerCount,
+            IsVisible = true,
+            IsOpen = true,
+            MatchmakingMode = Fusion.Photon.Realtime.MatchmakingMode.FillRoom
+        });
+    }
+
+
+    public async UniTask JoinRoomByNameAsync(string roomName)
+    {
+        await _networkRunner.StartGame(new StartGameArgs
+        {
+            GameMode = Fusion.GameMode.Shared,
+            SessionName = roomName,
+            SceneManager = _networkRunner.SceneManager,
+            PlayerCount = Constants.MaxPlayerCount,
+            IsVisible = false,
+            IsOpen = true,
+            MatchmakingMode = Fusion.Photon.Realtime.MatchmakingMode.FillRoom
         });
     }
 
