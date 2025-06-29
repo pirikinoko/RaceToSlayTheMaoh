@@ -51,6 +51,27 @@ public static class SkillList
             _ => throw new InvalidOperationException("Unknown skill name")
         };
     }
+    /// <summary>
+    /// スキル名からスキルエフェクトを取得
+    /// </summary>
+    public static string GetSkillEffectKey(string skillName)
+    {
+        return skillName switch
+        {
+            var name when name == GetSkillNameByLanguage(SkillType.Heal) => CreateHealSkill().EffectKey,
+            var name when name == GetSkillNameByLanguage(SkillType.Bite) => CreateBiteSkill().EffectKey,
+            var name when name == GetSkillNameByLanguage(SkillType.Ignition) => CreateIgnitionSkill().EffectKey,
+            var name when name == GetSkillNameByLanguage(SkillType.Drain) => CreateDrainSkill().EffectKey,
+            var name when name == GetSkillNameByLanguage(SkillType.Destroy) => CreateDestroySkill().EffectKey,
+            var name when name == GetSkillNameByLanguage(SkillType.Regen) => CreateRegenSkill().EffectKey,
+            var name when name == GetSkillNameByLanguage(SkillType.SuperHeal) => CreateSuperHealSkill().EffectKey,
+            var name when name == GetSkillNameByLanguage(SkillType.Training) => CreateTrainingSkill().EffectKey,
+            var name when name == GetSkillNameByLanguage(SkillType.Strike) => CreateStrikeSkill().EffectKey,
+            var name when name == GetSkillNameByLanguage(SkillType.PoisonMushroom) => CreatePoisonMushroomSkill().EffectKey,
+            _ => throw new InvalidOperationException("Unknown skill name")
+        };
+    }
+
 
     /// <summary>
     /// スキルタイプからスキルを取得
@@ -328,13 +349,13 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyHeal,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
+                skillUser.SetManaPoint(skillUser.Mp - 1);
                 int healAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: 5,
                     offsetPercent: 50,
                     missPotential: 0
                 );
-                skillUser.SetHitPoint(skillUser.Parameter.HitPoint + healAmount);
+                skillUser.SetHitPoint(skillUser.Hp + healAmount);
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
@@ -355,13 +376,13 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyBite,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
+                skillUser.SetManaPoint(skillUser.Mp - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
-                    baseValue: skillUser.Parameter.Power + 1,
+                    baseValue: skillUser.BaseParameter.Power + 1,
                     offsetPercent: 50,
                     missPotential: Constants.MissPotentialOnEveryDamageAction
                 );
-                opponent.SetHitPoint(opponent.Parameter.HitPoint - damageAmount);
+                opponent.SetHitPoint(opponent.Hp - damageAmount);
                 int healAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: 2,
                     offsetPercent: 50,
@@ -372,7 +393,7 @@ public static class SkillList
 
                 if (damageAmount > 0)
                 {
-                    skillUser.SetHitPoint(skillUser.Parameter.HitPoint + healAmount);
+                    skillUser.SetHitPoint(skillUser.Hp + healAmount);
                     //logs.Add($"{damageAmount}のダメージを与え,HPを{healAmount}回復した");
                 }
                 else
@@ -397,20 +418,19 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyIgnition,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
+                skillUser.SetManaPoint(skillUser.Mp - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.AttackPower,
                     offsetPercent: 50,
                     missPotential: 30
                 );
-                opponent.SetHitPoint(opponent.Parameter.HitPoint - damageAmount);
+                opponent.SetHitPoint(opponent.Hp - damageAmount);
 
                 var logs = new List<string>();
 
                 if (damageAmount > 0)
                 {
-                    var abnormalCondition = opponent.GetAbnormalCondition();
-                    abnormalCondition.Condition = Condition.Fire;
+                    opponent.AbnormalConditionType = Condition.Fire;
                     //logs.Add($"炎の力で{damageAmount}のダメージを与えた");
                 }
                 else
@@ -435,19 +455,19 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyDrain,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
+                skillUser.SetManaPoint(skillUser.Mp - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.AttackPower,
                     offsetPercent: 50,
                     missPotential: Constants.MissPotentialOnEveryDamageAction
                 );
-                opponent.SetHitPoint(opponent.Parameter.HitPoint - damageAmount);
+                opponent.SetHitPoint(opponent.Hp - damageAmount);
 
                 var logs = new List<string>();
 
                 if (damageAmount > 0)
                 {
-                    skillUser.SetHitPoint(skillUser.Parameter.HitPoint + damageAmount);
+                    skillUser.SetHitPoint(skillUser.Hp + damageAmount);
                     // logs.Add($"{opponent.name}から{damageAmount}HP吸収した");
                 }
                 else
@@ -472,13 +492,13 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyDestroy,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
+                skillUser.SetManaPoint(skillUser.Mp - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: skillUser.AttackPower + 3,
                     offsetPercent: 50,
                     missPotential: Constants.MissPotentialOnEveryDamageAction
                 );
-                opponent.SetHitPoint(opponent.Parameter.HitPoint - damageAmount);
+                opponent.SetHitPoint(opponent.Hp - damageAmount);
 
                 var logs = new List<string>();
 
@@ -508,10 +528,8 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyRegen,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
-
-                var abnormalCondition = skillUser.GetAbnormalCondition();
-                abnormalCondition.Condition = Condition.Regen;
+                skillUser.SetManaPoint(skillUser.Mp - 1);
+                skillUser.AbnormalConditionType = Condition.Regen;
 
                 return new Skill.SkillResult(
                     logs: new string[]
@@ -533,14 +551,14 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeySuperHeal,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
+                skillUser.SetManaPoint(skillUser.Mp - 1);
                 int healAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
                     baseValue: 10,
                     offsetPercent: 50,
                     missPotential: 0
                 );
 
-                skillUser.SetHitPoint(skillUser.Parameter.HitPoint + healAmount);
+                skillUser.SetHitPoint(skillUser.Hp + healAmount);
                 return new Skill.SkillResult(
                     logs: new string[]
                     {
@@ -561,12 +579,10 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyTraining,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
+                skillUser.SetManaPoint(skillUser.Mp - 1);
 
                 int powerBoost = 1;
-                var abnormalCondition = skillUser.GetAbnormalCondition();
-                abnormalCondition.PowerGain += powerBoost;
-                skillUser.SetAbnormalCondition(abnormalCondition);
+                skillUser.AbnormalConditionPowerGain += powerBoost;
 
                 return new Skill.SkillResult(
                     logs: new string[]
@@ -588,20 +604,17 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyStrike,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
+                skillUser.SetManaPoint(skillUser.Mp - 1);
                 int damageAmount = Constants.GetRandomizedValueWithinOffsetWithMissPotential(
-                    baseValue: skillUser.Parameter.Power + 2,
+                    baseValue: skillUser.BaseParameter.Power + 2,
                     offsetPercent: 50,
                     missPotential: Constants.MissPotentialOnEveryDamageAction + 15
                 );
-                opponent.SetHitPoint(opponent.Parameter.HitPoint - damageAmount);
+                opponent.SetHitPoint(opponent.Hp - damageAmount);
                 var logs = new List<string>();
                 if (damageAmount > 0)
                 {
-                    var abnormalCondition = opponent.GetAbnormalCondition();
-                    abnormalCondition.Condition = Condition.Stun;
-                    opponent.SetAbnormalCondition(abnormalCondition);
-
+                    opponent.AbnormalConditionType = Condition.Stun;
                     //  logs.Add($"{damageAmount}のダメージを与え,相手をスタンさせた");
                 }
                 else
@@ -625,11 +638,8 @@ public static class SkillList
             effectKey: Constants.ImageAnimationKeyPoisonMushroom,
             action: (skillUser, opponent) =>
             {
-                skillUser.SetManaPoint(skillUser.Parameter.ManaPoint - 1);
-
-                var abnormalCondition = opponent.GetAbnormalCondition();
-                abnormalCondition.Condition = Condition.Poison;
-                opponent.SetAbnormalCondition(abnormalCondition);
+                skillUser.SetManaPoint(skillUser.Mp - 1);
+                opponent.AbnormalConditionType = Condition.Poison;
 
                 var logs = new List<string>
                 {

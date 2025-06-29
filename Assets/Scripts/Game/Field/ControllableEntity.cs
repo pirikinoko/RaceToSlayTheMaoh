@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Fusion;
 using R3;
 using TMPro;
 using UnityEngine;
@@ -203,8 +205,14 @@ public class ControllableEntity : MonoBehaviour
         if (!hasEncounted)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(Constants.DelayBeforeNewTurnSeconds));
-            _mainController.StartNewTurnAsync().Forget();
+            _mainController.NewTurnProcess();
         }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_TracePath(Queue<Vector2> path)
+    {
+        TracePathAsync(path).Forget();
     }
 
     /// <summary>
@@ -252,19 +260,26 @@ public class ControllableEntity : MonoBehaviour
         return _remainingMoves;
     }
 
+    public void MoveNpc(bool includePlayersAsTarget)
+    {
+        (Vector2? nearestGoal, Queue<Vector2> bestPath) = FindNearestEntityPath(includePlayersAsTarget);
+        if (nearestGoal != null && bestPath != null && bestPath.Count > 0)
+        {
+            Rpc_TracePath(bestPath);
+        }
+    }
+
     /// <summary>
     /// /// 一番少ない移動数で済むEntityに向かって移動する
     /// </summary>
     /// <returns></returns>
-    public async UniTask MoveTowardsNearestEntity()
+    /// /// <param name="includePlayersAsTarget">プレイヤーもターゲットに含めるか,プレイヤー同士の戦いになりすぎるため</param>
+    public (Vector2? nearestGoal, Queue<Vector2> bestPath) FindNearestEntityPath(bool includePlayersAsTarget)
     {
         Vector2 startPos = _transform.position;
 
         // ゴール候補（Entityの位置）をHashSetで取得
         var entityPositions = new HashSet<Vector2>();
-
-        // 一番近い敵がプレイヤーであることが多いため3分の2の確率でプレイヤーは除外する
-        bool includePlayersAsTarget = UnityEngine.Random.Range(0, 3) == 0;
 
         foreach (var enemy in _enemyController.EnemyList)
         {
@@ -330,10 +345,6 @@ public class ControllableEntity : MonoBehaviour
                 visited.Add(next);
             }
         }
-
-        if (nearestGoal != null && bestPath != null && bestPath.Count > 0)
-        {
-            await TracePathAsync(bestPath);
-        }
+        return (nearestGoal, bestPath);
     }
 }

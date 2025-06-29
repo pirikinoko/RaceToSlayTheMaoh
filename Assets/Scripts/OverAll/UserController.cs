@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UserController : MonoBehaviour
 {
+    private NetworkManager _networkManager;
     private PlayerController _playerController;
 
     public int Id;
@@ -21,6 +22,8 @@ public class UserController : MonoBehaviour
     public void Initialize(PlayerController playerController)
     {
         _playerController = playerController;
+        _networkManager = NetworkManager.Instance;
+        Id = _networkManager.GetPlayerId(_networkManager.GetNetworkRunner().LocalPlayer);
     }
 
     private void GetMyEntity(List<Entity> playerList)

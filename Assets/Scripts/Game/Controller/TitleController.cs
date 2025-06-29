@@ -50,7 +50,7 @@ public class TitleController : MonoBehaviour
     private void StartLocalGame()
     {
         _mainController.GameMode = GameMode.Local;
-        _networkManager.StartLocalGameAsync().Forget();
+        _networkManager.CraeateLocalGameAsync().Forget();
         _stateContoller.ChangeState(State.Field);
     }
 
@@ -66,7 +66,7 @@ public class TitleController : MonoBehaviour
         {
             return;
         }
-        _networkManager.JoinOldestRoomAsync().Forget();
+        _networkManager.JoinOrCreateOldestRoomAsync().Forget();
         _whileMatching = true;
         _buttonStartMatchMaking.text = Constants.GetSentenceForMatchingButton(Settings.Language);
         _buttonStartMatchMaking.clicked -= StartMatchMaking;

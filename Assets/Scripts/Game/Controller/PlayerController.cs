@@ -59,8 +59,6 @@ public class PlayerController : NetworkBehaviour
             var clonedParameter = playerParameter.Clone();
             var isNpc = i >= _mainController.PlayerCount;
 
-            clonedParameter.BattleSprite = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerBattleImage(playerId)).ToUniTask();
-            clonedParameter.FieldSprite = await Addressables.LoadAssetAsync<Sprite>(Constants.GetAssetReferencePlayerFieldImage(playerId)).ToUniTask();
             clonedParameter.Name = isNpc ? $"{Constants.GetNpcNames(Settings.Language)[i]}" : $"{Constants.GetPlayerName(Settings.Language, playerId)}";
 
             // プレイヤーをスポーンさせる
@@ -68,7 +66,7 @@ public class PlayerController : NetworkBehaviour
 
             // スポーンしたオブジェクトのEntityコンポーネントを初期化
             var playerEntity = playerGameObject.GetComponent<Entity>();
-            playerEntity.Initialize(clonedParameter, isNpc);
+            playerEntity.Initialize(clonedParameter, playerId, Constants.GetAssetReferencePlayerFieldImage(playerId), Constants.GetAssetReferencePlayerBattleImage(playerId), isNpc);
             playerEntity.SetName(Constants.GetPlayerName(Settings.Language, playerId));
 
             PlayerNetworkObjectList.Set(i, playerGameObject.GetComponent<NetworkObject>());

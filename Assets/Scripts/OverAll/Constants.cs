@@ -19,6 +19,16 @@ public class Constants
         return string.Format("Player{0}FieldImage", playerId);
     }
 
+    public static string GetAssetReferenceEnemyFieldImage(EntityType entityType)
+    {
+        return string.Format("{0}FieldImage", entityType);
+    }
+
+    public static string GetAssetReferenceEnemyBattleImage(EntityType entityType)
+    {
+        return string.Format("{0}BattleImage", entityType);
+    }
+
     public static string AssetReferenceEnemy = "Enemy";
     public static string AssetReferencePlayerIcon = "PlayerIcon";
     public static string AssetReferenceHeartIcon = "HeartIcon";

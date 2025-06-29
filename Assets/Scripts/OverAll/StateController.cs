@@ -108,7 +108,7 @@ public class StateController : MonoBehaviour
         await _fieldController.UpdateStatusBoxesAsync();
 
         await UniTask.Delay(TimeSpan.FromSeconds(Constants.DelayBeforeNewTurnSeconds));
-        await _mainController.StartNewTurnAsync();
+        _mainController.NewTurnProcess();
     }
 
     private async void SwitchBattleState()
@@ -146,7 +146,7 @@ public class StateController : MonoBehaviour
 
         // リザルト画面のUIを準備
         var resultMessageLabel = _resultRoot.Q<Label>("ResultMessageLabel");
-        resultMessageLabel.text = Constants.GetResultMessageWin(Settings.Language, winner.Parameter.Name);
+        resultMessageLabel.text = Constants.GetResultMessageWin(Settings.Language, winner.BaseParameter.Name);
         resultMessageLabel.style.display = DisplayStyle.None;
 
         var turnCountMessageLabel = _resultRoot.Q<Label>("TurnCountMessageLabel");

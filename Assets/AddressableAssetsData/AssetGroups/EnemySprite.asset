@@ -10,99 +10,98 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Sprite
+  m_Name: EnemySprite
   m_EditorClassIdentifier: 
-  m_GroupName: Sprite
+  m_GroupName: EnemySprite
   m_GUID: a0994da785cdaed408fc71ce79aa7912
   m_SerializeEntries:
-  - m_GUID: 1349a394fe94f354d9159a565e5051a3
-    m_Address: Player3BattleImage
+  - m_GUID: 0341b7a3f41a8ac42b2a0930a18bdbfd
+    m_Address: ShieldManOnField
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3dbe7276f4b49864fb69b83790a26153
+    m_Address: SatanOnField
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4e0f599b690ec1947b3946fb4b695ac9
-    m_Address: Magician
+    m_Address: MagicianOnBattle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 51deeebefef47cf478d93159728eb67d
-    m_Address: Satan
+    m_Address: SatanOnBattle
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5919f2f91a6f9b244b463f6e55d9eed9
-    m_Address: PowerIcon
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Icon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5ddb43dcafe8e074a94c8f1a0e57629d
-    m_Address: ShieldMan
+    m_Address: ShieldManOnBattle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 690601d770425be4a8400e552965d958
-    m_Address: PoisonConditionIcon
+  - m_GUID: 6d69ca5ac16fcad47b75a1608c52b754
+    m_Address: DullahanOnField
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9ac73ed4eab31ff4d8f36b198f085fd8
-    m_Address: Player4FieldImage
+  - m_GUID: 6d99c99017f371241b756f03f8f9bd45
+    m_Address: SlimeOnField
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ac688a43ca20a6240b67851c25614dcf
-    m_Address: Player1FieldImage
+  - m_GUID: a9548bf485a3fe44db89e60e9f47c172
+    m_Address: AxeManOnField
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad7990e0afdfac141853a8a75aabd60e
+    m_Address: MushroomOnField
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: af713fbb749359b4ea2624e9da170491
-    m_Address: Dullahan
+    m_Address: DullahanOnBattle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bd8199a4fa9c05549a4083575f74526b
-    m_Address: AxeMan
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: be7891abc6af39646a2fd15dc1232f68
-    m_Address: Player3FieldImage
+    m_Address: AxeManOnBattle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d9bd21097d437e64d976ef1b2bea7738
-    m_Address: Bat
+    m_Address: BatOnBattle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e281157d40322ae4594e2f0d2f1faa95
-    m_Address: RegenConditionIcon
+  - m_GUID: da477b8e98a563149b366d626eeb9832
+    m_Address: MagicianOnField
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f026905c12b63f34fb7f2d9eee3128bf
-    m_Address: Player4BattleImage
+  - m_GUID: e03843a4d024fba4bb9c2105376b3d11
+    m_Address: BatlOnField
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e92d5b76177d7d2408c91970b53d85f7
+    m_Address: SwordManOnField
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f24f3374a2210234cb607175de4282b7
-    m_Address: Slime
+    m_Address: SlimeOnBattle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f2a1731b04f68f341a3e2c855c44128c
-    m_Address: MushRoom
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f3037cf43720e384888edbd7a1eee09e
-    m_Address: FireConditionIcon
+    m_Address: MushRoomOnBattle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe3b428935b89034aa55947675d47ba0
-    m_Address: SwordMan
+    m_Address: SwordManOnBattle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
 namespace UIToolkit
@@ -140,16 +141,16 @@ namespace UIToolkit
 
         public void UpdateStatuBoxElments(Entity entity, Sprite heartIcon, Sprite manaIcon, Sprite powerIcon)
         {
-            var parameter = entity.Parameter;
+            var parameter = entity.BaseParameter;
             _parameter = parameter;
-            _playerIcon.style.backgroundImage = parameter.BattleSprite.texture;
+            _playerIcon.style.backgroundImage = Addressables.LoadAssetAsync<Sprite>(entity.FieldSpriteAssetReference).WaitForCompletion().texture;
             _hitPointIcon.style.backgroundImage = heartIcon.texture;
             _manaPointIcon.style.backgroundImage = manaIcon.texture;
             _powerIcon.style.backgroundImage = powerIcon.texture;
             _nameLabel.text = parameter.Name;
-            _hitPointLabel.text = parameter.HitPoint.ToString();
-            _manaPointLabel.text = parameter.ManaPoint.ToString();
-            _powerLabel.text = parameter.Power.ToString();
+            _hitPointLabel.text = entity.Hp.ToString();
+            _manaPointLabel.text = entity.Mp.ToString();
+            _powerLabel.text = entity.BaseParameter.Power.ToString();
         }
     }
 }

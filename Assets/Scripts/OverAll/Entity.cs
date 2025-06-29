@@ -4,6 +4,7 @@ using R3;
 using TMPro;
 using Fusion;
 using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
 
 public class Entity : NetworkBehaviour
 {
@@ -12,102 +13,114 @@ public class Entity : NetworkBehaviour
     public int Id { get; private set; }
 
     public EntityType EntityType;
-    public Parameter Parameter { get; private set; }
+    public Parameter BaseParameter { get; private set; }
+
+    public int Hp;
+    public int Mp;
 
     public ReadOnlyReactiveProperty<int> HitPointRp => _hitPointRp;
     public ReadOnlyReactiveProperty<int> ManaPointRp => _manaPointRp;
 
+    private ReactiveProperty<int> _hitPointRp = new ReactiveProperty<int>();
+    private ReactiveProperty<int> _manaPointRp = new ReactiveProperty<int>();
+
+    // HPとMPはリアクティブプロパティの利用によるアニメーションがあるため，新しい値を設定する際はリアクティブプロパティを経由する
+    // そのために一時的な値を保持するプロパティを用意する
     [Networked, OnChangedRender(nameof(OnHpChanged))]
-    public int Hp { get; set; }
+    public int NewHpTemp { get; set; }
 
     [Networked, OnChangedRender(nameof(OnMpChanged))]
-    public int Mp { get; set; }
+    public int NewMpTemp { get; set; }
 
+
+    [Networked, OnChangedRender(nameof(OnSpriteChanged))]
+    public NetworkString<_32> FieldSpriteAssetReference { get; set; }
     [Networked]
-    public int Power { get; set; }
+    public NetworkString<_32> BattleSpriteAssetReference { get; set; }
 
     // NetworkArrayを使ってスキルリストを同期する
     [Networked, Capacity(16), OnChangedRender(nameof(OnSkillsChanged))]
     public NetworkArray<SkillList.SkillType> SkillTypes { get; }
 
-    // --- ローカルでのみ使用するデータ ---
-    public Parameter BaseParameter { get; private set; }
-    public List<Skill> SyncedSkills { get; private set; } = new List<Skill>();
-    public bool IsAlive => Hp > 0; // IsAliveは現在のHPから算出する
     [Networked]
-    public bool IsNpc { get; private set; } = false;
+    public int AbnormalConditionPowerGain { get; set; }
 
-    public int AttackPower => Parameter.Power + _abnormalCondition.PowerGain;
+    [Networked]
+    public Condition AbnormalConditionType { get; set; }
 
-    private ReactiveProperty<int> _hitPointRp = new ReactiveProperty<int>();
-    private ReactiveProperty<int> _manaPointRp = new ReactiveProperty<int>();
+    [Networked]
+    public bool IsNpc { get; set; } = false;
 
-    private AbnormalCondition _abnormalCondition;
+    public List<Skill> SyncedSkills { get; private set; } = new List<Skill>();
+    public bool IsAlive => Hp > 0;
+
+    public int AttackPower => BaseParameter.Power + AbnormalConditionPowerGain;
+
     private SpriteRenderer _spriteRenderer;
 
 
     public override void Spawned()
     {
-        // 初期化時に一度コールバックを呼んでおくことで、
-        // スポーン直後の値がUIに反映されることを保証します。
-        OnHpChanged();
-        OnMpChanged();
         OnSkillsChanged();
     }
 
-    public void Initialize(Parameter parameter, bool isNpc)
+    public void Initialize(Parameter parameter, int id,
+    NetworkString<_32> fieldSpriteAssetReference, NetworkString<_32> battleSpriteAssetReference, bool isNpc)
     {
-        Parameter = parameter;
-
-        Id = EntityMaster.AssignId();
-        gameObject.name = parameter.Name;
-
-        _abnormalCondition = new AbnormalCondition();
-
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = Parameter.FieldSprite;
-
-        _hitPointRp.Value = Parameter.HitPoint;
-        _manaPointRp.Value = Parameter.ManaPoint;
-
+        BaseParameter = parameter;
+        Hp = parameter.HitPoint;
+        Mp = parameter.ManaPoint;
+        Id = id;
         IsNpc = isNpc;
+        FieldSpriteAssetReference = fieldSpriteAssetReference;
+        BattleSpriteAssetReference = battleSpriteAssetReference;
+
+        gameObject.name = parameter.Name;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _hitPointRp.Value = Hp;
+        _manaPointRp.Value = Mp;
+        ResetAbnormalCondition();
     }
 
     public int Attack(Entity target)
     {
         // 攻撃力のポテンシャルのオフセット内でランダムな値を返す
         int damage = Constants.GetRandomizedValueWithinOffsetWithMissPotential(AttackPower, Constants.AttackOffsetPercent, Constants.MissPotentialOnEveryDamageAction);
-        target.SetHitPoint(target.Parameter.HitPoint - damage);
+        target.SetHitPoint(target.Hp - damage);
         return damage;
     }
 
     public Skill.SkillResult UseSkill(string skillName, Entity skillUser, Entity opponent)
     {
-        Skill skill = Parameter.Skills.Find(s => s.Name == skillName);
+        Skill skill = SyncedSkills.Find(s => s.Name == skillName);
         return skill.Execute(skillUser, opponent);
     }
 
     public void SetHitPoint(int newHp)
     {
-        // 古いHPも参照して処理をしたいので，先にリアクションプロパティを更新してから、エンティティのHPを更新する
-        _hitPointRp.Value = newHp;
-        Parameter.HitPoint = _hitPointRp.Value;
+        NewHpTemp = newHp;
     }
 
     public void SetManaPoint(int newMana)
     {
-        _manaPointRp.Value = newMana;
-        Parameter.ManaPoint = _manaPointRp.Value;
+        NewMpTemp = newMana;
+    }
+
+    private void OnSpriteChanged()
+    {
+        _spriteRenderer.sprite = Addressables.LoadAssetAsync<Sprite>(FieldSpriteAssetReference).WaitForCompletion();
     }
 
     private void OnHpChanged()
     {
-        _hitPointRp.Value = Hp;
+        _manaPointRp.Value = NewHpTemp;
+        Hp = _hitPointRp.Value;
     }
 
     private void OnMpChanged()
     {
-        _manaPointRp.Value = Mp;
+        _manaPointRp.Value = NewMpTemp;
+        Mp = _manaPointRp.Value;
     }
 
     private void OnSkillsChanged()
@@ -133,19 +146,16 @@ public class Entity : NetworkBehaviour
         _spriteRenderer.enabled = isVisible;
     }
 
-    public AbnormalCondition GetAbnormalCondition()
+    public void SetAbnormalCondition(Condition? type, int? powerGain)
     {
-        return _abnormalCondition;
-    }
-
-    public void SetAbnormalCondition(AbnormalCondition condition)
-    {
-        _abnormalCondition = condition;
+        AbnormalConditionType = type ?? AbnormalConditionType;
+        AbnormalConditionPowerGain = powerGain ?? AbnormalConditionPowerGain;
     }
 
     public void ResetAbnormalCondition()
     {
-        _abnormalCondition = new AbnormalCondition();
+        AbnormalConditionType = Condition.None;
+        AbnormalConditionPowerGain = 0;
     }
 
     public void SetName(string name)

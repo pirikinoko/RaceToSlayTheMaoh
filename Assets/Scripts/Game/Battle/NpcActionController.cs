@@ -18,7 +18,7 @@ public static class NpcActionController
                 Attack(battleController);
                 break;
             case 1:
-                string skillName = await DecideASkillToUseAsync(acter, target);
+                string skillName = DecideASkillToUse(acter, target);
 
                 //　適切なスキルが存在しない場合は通常攻撃をする
                 if (skillName == "None")
@@ -50,19 +50,16 @@ public static class NpcActionController
         battleController.UseSkill(skillName);
     }
 
-    public static async UniTask<string> DecideASkillToUseAsync(Entity acter, Entity target)
+    public static string DecideASkillToUse(Entity acter, Entity target)
     {
-        var HealSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Heal);
-        var DamageSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Damage);
-        var BuffSkills = acter.Parameter.Skills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Buff);
+        var HealSkills = acter.SyncedSkills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Heal);
+        var DamageSkills = acter.SyncedSkills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Damage);
+        var BuffSkills = acter.SyncedSkills.FindAll(s => SkillList.GetSkillEffectType(s.Name) == SkillList.SkillEffectType.Buff);
 
-        var parameterAsset = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
-        var defaultParameter = parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == acter.EntityType);
-
-        var hasChanceOfDeath = acter.Parameter.HitPoint < target.Parameter.Power * 1.5f;
+        var hasChanceOfDeath = acter.Hp < target.AttackPower * 1.5f;
 
         // バフスキルがあれば1/3の確率でバフスキルを返す
-        if (acter.GetAbnormalCondition().Condition != Condition.Regen && BuffSkills.Count > 0 && Random.Range(0, 3) == 0)
+        if (acter.AbnormalConditionType != Condition.Regen && BuffSkills.Count > 0 && Random.Range(0, 3) == 0)
         {
             return BuffSkills[Random.Range(0, BuffSkills.Count)].Name;
         }
@@ -84,25 +81,21 @@ public static class NpcActionController
 
     public static bool HasEnoughManaPoint(Entity acter, string skillName)
     {
-        return acter.Parameter.ManaPoint >= acter.Parameter.Skills.FirstOrDefault(s => s.Name == skillName).ManaCost;
+        return acter.Mp >= acter.SyncedSkills.FirstOrDefault(s => s.Name == skillName).ManaCost;
     }
 
-    public static void StopRolling(DiceBoxComponent diceBoxComponent)
+    public static void StopRolling(DiceBoxComponent diceBoxComponent, int result)
     {
-        diceBoxComponent.StopRolling();
+        diceBoxComponent.StopRolling(result);
     }
 
     /// <summary>
     /// レイキャストで当たった敵の中から最も近い敵を見つける
     /// つまりは障害物を挟む敵は対象外
     /// </summary>
-    /// <param name="acter"></param>
-    /// <param name="playerController"></param>
-    /// <param name="enemyController"></param>
-    /// <returns></returns>
-    public static async UniTask MoveAsync(ControllableEntity acter)
+    public static void Move(ControllableEntity acter, bool includePlayersAsTarget)
     {
-        await acter.MoveTowardsNearestEntity();
+        acter.MoveNpc(includePlayersAsTarget);
     }
 
     public static async UniTask SelectReward(BattleController battleController, BattleLogController battleLogController)

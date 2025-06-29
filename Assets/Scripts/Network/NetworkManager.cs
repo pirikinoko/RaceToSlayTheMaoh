@@ -10,13 +10,15 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public static NetworkManager Instance { get; private set; }
 
     [Networked]
-    public NetworkDictionary<PlayerRef, int> PlayerIdMap { get; }
+    public NetworkDictionary<PlayerRef, int> PlayerIdMap { get; set; }
 
     [SerializeField]
     private NetworkRunner networkRunnerPrefab;
 
+    [SerializeField]
+    private UserController _userController;
+
     private NetworkRunner _networkRunner;
-    private int _nextPlayerId = 1;
 
     private void Awake()
     {
@@ -36,17 +38,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         _networkRunner.AddCallbacks(this);
     }
 
-    public async UniTask StartGame(Fusion.GameMode gameMode)
-    {
-        // Start the network runner
-        await _networkRunner.StartGame(new StartGameArgs
-        {
-            GameMode = gameMode,
-            SceneManager = _networkRunner.SceneManager
-        });
-    }
-
-    public async UniTask StartLocalGameAsync()
+    public async UniTask CraeateLocalGameAsync()
     {
         await _networkRunner.StartGame(new StartGameArgs
         {
@@ -58,7 +50,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
-    public async UniTask JoinOldestRoomAsync()
+    public async UniTask JoinOrCreateOldestRoomAsync()
     {
         await _networkRunner.StartGame(new StartGameArgs
         {
@@ -72,7 +64,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     }
 
 
-    public async UniTask JoinRoomByNameAsync(string roomName)
+    public async UniTask JoinOrCraateRoomByNameAsync(string roomName)
     {
         await _networkRunner.StartGame(new StartGameArgs
         {
@@ -84,6 +76,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             IsOpen = true,
             MatchmakingMode = Fusion.Photon.Realtime.MatchmakingMode.FillRoom
         });
+    }
+
+    public void StartGame()
+    {
+        _networkRunner.SessionInfo.IsOpen = false;
+        _networkRunner.SessionInfo.IsVisible = false;
     }
 
     public NetworkObject SpawnPlayer(GameObject playerPrefab, Vector3 spawnPosition, Transform parentTransform)
@@ -121,8 +119,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             if (!PlayerIdMap.ContainsKey(player))
             {
-                PlayerIdMap.Add(player, _nextPlayerId);
-                _nextPlayerId++;
+                PlayerIdMap.Add(player, GetNetworkRunner().SessionInfo.PlayerCount);
             }
         }
     }
@@ -132,6 +129,11 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsSharedModeMasterClient)
         {
             PlayerIdMap.Remove(player);
+            int i = 1;
+            foreach (var kvp in PlayerIdMap)
+            {
+                PlayerIdMap.Set(kvp.Key, i++);
+            }
         }
     }
 

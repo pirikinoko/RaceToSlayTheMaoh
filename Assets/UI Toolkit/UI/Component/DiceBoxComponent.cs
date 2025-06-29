@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Fusion;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -33,7 +34,7 @@ namespace UIToolkit
             // UI要素の初期化
             _numberBox = new VisualElement();
             _numberLabel = new Label("0");
-            StopButton = new Button(() => StopRolling()) { text = "Stop" };
+            StopButton = new Button(() => Rpc_StopRolling(UnityEngine.Random.Range(1, Constants.MaxDiceValue + 1))) { text = "Stop" };
 
             Add(_numberBox);
             _numberBox.Add(_numberLabel);
@@ -77,13 +78,19 @@ namespace UIToolkit
             _numberLabel.style.opacity = 1f;
         }
 
-        public async void StopRolling()
+        [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+        public void Rpc_StopRolling(int result)
+        {
+            StopRolling(result);
+        }
+
+        public async void StopRolling(int result)
         {
             // StartRolling()をキャンセル
             _cancellationTokenSource.Cancel();
 
             StopButton.style.display = DisplayStyle.None;
-            _currentNumber = UnityEngine.Random.Range(1, Constants.MaxDiceValue + 1);
+            _currentNumber = result;
             // サイコロの数字を止める処理
             // 数字の切り替えを徐々に遅くし、最終的にランダムな数字を生成
             float delay = Constants.DiceRollUpdateInterval;

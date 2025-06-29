@@ -38,7 +38,8 @@ public class EnemyController : MonoBehaviour
     {
         var parameter = _parameterAsset.ParameterList.FirstOrDefault(p => p.EntityType == entityType);
         var clonedParameter = parameter.Clone();
-        target.Initialize(clonedParameter, isNpc: true);
+        target.Initialize(clonedParameter, -1,
+        Constants.GetAssetReferenceEnemyFieldImage(entityType), Constants.GetAssetReferenceEnemyBattleImage(entityType), isNpc: true);
     }
 
     private EntityType GetRandomEntityIdentifier()

@@ -1,10 +1,11 @@
 using Cysharp.Threading.Tasks;
+using Fusion;
 using R3;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BattleLogController : MonoBehaviour
+public class BattleLogController : NetworkBehaviour
 {
     public Observable<Unit> OnAllLogsRead => _onAllLogsRead;
 
@@ -13,8 +14,16 @@ public class BattleLogController : MonoBehaviour
     private Queue<string> _logs = new Queue<string>();
     private Label _label;
 
-    private bool isFlipable;
+    [Networked]
+    private bool _isFlipable { get; set; }
 
+    [Networked, OnChangedRender(nameof(UpdateLabel))]
+    private NetworkString<_64> SyncedLog { get; set; }
+
+    private void UpdateLabel()
+    {
+        _label.text = SyncedLog.Value;
+    }
 
     public void Initialize(Label logLabel)
     {
@@ -23,49 +32,55 @@ public class BattleLogController : MonoBehaviour
 
     private void Update()
     {
+        if (!_isFlipable)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
-            FlipLog();
+            Rpc_RequestFlipLog();
         }
     }
 
     public void SetText(string text)
     {
-        _label.text = text;
+        SyncedLog = text;
     }
 
     public void AddLog(string log)
     {
         _logs.Enqueue(log);
-        _label.text = _logs.Peek();
+        SyncedLog = _logs.Peek();
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void Rpc_RequestFlipLog()
+    {
+        FlipLog();
     }
 
     public void FlipLog()
     {
-        if (!isFlipable)
-        {
-            return;
-        }
-
         _logs.Dequeue();
         if (_logs.Count == 0)
         {
-            isFlipable = false;
+            _isFlipable = false;
             _onAllLogsRead.OnNext(Unit.Default);
             return;
         }
-        _label.text = _logs.Peek();
+        SyncedLog = _logs.Peek();
     }
 
     public void ClearLogs()
     {
         _logs.Clear();
-        _label.text = string.Empty;
-        isFlipable = false;
+        SyncedLog = string.Empty;
+        _isFlipable = false;
     }
 
     public void EnableFlip()
     {
-        isFlipable = true;
+        _isFlipable = true;
     }
 }

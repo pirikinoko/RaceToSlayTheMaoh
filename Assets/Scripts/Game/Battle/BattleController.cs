@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Fusion;
 using R3;
 using System.Collections.Generic;
 using System.Threading;
@@ -15,6 +16,7 @@ public class BattleController : MonoBehaviour
     private BattleLogController _battleLogController;
     private EnemyController _enemyController;
     private ImageAnimationHolder _imageAnimationHolder;
+    private NetworkManager _networkManager;
 
     private BattleStatus _battleStatus;
 
@@ -27,7 +29,13 @@ public class BattleController : MonoBehaviour
 
     private Vector2 _entityLeftsPreviousPos;
 
-    private int _turnCount = 0;
+    [Networked]
+    public int TurnCount { get; set; }
+
+    [Networked, OnChangedRender(nameof(OnTurnEntityChanged))]
+    private NetworkObject _currentTurnEntityNO { get; set; }
+
+
     private bool _hasActionEnded;
 
     /// <summary>
@@ -68,6 +76,20 @@ public class BattleController : MonoBehaviour
     private Reward _currentReward;
     private List<Skill> _currentRewardSkills;
 
+    private void OnTurnEntityChanged()
+    {
+        // ターン表示の矢印を切り替える
+        SwitchArrowVisibility();
+
+        // 自分のターンが来たかどうかを判定し、コマンドUIを開く
+        if (_currentTurnEntity == _userController.MyEntity)
+        {
+            OpenCommandView();
+            SetSkillButtons(_currentTurnEntity);
+            ToggleSkillButonClickable(_currentTurnEntity);
+        }
+    }
+
     private void Start()
     {
         InitializeUIElements();
@@ -82,6 +104,7 @@ public class BattleController : MonoBehaviour
         _battleLogController = battleLogController;
         _enemyController = enemyController;
         _imageAnimationHolder = imageAnimationHolder;
+        _networkManager = NetworkManager.Instance;
     }
 
     public static class ClassNames
@@ -141,22 +164,24 @@ public class BattleController : MonoBehaviour
     {
         // 左側のエンティティのUIの設定
         _entityNameLeft.text = _leftEntity.name;
-        _entityImageLeft.style.backgroundImage = _leftEntity.Parameter.BattleSprite.texture;
+        var texture = Addressables.LoadAssetAsync<Sprite>(_leftEntity.FieldSpriteAssetReference).WaitForCompletion().texture;
+        _entityImageLeft.style.backgroundImage = texture;
 
-        _healthLabelLeft.text = _leftEntity.Parameter.HitPoint.ToString();
-        _manaLabelLeft.text = _leftEntity.Parameter.ManaPoint.ToString();
+        _healthLabelLeft.text = _leftEntity.Hp.ToString();
+        _manaLabelLeft.text = _leftEntity.Mp.ToString();
         _leftConditionImage.style.display = DisplayStyle.None;
 
         // 右側のエンティティのUIの設定
         _entityNameRight.text = _rightEntity.name;
-        _entityImageRight.style.backgroundImage = _rightEntity.Parameter.BattleSprite.texture;
+        var rightTexture = Addressables.LoadAssetAsync<Sprite>(_rightEntity.BattleSpriteAssetReference).WaitForCompletion().texture;
+        _entityImageRight.style.backgroundImage = rightTexture;
 
-        _healthLabelRight.text = _rightEntity.Parameter.HitPoint.ToString();
-        _manaLabelRight.text = _rightEntity.Parameter.ManaPoint.ToString();
+        _healthLabelRight.text = _rightEntity.Hp.ToString();
+        _manaLabelRight.text = _rightEntity.Mp.ToString();
         _rightConditionImage.style.display = DisplayStyle.None;
 
-        _winnerEntity = null;
-        _loserEntity = null;
+        Rpc_WinnerEntity(null);
+        Rpc_LoserEntity(null);
 
         // アクションエレメントの位置を左側に初期化
         ResetActionElementPosition();
@@ -169,7 +194,7 @@ public class BattleController : MonoBehaviour
         _skillButtons.Clear();
         _skillScrollContainer.Clear();
 
-        foreach (var skill in entity.Parameter.Skills)
+        foreach (var skill in entity.SyncedSkills)
         {
             var skillButton = new Button(() =>
             {
@@ -189,18 +214,24 @@ public class BattleController : MonoBehaviour
     {
         foreach (var (button, manaCost) in _skillButtons)
         {
-            button.SetEnabled(entity.Parameter.ManaPoint >= manaCost);
+            button.SetEnabled(entity.Mp >= manaCost);
         }
     }
 
     public void StartBattle(Entity leftEntity, Entity rightEntity, Vector2 entityLeftsPreviousPos)
     {
-        _turnCount = 0;
         _battleStatus = BattleStatus.BeforeAction;
         _entityLeftsPreviousPos = entityLeftsPreviousPos;
 
         _leftEntity = _currentTurnEntity = leftEntity;
         _rightEntity = _waitingTurnEntity = rightEntity;
+
+        // マスタークライアントのみが初期状態を設定する
+        if (_networkManager.GetNetworkRunner().IsSharedModeMasterClient)
+        {
+            TurnCount = 0;
+            _currentTurnEntityNO = leftEntity.Object;
+        }
 
         _currentActionerArrowLeft.style.visibility = Visibility.Visible;
         _currentActionerArrowRight.style.visibility = Visibility.Hidden;
@@ -209,7 +240,7 @@ public class BattleController : MonoBehaviour
         CloseCommandView();
         CloseSkillScroll();
         CloseRewardView();
-        SetConditionImage();
+        Rpc_SetConditionImage();
 
         SetEntities();
 
@@ -219,30 +250,35 @@ public class BattleController : MonoBehaviour
     }
     private void StartNewTurn()
     {
+        if (!_networkManager.GetNetworkRunner().IsSharedModeMasterClient)
+        {
+            return;
+        }
+
         _hasActionEnded = false;
         _battleStatus = BattleStatus.BeforeAction;
 
-        bool isFirstTurn = _turnCount == 0;
+        bool isFirstTurn = TurnCount == 0;
 
         // _currentTurnEntityと_waitingTurnEntityを入れ替える
         if (!isFirstTurn)
         {
             Entity tmp = _currentTurnEntity;
-            _currentTurnEntity = _waitingTurnEntity;
-            _waitingTurnEntity = tmp;
-            SwitchArrowVisibility();
+            Rpc_SetCurrentTurnEntity(_waitingTurnEntity);
+            Rpc_SetWaitingTurnEntity(tmp);
+            _currentTurnEntityNO = _waitingTurnEntity.Object;
         }
 
         // ターン数を更新
         if (_currentTurnEntity == _leftEntity)
         {
-            _turnCount++;
+            TurnCount++;
         }
 
-        if (_currentTurnEntity.GetAbnormalCondition().Condition == Condition.Stun)
+        if (_currentTurnEntity.AbnormalConditionType == Condition.Stun)
         {
-            _currentTurnEntity.SetAbnormalCondition(new AbnormalCondition { Condition = Condition.None });
-            SetConditionImage();
+            _currentTurnEntity.SetAbnormalCondition(Condition.None, null);
+            Rpc_SetConditionImage();
             StartNewTurn();
             return;
         }
@@ -266,14 +302,6 @@ public class BattleController : MonoBehaviour
 
     private void HandleTurnStartActions()
     {
-        // ローカルモードまたはユーザーのターンの場合、コマンドビューを開く
-        if (_mainController.GameMode == GameMode.Local || _currentTurnEntity == _userController.MyEntity)
-        {
-            OpenCommandView();
-            SetSkillButtons(_currentTurnEntity);
-            ToggleSkillButonClickable(_currentTurnEntity);
-        }
-
         // NPCのターンの場合は行動を実行する
         if (_currentTurnEntity.IsNpc)
         {
@@ -303,20 +331,41 @@ public class BattleController : MonoBehaviour
     public void Attack()
     {
         CloseCommandView();
-        // 攻撃時のアニメーションを再生
-        RunAttackProcessAsync().Forget();
+        Rpc_RequestAttack();
     }
 
-    private async UniTask RunAttackProcessAsync()
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    private void Rpc_RequestAttack()
     {
-        // 「○○の攻撃！」のログ
-        _battleLogController.AddLog(Constants.GetAttackSentence(Settings.Language, _currentTurnEntity.name));
+        // 共有ホスト以外のクライアントでアニメーションを再生する
+        Rpc_PlayAttackAnimation();
+        // 共有ホストが行う必要のある処理を実行する
+        AttackProcessByHostAsync().Forget();
+    }
 
+    /// <summary>
+    /// ホスト以外のプレイヤーが攻撃のアニメーションを再生するためのRPC
+    /// </summary>
+    [Rpc(RpcSources.StateAuthority, RpcTargets.Proxies)]
+    private void Rpc_PlayAttackAnimation()
+    {
+        PlayAttackAnimationAsync().Forget();
+    }
+
+    private async UniTask PlayAttackAnimationAsync()
+    {
         // ステップアニメーションを実行
         await AnimateEntityStepAsync(_currentTurnEntity);
         // 攻撃時のエフェクトを再生
         await PlayImageAnimationAsync(Constants.ImageAnimationKeySlash, _waitingTurnEntity);
+    }
 
+    private async UniTask AttackProcessByHostAsync()
+    {
+        // 「○○の攻撃！」のログ
+        _battleLogController.AddLog(Constants.GetAttackSentence(Settings.Language, _currentTurnEntity.name));
+        // 共有ホストのクライアントでアニメーションを再生する
+        await PlayAttackAnimationAsync();
         // ダメージ計算処理
         int damage = _currentTurnEntity.Attack(_waitingTurnEntity);
 
@@ -333,27 +382,51 @@ public class BattleController : MonoBehaviour
     public void UseSkill(string skillName)
     {
         CloseCommandView();
-        RunSkillProcessAsync(skillName).Forget();
+        Rpc_RequestSkill(skillName);
     }
 
-    private async UniTask RunSkillProcessAsync(string skillName)
-    {
-        // 「○○のヒール！」(例)のログ
-        _battleLogController.AddLog(Constants.GetSkillSentence(Settings.Language, _currentTurnEntity.name, skillName));
 
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    private void Rpc_RequestSkill(string skillName)
+    {
+        // 共有ホスト以外のクライアントでアニメーションを再生する
+        Rpc_PlaySkillAnimation(skillName);
+        // 共有ホストが行う必要のある処理を実行する
+        SkillProcessByHostAsync(skillName).Forget();
+    }
+
+    /// <summary>
+    /// ホスト以外のプレイヤーが攻撃のアニメーションを再生するためのRPC
+    /// </summary>
+    [Rpc(RpcSources.StateAuthority, RpcTargets.Proxies)]
+    private void Rpc_PlaySkillAnimation(string skillName)
+    {
+        PlaySkillAnimationAsync(skillName).Forget();
+    }
+
+    private async UniTask PlaySkillAnimationAsync(string skillName)
+    {
         // ステップアニメーションを実行
         await AnimateEntityStepAsync(_currentTurnEntity);
+        // 攻撃時のエフェクトを再生
+        await PlayImageAnimationAsync(SkillList.GetSkillEffectKey(skillName), _waitingTurnEntity);
+    }
 
-        // スキルの使用
+    private async UniTask SkillProcessByHostAsync(string skillName)
+    {
+        _battleLogController.AddLog(Constants.GetSkillSentence(Settings.Language, _currentTurnEntity.name, skillName));
+
+        await PlaySkillAnimationAsync(skillName);
+
         Skill.SkillResult result = _currentTurnEntity.UseSkill(skillName, _currentTurnEntity, _waitingTurnEntity);
 
         var skillEffectType = SkillList.GetSkillEffectType(skillName);
         // スキルのエフェクトを再生
-        if (skillEffectType == SkillList.SkillEffectType.Heal)
+        if (skillEffectType is SkillList.SkillEffectType.Heal or SkillList.SkillEffectType.Buff)
         {
             await PlayImageAnimationAsync(result.EffectKey, _currentTurnEntity);
         }
-        else if (skillEffectType == SkillList.SkillEffectType.Damage)
+        else if (skillEffectType is SkillList.SkillEffectType.Damage)
         {
             await PlayImageAnimationAsync(result.EffectKey, _waitingTurnEntity);
         }
@@ -389,7 +462,12 @@ public class BattleController : MonoBehaviour
 
     private void OnAllLogsRead()
     {
-        if (_turnCount == 0)
+        if (!_networkManager.GetNetworkRunner().IsSharedModeMasterClient)
+        {
+            return;
+        }
+
+        if (TurnCount == 0)
         {
             StartNewTurn();
             return;
@@ -417,9 +495,9 @@ public class BattleController : MonoBehaviour
             case BattleStatus.LeftWin or BattleStatus.RightWin:
                 if (_winnerEntity.EntityType == EntityType.Player)
                 {
-                    HideBattleElement();
-                    OpenRewardView();
-                    SetRewards();
+                    Rpc_HideBattleElement();
+                    Rpc_OpenRewardView();
+                    SetRewardsProcess();
                     _battleLogController.SetText(Constants.GetSentenceWhenSelectingReward(Settings.Language, _winnerEntity == _userController.MyEntity, _winnerEntity.name));
                     _battleStatus = BattleStatus.SelectReward;
                     if (_winnerEntity.IsNpc)
@@ -454,17 +532,17 @@ public class BattleController : MonoBehaviour
     /// </summary>
     private void ApplyCurrentBattleStatus()
     {
-        if (_leftEntity.Parameter.HitPoint <= 0)
+        if (_leftEntity.Hp <= 0)
         {
             _battleStatus = BattleStatus.RightWin;
-            _winnerEntity = _rightEntity;
-            _loserEntity = _leftEntity;
+            Rpc_WinnerEntity(_rightEntity);
+            Rpc_LoserEntity(_leftEntity);
         }
-        else if (_rightEntity.Parameter.HitPoint <= 0)
+        else if (_rightEntity.Hp <= 0)
         {
             _battleStatus = BattleStatus.LeftWin;
-            _winnerEntity = _leftEntity;
-            _loserEntity = _rightEntity;
+            Rpc_WinnerEntity(_leftEntity);
+            Rpc_LoserEntity(_rightEntity);
             if (_rightEntity.EntityType == EntityType.Satan)
             {
                 _battleStatus = BattleStatus.GameClear;
@@ -514,16 +592,16 @@ public class BattleController : MonoBehaviour
     {
         Condition condition = Condition.None;
         //　状態異常の画像をセット
-        SetConditionImage();
+        Rpc_SetConditionImage();
 
-        var currentTurnEntitiesCondition = _currentTurnEntity.GetAbnormalCondition().Condition;
+        var currentTurnEntitiesCondition = _currentTurnEntity.AbnormalConditionType;
         switch (currentTurnEntitiesCondition)
         {
             case Condition.Poison:
-                int poisonDamage = (int)(_currentTurnEntity.Parameter.HitPoint * Constants.PoisonDamageRateOfHitPoint);
-                _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint - poisonDamage);
+                int poisonDamage = (int)(_currentTurnEntity.Hp * Constants.PoisonDamageRateOfHitPoint);
+                _currentTurnEntity.SetHitPoint(_currentTurnEntity.Hp - poisonDamage);
                 _battleLogController.AddLog(Constants.GetPoisonSentence(Settings.Language, _currentTurnEntity.name));
-                PlayImageAnimationAsync(Constants.ImageAnimationKeyPoisonMushroom, _currentTurnEntity).Forget();
+                Rpc_PlayImageAnimation(Constants.ImageAnimationKeyPoisonMushroom, _currentTurnEntity);
                 condition = Condition.Poison;
                 break;
 
@@ -534,9 +612,9 @@ public class BattleController : MonoBehaviour
                         0
                     );
 
-                _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint - damage);
+                _currentTurnEntity.SetHitPoint(_currentTurnEntity.Hp - damage);
                 _battleLogController.AddLog(Constants.GetFireDamageSentence(Settings.Language, _currentTurnEntity.name));
-                PlayImageAnimationAsync(Constants.ImageAnimationKeyIgnition, _currentTurnEntity).Forget();
+                Rpc_PlayImageAnimation(Constants.ImageAnimationKeyIgnition, _currentTurnEntity);
                 condition = Condition.Fire;
                 break;
 
@@ -546,11 +624,11 @@ public class BattleController : MonoBehaviour
                         Constants.RegenAmountOffsetPercent,
                         30
                     );
-                _currentTurnEntity.SetHitPoint(_currentTurnEntity.Parameter.HitPoint + regenAmount);
+                _currentTurnEntity.SetHitPoint(_currentTurnEntity.Hp + regenAmount);
                 _battleLogController.AddLog(Constants.GetRegenSentence(Settings.Language, _currentTurnEntity.name, regenAmount));
                 if (regenAmount > 0)
                 {
-                    PlayImageAnimationAsync(Constants.ImageAnimationKeyRegen, _currentTurnEntity).Forget();
+                    Rpc_PlayImageAnimation(Constants.ImageAnimationKeyRegen, _currentTurnEntity);
                 }
                 condition = Condition.Regen;
                 break;
@@ -559,7 +637,7 @@ public class BattleController : MonoBehaviour
                 break;
         }
 
-        var waitingTurnEntitiesCondition = _waitingTurnEntity.GetAbnormalCondition().Condition;
+        var waitingTurnEntitiesCondition = _waitingTurnEntity.AbnormalConditionType;
         switch (waitingTurnEntitiesCondition)
         {
             case Condition.Stun:
@@ -573,10 +651,11 @@ public class BattleController : MonoBehaviour
         return condition;
     }
 
-    private void SetConditionImage()
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_SetConditionImage()
     {
-        var leftCondition = _leftEntity.GetAbnormalCondition().Condition;
-        var rightCondition = _rightEntity.GetAbnormalCondition().Condition;
+        var leftCondition = _leftEntity.AbnormalConditionType;
+        var rightCondition = _rightEntity.AbnormalConditionType;
 
         _leftConditionImage.style.display = leftCondition == Condition.None ? DisplayStyle.None : DisplayStyle.Flex;
         _rightConditionImage.style.display = rightCondition == Condition.None ? DisplayStyle.None : DisplayStyle.Flex;
@@ -619,7 +698,6 @@ public class BattleController : MonoBehaviour
         string result = _currentReward.Execute(_winnerEntity);
         _battleLogController.AddLog(result);
         _battleLogController.EnableFlip();
-
         CloseRewardView();
         _battleStatus = BattleStatus.BattleEnding;
     }
@@ -640,7 +718,7 @@ public class BattleController : MonoBehaviour
             var rewardChoices = new List<int> { 0 };
             for (int i = 0; i < _currentRewardSkills.Count; i++)
             {
-                if (_winnerEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[i].Name) == null)
+                if (_winnerEntity.SyncedSkills.Find(s => s.Name == _currentRewardSkills[i].Name) == null)
                 {
                     rewardChoices.Add(i);
                 }
@@ -649,7 +727,17 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    private void SetRewards()
+    private void SetRewardsProcess()
+    {
+        // スキル報酬のセット
+        List<Skill> loserSkills = new List<Skill>(_loserEntity.SyncedSkills);
+        _currentRewardSkills = GetListOfRandomTwoElementsFromList(loserSkills);
+
+        Rpc_SetRewards();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_SetRewards()
     {
         _rewardElement.Clear();
         var rewardButtons = new List<Button>();
@@ -662,10 +750,6 @@ public class BattleController : MonoBehaviour
         statusRewardButton.Add(CreateNewLabelWithDetails(ClassNames.RewardDescription, _currentReward.Description));
         rewardButtons.Add(statusRewardButton);
 
-        // スキル報酬のセット
-        List<Skill> loserSkills = new List<Skill>(_loserEntity.Parameter.Skills);
-        _currentRewardSkills = GetListOfRandomTwoElementsFromList(loserSkills);
-
         for (int i = 0; i < _currentRewardSkills.Count; i++)
         {
             int index = i;
@@ -675,7 +759,7 @@ public class BattleController : MonoBehaviour
             skillRewardButton.Add(labelRewardTitle);
             var labelRewardDescription = CreateNewLabelWithDetails(ClassNames.RewardDescription, _currentRewardSkills[index].Description);
             skillRewardButton.Add(labelRewardDescription);
-            if (_winnerEntity.Parameter.Skills.Find(s => s.Name == _currentRewardSkills[index].Name) != null)
+            if (_winnerEntity.SyncedSkills.Find(s => s.Name == _currentRewardSkills[index].Name) != null)
             {
                 skillRewardButton.SetEnabled(false);
                 labelRewardDescription.text = Constants.GetSentenceWhenAlreadyHoldingTheSkill(Settings.Language);
@@ -690,7 +774,7 @@ public class BattleController : MonoBehaviour
             {
                 continue;
             }
-            button.SetEnabled(_winnerEntity == _userController.MyEntity || (_mainController.GameMode == GameMode.Local && !_winnerEntity.IsNpc));
+            button.SetEnabled(_winnerEntity == _userController.MyEntity);
         }
     }
 
@@ -721,7 +805,7 @@ public class BattleController : MonoBehaviour
 
     private void AddSkillToWinnerEntity(Skill skill, out string log)
     {
-        _winnerEntity.Parameter.Skills.Add(skill);
+        _winnerEntity.SyncedSkills.Add(skill);
         log = string.Format(Constants.GetSkillGetSentence(Settings.Language), _winnerEntity.name, skill.Name);
     }
 
@@ -756,7 +840,8 @@ public class BattleController : MonoBehaviour
         _battleElement.style.display = DisplayStyle.Flex;
     }
 
-    private void HideBattleElement()
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_HideBattleElement()
     {
         _battleElement.style.display = DisplayStyle.None;
     }
@@ -784,13 +869,41 @@ public class BattleController : MonoBehaviour
         _commanndView.style.display = DisplayStyle.Flex;
     }
 
-    private void OpenRewardView()
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_OpenRewardView()
     {
         _rewardElement.style.display = DisplayStyle.Flex;
     }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void CloseRewardView()
     {
         _rewardElement.style.display = DisplayStyle.None;
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_SetCurrentTurnEntity(Entity entity)
+    {
+        _currentTurnEntity = entity;
+        _currentTurnEntityNO = entity.Object;
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_SetWaitingTurnEntity(Entity entity)
+    {
+        _waitingTurnEntity = entity;
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_WinnerEntity(Entity entity)
+    {
+        _winnerEntity = entity;
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_LoserEntity(Entity entity)
+    {
+        _loserEntity = entity;
     }
 
     private void ResetActionElementPosition()
@@ -813,22 +926,22 @@ public class BattleController : MonoBehaviour
 
         _leftEntity.HitPointRp.Subscribe(newHp =>
         {
-            StatusChangeReaction(newHp, _leftEntity.Parameter.HitPoint, _healthLabelLeft, delayOnHpGainMills, delayOnHpDecreaseMills).Forget();
+            StatusChangeReaction(newHp, _leftEntity.Hp, _healthLabelLeft, delayOnHpGainMills, delayOnHpDecreaseMills).Forget();
         }).AddTo(_disposable);
 
         _leftEntity.ManaPointRp.Subscribe(newMp =>
         {
-            StatusChangeReaction(newMp, _leftEntity.Parameter.ManaPoint, _manaLabelLeft, delayOnManaChangeMills, delayOnManaChangeMills).Forget();
+            StatusChangeReaction(newMp, _leftEntity.Mp, _manaLabelLeft, delayOnManaChangeMills, delayOnManaChangeMills).Forget();
         }).AddTo(_disposable);
 
         _rightEntity.HitPointRp.Subscribe(newHp =>
         {
-            StatusChangeReaction(newHp, _rightEntity.Parameter.HitPoint, _healthLabelRight, delayOnHpGainMills, delayOnHpDecreaseMills).Forget();
+            StatusChangeReaction(newHp, _rightEntity.Hp, _healthLabelRight, delayOnHpGainMills, delayOnHpDecreaseMills).Forget();
         }).AddTo(_disposable);
 
         _rightEntity.ManaPointRp.Subscribe(newMp =>
         {
-            StatusChangeReaction(newMp, _rightEntity.Parameter.ManaPoint, _manaLabelRight, delayOnManaChangeMills, delayOnManaChangeMills).Forget();
+            StatusChangeReaction(newMp, _rightEntity.Mp, _manaLabelRight, delayOnManaChangeMills, delayOnManaChangeMills).Forget();
         }).AddTo(_disposable);
     }
 
@@ -854,6 +967,12 @@ public class BattleController : MonoBehaviour
         {
             Interlocked.Decrement(ref _reactiveNumberAnimationCounter);
         }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_PlayImageAnimation(string key, Entity targetEntity)
+    {
+        PlayImageAnimationAsync(key, targetEntity).Forget();
     }
 
     private async UniTask PlayImageAnimationAsync(string key, Entity targetEntity)

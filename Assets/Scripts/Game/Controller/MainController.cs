@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Fusion;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -30,9 +31,6 @@ public class MainController : NetworkBehaviour
     private int _playerCount = 1;
     public int PlayerCount { get => _playerCount; set => _playerCount = value; }
 
-    private int _currentTurnPlayerId = 1;
-    public int CurrentTurnPlayerId { get => _currentTurnPlayerId; private set => _currentTurnPlayerId = value; }
-
     private Entity _currentTurnPlayerEntity;
     public Entity CurrentTurnPlayerEntity { get => _currentTurnPlayerEntity; private set => _currentTurnPlayerEntity = value; }
 
@@ -46,6 +44,25 @@ public class MainController : NetworkBehaviour
 
     [Networked]
     private bool _isGameInitialized { get; set; } = false;
+
+    [Networked, OnChangedRender(nameof(OnTurnPlayerChanged))]
+    public int CurrentTurnPlayerId { get; set; }
+
+    [Networked, OnChangedRender(nameof(OnDiceResultChanged))]
+    private int NetworkedDiceResult { get; set; }
+
+    private void OnDiceResultChanged()
+    {
+        // 必要に応じてUI更新など
+    }
+
+    // ターンプレイヤー変更時の処理
+    private void OnTurnPlayerChanged()
+    {
+        CurrentTurnPlayerEntity = _playerController.SyncedPlayerList.FirstOrDefault(p => p.Id == CurrentTurnPlayerId);
+        StartNewTurnAsync().Forget();
+    }
+
 
     private void Start()
     {
@@ -90,19 +107,26 @@ public class MainController : NetworkBehaviour
         await _enemyController.InitializeAllEnemiesAsync();
     }
 
-    public async UniTask StartNewTurnAsync()
+    public void NewTurnProcess()
     {
-        if (TurnCount != 0)
+        if (HasStateAuthority)
         {
-            CurrentTurnPlayerId++;
-            if (CurrentTurnPlayerId > Constants.MaxPlayerCount)
+            if (TurnCount != 0)
+            {
+                CurrentTurnPlayerId++;
+                if (CurrentTurnPlayerId > Constants.MaxPlayerCount)
+                    CurrentTurnPlayerId = 1;
+            }
+            else
             {
                 CurrentTurnPlayerId = 1;
             }
         }
+    }
 
+    public async UniTask StartNewTurnAsync()
+    {
         _fieldController.UpdateStatusBoxesAsync().Forget();
-        CurrentTurnPlayerEntity = _playerController.SyncedPlayerList.FirstOrDefault(p => p.Id == CurrentTurnPlayerId);
         // 現在のターンのプレイヤーを最前面に表示する
         CurrentTurnPlayerEntity.gameObject.GetComponent<SpriteRenderer>().sortingOrder++;
 
@@ -110,25 +134,43 @@ public class MainController : NetworkBehaviour
 
         if (CurrentTurnPlayerEntity.IsAlive == false)
         {
-            await RevivePlayerAsync(CurrentTurnPlayerEntity);
-            StartNewTurnAsync().Forget();
+            if (!HasStateAuthority)
+            {
+                return;
+            }
+            await Rpc_RevivePlayerAsync(CurrentTurnPlayerEntity);
+            SetStatusOnRevive(CurrentTurnPlayerEntity);
+            NewTurnProcess();
             return;
         }
 
-        var moves = await GetDiceResultAsync();
-
-        CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().SetMoves(moves);
-        CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().EnableClickMovement();
-
-        if (CurrentTurnPlayerEntity.IsNpc)
+        if (HasStateAuthority)
         {
-            await NpcActionController.MoveAsync(CurrentTurnPlayerEntity.GetComponent<ControllableEntity>());
+            NetworkedDiceResult = await GetDiceResultAsync();
+        }
+
+        await UniTask.WaitUntil(() => NetworkedDiceResult != 0);
+
+        if (CurrentTurnPlayerEntity == _userController.MyEntity)
+        {
+            CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().SetMoves(NetworkedDiceResult);
+            CurrentTurnPlayerEntity.GetComponent<ControllableEntity>().EnableClickMovement();
+        }
+
+        if (CurrentTurnPlayerEntity.IsNpc && HasStateAuthority)
+        {
+            NpcActionController.Move(CurrentTurnPlayerEntity.GetComponent<ControllableEntity>(), UnityEngine.Random.Range(0, 3) == 0);
         }
 
         // レイヤーの順序を戻す
         CurrentTurnPlayerEntity.gameObject.GetComponent<SpriteRenderer>().sortingOrder--;
 
-        if (_currentTurnPlayerId == 1)
+        if (HasStateAuthority)
+        {
+            NetworkedDiceResult = 0;
+        }
+
+        if (CurrentTurnPlayerId == 1)
         {
             TurnCount++;
         }
@@ -146,9 +188,9 @@ public class MainController : NetworkBehaviour
             _stopButton.style.display = DisplayStyle.None;
         }
 
-        if (CurrentTurnPlayerEntity.IsNpc)
+        if (CurrentTurnPlayerEntity.IsNpc && HasStateAuthority)
         {
-            NpcActionController.StopRolling(_diceBoxComponent);
+            NpcActionController.StopRolling(_diceBoxComponent, UnityEngine.Random.Range(1, Constants.MaxDiceValue + 1));
         }
 
         await UniTask.WaitUntil(() => _diceBoxComponent.IsRolling == false);
@@ -159,22 +201,33 @@ public class MainController : NetworkBehaviour
         return _diceBoxComponent.GetCurrentNumber();
     }
 
-    private async UniTask RevivePlayerAsync(Entity entity)
+    // サイコロ結果を全員に通知
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void Rpc_SetDiceResult(int result)
+    {
+        NetworkedDiceResult = result;
+    }
+
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private async UniTask Rpc_RevivePlayerAsync(Entity entity)
     {
         await UniTask.Delay(1000);
-        entity.IsAlive = true;
         entity.ChangeVisibility(true);
+        _coffinObjects[entity.Id].SetActive(false);
+    }
+
+    private void SetStatusOnRevive(Entity entity)
+    {
         // 復活時のHPとMPを設定
-        var defaultParameter = await Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).Task;
+        var defaultParameter = Addressables.LoadAssetAsync<ParameterAsset>(Constants.AssetReferenceParameter).WaitForCompletion();
         var parameter = defaultParameter.ParameterList.FirstOrDefault(p => p.EntityType == EntityType.Player);
         entity.SetHitPoint(parameter.HitPoint);
-        entity.SetManaPoint(Mathf.Max(entity.Parameter.ManaPoint, parameter.ManaPoint));
-        _coffinObjects[entity.Id].SetActive(false);
+        entity.SetManaPoint(Mathf.Max(entity.Mp, parameter.ManaPoint));
     }
 
     public void SetPlayerAsDead(Entity playerEntity, Vector2 coffinPosition)
     {
-        playerEntity.IsAlive = false;
         playerEntity.ChangeVisibility(false);
         _coffinObjects[playerEntity.Id].SetActive(true);
         _coffinObjects[playerEntity.Id].transform.position = coffinPosition;

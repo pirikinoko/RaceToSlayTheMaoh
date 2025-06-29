@@ -15,71 +15,11 @@ MonoBehaviour:
   m_GroupName: Parameter
   m_GUID: ea73b9b8de50b2b41966d0cac76f2640
   m_SerializeEntries:
-  - m_GUID: 0a5a4de897429a74ba1f73250681006f
-    m_Address: Player4
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Entity
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1d7ff081d94552a4381f5b620f70fea5
     m_Address: Assets/ScriptableObjects/Parameter/Parameter.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Parameter
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1f2db94f487680742b0dfce94110da53
-    m_Address: StunConditionIcon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 45c32b245d8d0b448be0faa883cf1545
-    m_Address: Player3
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Entity
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5e12b362e37584f44ba41a9fe38e0692
-    m_Address: Player2BattleImage
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 809252411dcd60949b7e075078285f9b
-    m_Address: Player2
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Entity
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 99a29aba5cbc99d478520cae885fbdcb
-    m_Address: Player2FieldImage
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 99a768d1d91d9e841918b2124d0fc1bb
-    m_Address: Player1
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Entity
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bd7894cc4aa2f9b4190e357636140604
-    m_Address: HeartIcon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c8ee15c3eb775dd4c9a2171c5a68a92b
-    m_Address: ManaIcon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d54b53dc55fc91440a37a9128826a61b
-    m_Address: Enemy
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Entity
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fe5fe608913d1b749baf641cc1d6acac
-    m_Address: Player1BattleImage
-    m_ReadOnly: 0
-    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c15980a2792339542b1da6f13079ad19, type: 2}
