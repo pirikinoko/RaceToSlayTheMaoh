@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 
 public class GameBootstrapper : MonoBehaviour
 {
+    [SerializeField] private TitleController _titleController;
     [SerializeField] private MainController _mainController;
     [SerializeField] private StateController _stateController;
     [SerializeField] private FieldController _fieldController;
@@ -21,8 +22,9 @@ public class GameBootstrapper : MonoBehaviour
 
     private void Awake()
     {
+        _titleController.Initialize(_mainController, _stateController);
         _mainController.Initialize(_userController, _fieldController, _cameraController, _stateController, _playerController, _enemyController);
-        _stateController.Initialize(_mainController, _fieldController, _playerController, _cameraController, _overAllUi, _titleUi, _fieldUi, _battleUi, _resultUi);
+        _stateController.Initialize(_mainController, _fieldController, _cameraController, _overAllUi, _titleUi, _fieldUi, _battleUi, _resultUi);
         _fieldController.Initialize(_mainController, _stateController, _enemyController, _playerController, _battleController);
         _playerController.Initialize(_mainController);
         _battleController.Initialize(_stateController, _mainController, _userController, _battleLogController, _enemyController, _imageAnimationHolder);

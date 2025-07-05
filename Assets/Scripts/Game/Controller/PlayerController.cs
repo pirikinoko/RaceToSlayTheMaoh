@@ -9,9 +9,8 @@ using Fusion;
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField]
-    private NetworkManager _networkManager;
-    [SerializeField]
     private Transform _playerParent;
+    private NetworkManager _networkManager;
 
     [Networked, Capacity(4), OnChangedRender(nameof(OnPlayerListChanged))]
     public NetworkArray<NetworkObject> PlayerNetworkObjectList { get; }
@@ -27,6 +26,7 @@ public class PlayerController : NetworkBehaviour
     public void Initialize(MainController mainController)
     {
         _mainController = mainController;
+        _networkManager = NetworkManager.Instance;
     }
 
     // PlayerEntitiesが変更されたときに呼ばれるコールバック
@@ -71,9 +71,5 @@ public class PlayerController : NetworkBehaviour
 
             PlayerNetworkObjectList.Set(i, playerGameObject.GetComponent<NetworkObject>());
         }
-
-        // OnChangedコールバックが全クライアントで呼ばれ、SyncedPlayerListが更新されるので、
-        // ここで手動でOnNextを呼ぶ必要はなくなります。
-        // _onPlayersInitialized.OnNext(SyncedPlayerList);
     }
 }

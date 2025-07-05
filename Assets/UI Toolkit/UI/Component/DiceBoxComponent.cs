@@ -119,6 +119,5 @@ namespace UIToolkit
             // 現在のサイコロの数字を取得
             return _currentNumber;
         }
-
     }
 }

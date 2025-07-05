@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Fusion;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -13,9 +14,8 @@ using UnityEngine.UIElements;
 public class MainController : NetworkBehaviour
 {
     [SerializeField]
-    private NetworkManager _networkManager;
-    [SerializeField]
     private Transform _objectsParent;
+    private NetworkManager _networkManager;
     private UserController _userController;
     private FieldController _fieldController;
     private CameraController _cameraController;
@@ -48,13 +48,8 @@ public class MainController : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnTurnPlayerChanged))]
     public int CurrentTurnPlayerId { get; set; }
 
-    [Networked, OnChangedRender(nameof(OnDiceResultChanged))]
+    [Networked]
     private int NetworkedDiceResult { get; set; }
-
-    private void OnDiceResultChanged()
-    {
-        // 必要に応じてUI更新など
-    }
 
     // ターンプレイヤー変更時の処理
     private void OnTurnPlayerChanged()
@@ -62,7 +57,6 @@ public class MainController : NetworkBehaviour
         CurrentTurnPlayerEntity = _playerController.SyncedPlayerList.FirstOrDefault(p => p.Id == CurrentTurnPlayerId);
         StartNewTurnAsync().Forget();
     }
-
 
     private void Start()
     {
@@ -86,6 +80,7 @@ public class MainController : NetworkBehaviour
         _stateController = stateController;
         _playerController = playerController;
         _enemyController = enemyController;
+        _networkManager = NetworkManager.Instance;
     }
 
     public async UniTask InitializeGame()
@@ -124,6 +119,11 @@ public class MainController : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// 新しいターンを開始する
+    /// CurrentTurnPlayerIdが更新されたときに呼び出される
+    /// </summary>
+    /// <returns></returns>
     public async UniTask StartNewTurnAsync()
     {
         _fieldController.UpdateStatusBoxesAsync().Forget();
@@ -138,17 +138,15 @@ public class MainController : NetworkBehaviour
             {
                 return;
             }
-            await Rpc_RevivePlayerAsync(CurrentTurnPlayerEntity);
+            // カメラ移動完了後少し待ってからリバイブ処理を行う
+            await UniTask.Delay(1000);
+            Rpc_RevivePlayer(CurrentTurnPlayerEntity);
             SetStatusOnRevive(CurrentTurnPlayerEntity);
             NewTurnProcess();
             return;
         }
 
-        if (HasStateAuthority)
-        {
-            NetworkedDiceResult = await GetDiceResultAsync();
-        }
-
+        await DiceProgressAsync();
         await UniTask.WaitUntil(() => NetworkedDiceResult != 0);
 
         if (CurrentTurnPlayerEntity == _userController.MyEntity)
@@ -176,7 +174,7 @@ public class MainController : NetworkBehaviour
         }
     }
 
-    private async UniTask<int> GetDiceResultAsync()
+    private async UniTask DiceProgressAsync()
     {
         _stateController.BlackoutField();
 
@@ -194,25 +192,18 @@ public class MainController : NetworkBehaviour
         }
 
         await UniTask.WaitUntil(() => _diceBoxComponent.IsRolling == false);
-
         _diceBoxComponent.style.display = DisplayStyle.None;
+        if (HasStateAuthority)
+        {
+            NetworkedDiceResult = _diceBoxComponent.GetCurrentNumber();
+        }
 
         _stateController.RevealField();
-        return _diceBoxComponent.GetCurrentNumber();
     }
 
-    // サイコロ結果を全員に通知
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void Rpc_SetDiceResult(int result)
+    private void Rpc_RevivePlayer(Entity entity)
     {
-        NetworkedDiceResult = result;
-    }
-
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private async UniTask Rpc_RevivePlayerAsync(Entity entity)
-    {
-        await UniTask.Delay(1000);
         entity.ChangeVisibility(true);
         _coffinObjects[entity.Id].SetActive(false);
     }

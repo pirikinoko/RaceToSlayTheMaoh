@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Fusion;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,8 +45,15 @@ public class FieldController : MonoBehaviour
         _statusBoxComponents.ForEach(statusBox => statusBox.style.display = DisplayStyle.None);
     }
 
-    // 歩いたほうのエンティティがentityLeftになる
-    public bool CheckEncount(Entity entityLeft, Vector2 entityLeftsPreviousPos)
+    /// <summary>
+    /// エンカウントチェックを行い、エンカウントが発生した場合はバトル状態に遷移する。
+    /// 歩いたほうのエンティティがentityLeftになる
+    /// </summary>
+    /// <param name="entityLeft"></param>
+    /// <param name="entityLeftsPreviousPos"></param>
+    /// <returns></returns>
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public bool Rpc_CheckEncount(Entity entityLeft, Vector2 entityLeftsPreviousPos)
     {
         var allEntity = new List<Entity>();
         allEntity.AddRange(_playerController.SyncedPlayerList);

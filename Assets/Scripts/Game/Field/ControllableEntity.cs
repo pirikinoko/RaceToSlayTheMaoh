@@ -182,7 +182,8 @@ public class ControllableEntity : MonoBehaviour
     /// <summary>
     /// 指定された経路を順にたどって移動する
     /// </summary>
-    public async UniTask TracePathAsync(Queue<Vector2> path)
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public async UniTask Rpc_TracePathAsync(Queue<Vector2> path)
     {
         // 強調表示を全て削除
         ClearAllHighlights();
@@ -194,7 +195,7 @@ public class ControllableEntity : MonoBehaviour
             // 負けた場合棺桶を配置するので、移動前に位置を保存
             var previousPos = _transform.position;
             await MoveAsync(nextPos);
-            if (_fieldController.CheckEncount(gameObject.GetComponent<Entity>(), previousPos))
+            if (_fieldController.Rpc_CheckEncount(gameObject.GetComponent<Entity>(), previousPos))
             {
                 hasEncounted = true;
                 break;
@@ -207,12 +208,6 @@ public class ControllableEntity : MonoBehaviour
             await UniTask.Delay(TimeSpan.FromSeconds(Constants.DelayBeforeNewTurnSeconds));
             _mainController.NewTurnProcess();
         }
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void Rpc_TracePath(Queue<Vector2> path)
-    {
-        TracePathAsync(path).Forget();
     }
 
     /// <summary>
@@ -265,7 +260,7 @@ public class ControllableEntity : MonoBehaviour
         (Vector2? nearestGoal, Queue<Vector2> bestPath) = FindNearestEntityPath(includePlayersAsTarget);
         if (nearestGoal != null && bestPath != null && bestPath.Count > 0)
         {
-            Rpc_TracePath(bestPath);
+            Rpc_TracePathAsync(bestPath).Forget();
         }
     }
 

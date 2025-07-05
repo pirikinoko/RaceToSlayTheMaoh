@@ -11,8 +11,7 @@ public class StateController : MonoBehaviour
 
     private MainController _mainController;
     private FieldController _fieldController;
-    private PlayerController _playerController;
-    private CameraController _cameraController; // CameraController を追加
+    private CameraController _cameraController;
     private UIDocument _overAllUi;
     private UIDocument _titleUi;
     private UIDocument _fieldUi;
@@ -29,11 +28,10 @@ public class StateController : MonoBehaviour
 
     private VisualElement _colorEffectPanel;
 
-    public void Initialize(MainController mainController, FieldController fieldController, PlayerController playerController, CameraController cameraController, UIDocument overAllUi, UIDocument titleUi, UIDocument fieldUi, UIDocument battleUi, UIDocument resultUi)
+    public void Initialize(MainController mainController, FieldController fieldController, CameraController cameraController, UIDocument overAllUi, UIDocument titleUi, UIDocument fieldUi, UIDocument battleUi, UIDocument resultUi)
     {
         _mainController = mainController;
         _fieldController = fieldController;
-        _playerController = playerController;
         _cameraController = cameraController;
         _overAllUi = overAllUi;
         _titleUi = titleUi;
@@ -79,7 +77,7 @@ public class StateController : MonoBehaviour
                 SwitchFieldState().Forget();
                 break;
             case State.Battle:
-                SwitchBattleState();
+                SwitchBattleStateAsync().Forget();
                 break;
             case State.Result:
                 SwitchResultState().Forget();
@@ -105,22 +103,31 @@ public class StateController : MonoBehaviour
             await _fieldController.UpdateStatusBoxesAsync();
             _fieldController.DisplayStatusBoxes();
         }
-        await _fieldController.UpdateStatusBoxesAsync();
+        else
+        {
+            await _fieldController.UpdateStatusBoxesAsync();
+        }
 
         await UniTask.Delay(TimeSpan.FromSeconds(Constants.DelayBeforeNewTurnSeconds));
         _mainController.NewTurnProcess();
     }
 
-    private async void SwitchBattleState()
+    private async UniTask SwitchBattleStateAsync()
     {
         BlackoutField();
         await UniTask.Delay(TimeSpan.FromSeconds(1f));
         _battleRoot.style.display = DisplayStyle.Flex;
 
+        await SlideInBattleUI();
+        _battleRoot.style.translate = new StyleTranslate(new Translate(0, 0, 0));
+    }
+
+    private async UniTask SlideInBattleUI()
+    {
         // スライドイン演出
         // 画面右端から中央へ移動（X座標を調整）
         var width = _battleRoot.resolvedStyle.width;
-        if (width == 0) width = 1920; // fallback（エディタで未レイアウト時）
+        if (width == 0) width = 1920;
         _battleRoot.style.translate = new StyleTranslate(new Translate(width, 0, 0));
         float duration = 0.4f;
         float elapsed = 0f;
@@ -132,7 +139,6 @@ public class StateController : MonoBehaviour
             await UniTask.DelayFrame(1);
             elapsed += Time.deltaTime;
         }
-        _battleRoot.style.translate = new StyleTranslate(new Translate(0, 0, 0));
     }
 
     private async UniTask SwitchResultState()
@@ -157,7 +163,6 @@ public class StateController : MonoBehaviour
         backToTitleButton.style.display = DisplayStyle.None;
 
         _resultRoot.style.display = DisplayStyle.Flex;
-
 
         // 暗転アニメーション
         var resultElements = _resultRoot.Q<VisualElement>("ResultElements");

@@ -36,7 +36,7 @@ public class MoveHighlight : MonoBehaviour
         if (_isInitialized)
         {
             // クリックされたときに対象位置へ移動
-            _entity.TracePathAsync(_pathToHighlightPosition).Forget();
+            _entity.Rpc_TracePathAsync(_pathToHighlightPosition).Forget();
         }
     }
 

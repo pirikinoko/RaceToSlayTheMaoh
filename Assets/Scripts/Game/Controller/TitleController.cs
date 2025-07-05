@@ -5,19 +5,22 @@ using System.Threading.Tasks;
 
 public class TitleController : MonoBehaviour
 {
-    [SerializeField]
     private MainController _mainController;
-
-    [SerializeField]
     private StateController _stateContoller;
-
-    [SerializeField]
     private NetworkManager _networkManager;
 
     private Button _buttonStartLocal;
     private Button _buttonStartMatchMaking;
 
     private bool _whileMatching = false;
+
+    public void Initialize(MainController mainController, StateController stateController)
+    {
+        _mainController = mainController;
+        _stateContoller = stateController;
+        _networkManager = NetworkManager.Instance;
+    }
+
     private void Start()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
