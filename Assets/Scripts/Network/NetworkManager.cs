@@ -38,9 +38,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         _networkRunner.AddCallbacks(this);
     }
 
-    public async UniTask CraeateLocalGameAsync()
+    public async UniTask<StartGameResult> CraeateLocalGameAsync()
     {
-        await _networkRunner.StartGame(new StartGameArgs
+        var result = await _networkRunner.StartGame(new StartGameArgs
         {
             GameMode = Fusion.GameMode.Single,
             SceneManager = _networkRunner.SceneManager,
@@ -48,11 +48,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             IsVisible = false,
             IsOpen = false,
         });
+        return result;
     }
 
-    public async UniTask JoinOrCreateOldestRoomAsync()
+    public async UniTask<StartGameResult> JoinOrCreateOldestRoomAsync()
     {
-        await _networkRunner.StartGame(new StartGameArgs
+        var result = await _networkRunner.StartGame(new StartGameArgs
         {
             GameMode = Fusion.GameMode.Shared,
             SceneManager = _networkRunner.SceneManager,
@@ -61,12 +62,13 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             IsOpen = true,
             MatchmakingMode = Fusion.Photon.Realtime.MatchmakingMode.FillRoom
         });
+        return result;
     }
 
 
-    public async UniTask JoinOrCraateRoomByNameAsync(string roomName)
+    public async UniTask<StartGameResult> JoinOrCreateRoomByNameAsync(string roomName)
     {
-        await _networkRunner.StartGame(new StartGameArgs
+        var result = await _networkRunner.StartGame(new StartGameArgs
         {
             GameMode = Fusion.GameMode.Shared,
             SessionName = roomName,
@@ -76,6 +78,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
             IsOpen = true,
             MatchmakingMode = Fusion.Photon.Realtime.MatchmakingMode.FillRoom
         });
+        return result;
     }
 
     public void StartGame()

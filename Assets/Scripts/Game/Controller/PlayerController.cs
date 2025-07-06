@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Fusion;
+using VContainer;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -23,7 +24,8 @@ public class PlayerController : NetworkBehaviour
 
     private MainController _mainController;
 
-    public void Initialize(MainController mainController)
+    [Inject]
+    public void Construct(MainController mainController)
     {
         _mainController = mainController;
         _networkManager = NetworkManager.Instance;

@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using VContainer;
+using VContainer.Unity;
 
-public class GameBootstrapper : MonoBehaviour
+public class GameBootstrapper : LifetimeScope
 {
     [SerializeField] private TitleController _titleController;
     [SerializeField] private MainController _mainController;
@@ -14,20 +16,32 @@ public class GameBootstrapper : MonoBehaviour
     [SerializeField] private BattleLogController _battleLogController;
     [SerializeField] private CameraController _cameraController;
     [SerializeField] private ImageAnimationHolder _imageAnimationHolder;
+    [SerializeField] private TitleTextData _titleTextData;
     [SerializeField] private UIDocument _overAllUi;
     [SerializeField] private UIDocument _titleUi;
     [SerializeField] private UIDocument _fieldUi;
     [SerializeField] private UIDocument _battleUi;
     [SerializeField] private UIDocument _resultUi;
 
-    private void Awake()
+    protected override void Configure(IContainerBuilder builder)
     {
-        _titleController.Initialize(_mainController, _stateController);
-        _mainController.Initialize(_userController, _fieldController, _cameraController, _stateController, _playerController, _enemyController);
-        _stateController.Initialize(_mainController, _fieldController, _cameraController, _overAllUi, _titleUi, _fieldUi, _battleUi, _resultUi);
-        _fieldController.Initialize(_mainController, _stateController, _enemyController, _playerController, _battleController);
-        _playerController.Initialize(_mainController);
-        _battleController.Initialize(_stateController, _mainController, _userController, _battleLogController, _enemyController, _imageAnimationHolder);
-        _userController.Initialize(_playerController);
+        // 各種ControllerやUIをインスタンスとして登録
+        builder.RegisterInstance(_titleController);
+        builder.RegisterInstance(_mainController);
+        builder.RegisterInstance(_stateController);
+        builder.RegisterInstance(_fieldController);
+        builder.RegisterInstance(_playerController);
+        builder.RegisterInstance(_enemyController);
+        builder.RegisterInstance(_userController);
+        builder.RegisterInstance(_battleController);
+        builder.RegisterInstance(_battleLogController);
+        builder.RegisterInstance(_cameraController);
+        builder.RegisterInstance(_imageAnimationHolder);
+        builder.RegisterInstance(_titleTextData);
+        builder.RegisterInstance(_overAllUi);
+        builder.RegisterInstance(_titleUi);
+        builder.RegisterInstance(_fieldUi);
+        builder.RegisterInstance(_battleUi);
+        builder.RegisterInstance(_resultUi);
     }
 }

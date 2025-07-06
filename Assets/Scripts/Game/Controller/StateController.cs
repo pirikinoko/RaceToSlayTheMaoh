@@ -1,9 +1,9 @@
-﻿// Removed unnecessary using directive
-using System;
+﻿using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UIElements; // Label を使うために追加
+using VContainer;
 
 public class StateController : MonoBehaviour
 {
@@ -28,7 +28,8 @@ public class StateController : MonoBehaviour
 
     private VisualElement _colorEffectPanel;
 
-    public void Initialize(MainController mainController, FieldController fieldController, CameraController cameraController, UIDocument overAllUi, UIDocument titleUi, UIDocument fieldUi, UIDocument battleUi, UIDocument resultUi)
+    [Inject]
+    public void Construct(MainController mainController, FieldController fieldController, CameraController cameraController, UIDocument overAllUi, UIDocument titleUi, UIDocument fieldUi, UIDocument battleUi, UIDocument resultUi)
     {
         _mainController = mainController;
         _fieldController = fieldController;

@@ -7,6 +7,7 @@ using UIToolkit;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
+using VContainer;
 
 public class FieldController : MonoBehaviour
 {
@@ -18,7 +19,8 @@ public class FieldController : MonoBehaviour
 
     private List<StatusBoxComponent> _statusBoxComponents = new();
 
-    public void Initialize(MainController mainController, StateController stateController, EnemyController enemyController, PlayerController playerController, BattleController battleController)
+    [Inject]
+    public void Construct(MainController mainController, StateController stateController, EnemyController enemyController, PlayerController playerController, BattleController battleController)
     {
         _mainController = mainController;
         _stateController = stateController;

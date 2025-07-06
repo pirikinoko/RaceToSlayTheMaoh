@@ -4,6 +4,7 @@ using R3;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using VContainer;
 
 public class BattleLogController : NetworkBehaviour
 {

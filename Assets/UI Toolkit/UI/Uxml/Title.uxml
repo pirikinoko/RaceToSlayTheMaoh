@@ -7,11 +7,23 @@
         </engine:VisualElement>
         <engine:VisualElement name="InteractiveElements" style="justify-content: flex-start; align-self: center; margin-top: 110px; width: auto; align-content: auto; align-items: center;">
             <engine:VisualElement name="LocalPlayElement" style="flex-grow: 1; flex-direction: row;">
-                <engine:Button name="ArrowLeft" class="arrowButton" style="rotate: 180deg; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
-                <engine:Button text="4PlayersGame" name="Button-Start-Local" enabled="true" class="actionButton label titleLabel" style="visibility: visible; font-size: 50px;" />
-                <engine:Button name="ArrowRight" class="arrowButton" style="border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
+                <engine:Button name="Button-ArrowLeft" class="arrowButton" style="rotate: 180deg; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
+                <engine:Button text="4PlayersGame" name="Button-StartLocal" enabled="true" data-source-type="TitleTextData, Assembly-CSharp" class="actionButton label titleLabel" style="visibility: visible; font-size: 50px;">
+                    <Bindings>
+                        <engine:DataBinding property="text" data-source-path="LocalPlayButtonText" binding-mode="ToTarget" />
+                    </Bindings>
+                </engine:Button>
+                <engine:Button name="Button-ArrowRight" class="arrowButton" style="border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
             </engine:VisualElement>
-            <engine:Button text="StartOnline" name="Button-Start-Online" class="actionButton label titleLabel" style="font-size: 60px;" />
+            <engine:VisualElement name="OnlinePlayElement" style="flex-grow: 1; flex-direction: row; left: 150px;">
+                <engine:Button text="StartMatchmaking" name="Button-StartMatchmaking" data-source-type="TitleTextData, Assembly-CSharp" class="actionButton label titleLabel" style="font-size: 60px;">
+                    <Bindings>
+                        <engine:DataBinding property="text" data-source-path="MatchMakingButtonText" binding-mode="ToTarget" />
+                    </Bindings>
+                </engine:Button>
+                <engine:Toggle label="ルーム名を指定する" name="Toggle-RoomNameInput" class="label" style="font-size: 30px; -unity-text-align: upper-left; align-items: center; justify-content: flex-start; flex-direction: row-reverse;" />
+            </engine:VisualElement>
         </engine:VisualElement>
+        <engine:TextField placeholder-text="RoomName" name="InputField-RoomName" max-length="15" class="label" style="display: flex; -unity-text-align: upper-center; font-size: 30px; width: 500px; align-self: center;" />
     </engine:VisualElement>
 </engine:UXML>

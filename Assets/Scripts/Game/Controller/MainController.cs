@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using VContainer;
 
 public class MainController : NetworkBehaviour
 {
@@ -72,7 +73,8 @@ public class MainController : NetworkBehaviour
         }
     }
 
-    public void Initialize(UserController userController, FieldController fieldController, CameraController cameraController, StateController stateController, PlayerController playerController, EnemyController enemyController)
+    [Inject]
+    public void Construct(UserController userController, FieldController fieldController, CameraController cameraController, StateController stateController, PlayerController playerController, EnemyController enemyController)
     {
         _userController = userController;
         _fieldController = fieldController;
@@ -80,7 +82,6 @@ public class MainController : NetworkBehaviour
         _stateController = stateController;
         _playerController = playerController;
         _enemyController = enemyController;
-        _networkManager = NetworkManager.Instance;
     }
 
     public async UniTask InitializeGame()

@@ -1,6 +1,7 @@
 using R3;
 using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
 
 public class UserController : MonoBehaviour
 {
@@ -19,7 +20,8 @@ public class UserController : MonoBehaviour
         });
     }
 
-    public void Initialize(PlayerController playerController)
+    [Inject]
+    public void Construct(PlayerController playerController)
     {
         _playerController = playerController;
         _networkManager = NetworkManager.Instance;

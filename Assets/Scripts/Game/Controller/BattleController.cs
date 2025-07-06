@@ -7,6 +7,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
+using VContainer;
 
 public class BattleController : MonoBehaviour
 {
@@ -96,7 +97,8 @@ public class BattleController : MonoBehaviour
         InitializeBattleLogController();
     }
 
-    public void Initialize(StateController stateController, MainController mainController, UserController userController, BattleLogController battleLogController, EnemyController enemyController, ImageAnimationHolder imageAnimationHolder)
+    [Inject]
+    public void Construct(StateController stateController, MainController mainController, UserController userController, BattleLogController battleLogController, EnemyController enemyController, ImageAnimationHolder imageAnimationHolder)
     {
         _stateController = stateController;
         _mainController = mainController;
