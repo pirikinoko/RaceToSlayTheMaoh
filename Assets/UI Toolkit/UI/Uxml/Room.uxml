@@ -1,3 +1,9 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement name="Root" style="flex-grow: 1;" />
+    <Style src="project://database/Assets/UI%20Toolkit/UI/Uss/OverAll.uss?fileID=7433441132597879392&amp;guid=4a4c7c1f77800fa4eb5a604d5e7f58b2&amp;type=3#OverAll" />
+    <engine:VisualElement name="VisualElement-Root" style="flex-grow: 1;">
+        <engine:VisualElement name="VisualElement-Chat" style="width: 400px; height: 600px;">
+            <engine:ListView name="ListView-Chat" class="chatList" style="background-color: rgb(58, 58, 58); height: 500px;" />
+            <engine:TextField placeholder-text="Chat" name="TextField-Chat" max-length="80" is-delayed="false" vertical-scroller-visibility="Auto" class="label" style="height: 50px; font-size: 30px; color: rgb(0, 0, 0);" />
+        </engine:VisualElement>
+    </engine:VisualElement>
 </engine:UXML>
