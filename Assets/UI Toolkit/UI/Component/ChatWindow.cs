@@ -9,9 +9,16 @@ namespace UIToolkit
     public partial class ChatWindow : VisualElement
     {
         [UxmlAttribute]
-        public Vector2 WindowSize { get; set; } = new Vector2(300, 600);
-        [UxmlAttribute]
-        public string PlaceholderText { get; set; } = "メッセージを入力...";
+        public Vector2 WindowSize
+        {
+            get => _windowSize;
+            set
+            {
+                _windowSize = value;
+                UpdateWindowSize();
+            }
+        }
+        private Vector2 _windowSize = new Vector2(300, 600);
 
         private ScrollView _chatList;
         private TextField _inputField;
@@ -146,9 +153,20 @@ namespace UIToolkit
 
         private void UpdatePlaceholder()
         {
-            if (_inputField != null && !string.IsNullOrEmpty(PlaceholderText))
+            if (_inputField != null && _inputField.value == string.Empty)
             {
-                _inputField.value = PlaceholderText;
+                // プレースホルダーテキストを設定
+                _inputField.value = Constants.GetAssetReferenceChatPlaceholder(Settings.Language);
+                _inputField.style.color = Color.gray;
+            }
+        }
+
+        private void UpdateWindowSize()
+        {
+            if (style != null)
+            {
+                style.width = WindowSize.x;
+                style.height = WindowSize.y;
             }
         }
     }

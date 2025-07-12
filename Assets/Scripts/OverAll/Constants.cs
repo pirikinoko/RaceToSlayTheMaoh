@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Constants
 {
-    // ******* AssetReference *******   
+    #region AssetReference
 
     public static string AssetReferenceParameter = "Parameter";
     public static string GetAssetReferencePlayer(int playerId)
@@ -29,12 +29,9 @@ public class Constants
         return string.Format("{0}BattleImage", entityType);
     }
 
-    public static string AssetReferenceEnemy = "Enemy";
-    public static string AssetReferencePlayerIcon = "PlayerIcon";
     public static string AssetReferenceHeartIcon = "HeartIcon";
     public static string AssetReferenceManaIcon = "ManaIcon";
     public static string AssetReferencePowerIcon = "PowerIcon";
-    public static string AssetReferenceDamageNumberEffect = "DamageNumberEffect";
     public static string AssetReferenceCoffin = "Coffin";
 
     public static string AssetReferenceFireCondition = "FireConditionIcon";
@@ -42,7 +39,9 @@ public class Constants
     public static string AssetReferenceRegenCondition = "RegenConditionIcon";
     public static string AssetReferenceStunCondition = "StunConditionIcon";
 
-    // ******* General *******
+    #endregion
+
+    #region General
     // 指定されたパーセンテージのオフセット内でランダムな値を返す
     // 例: baseValue = 100, offsetPercent = 20 の場合, 80から120の間でランダムな値を返す
     // ただしミスすることもある
@@ -62,9 +61,10 @@ public class Constants
 
     public static int MissPotentialOnEveryDamageAction = 15;
 
-    // ******* Player *******
+    #endregion
+
+    #region Player
     public static float PlayerMoveSpeed { get; set; } = 2.0f;
-    public static int MaxMoves { get; set; } = 3;
 
     public static string GetPlayerName(Language language, int playerId)
     {
@@ -92,7 +92,9 @@ public class Constants
         }
     }
 
-    // ******* Title *******
+    #endregion
+
+    #region Title
     public static string GetSentenceForLocalPlayButton(Language language, int playerCount)
     {
         switch (language)
@@ -132,25 +134,51 @@ public class Constants
         }
     }
 
-    // ******* Main *******
+    #endregion
+
+    #region Utility
+
+    public static string GetAssetReferenceChatPlaceholder(Language language)
+    {
+        switch (language)
+        {
+            case Language.Japanese:
+                return "メッセージを入力...";
+            case Language.English:
+                return "Type your chat message...";
+            default:
+                return "Type your chat message...";
+        }
+    }
+
+    #endregion
+
+    #region Main
     public static int MaxPlayerCount { get; set; } = 4;
     public static int MaxDiceValue { get; set; } = 4;
     public static float DiceRollUpdateInterval { get; set; } = 0.02f;
     public static int DiceHighlightBlinkCount { get; set; } = 5;
     public static float DiceHighlightBlinkInterval { get; set; } = 0.15f;
 
-    // ******* Entity *******
+    #endregion
+
+    #region Entity
 
     public static int MaxHitPoint { get; set; } = 50;
     public static int MaxManaPoint { get; set; } = 30;
     public static int AttackOffsetPercent { get; set; } = 100;
 
-    // ******* Camera *******
+    #endregion
+
+    #region Camera
     public static float CameraMoveDuration { get; set; } = 1f;
     public static float CameraZoomDuration { get; set; } = 1f;
     public static float CameraZoomFactor { get; set; } = 0.5f; // ズーム倍率を追加
     public static Vector2 BaseScreenSize { get; set; } = new Vector2(1920, 1080);
-    // ******* Field *******
+
+    #endregion
+
+    #region Field
     public static Vector2 FieldCornerUpLeft { get; set; } = new Vector2(-5, -5);
     public static Vector2 FieldCornerUpRight { get; set; } = new Vector2(-1, -5);
     public static Vector2 FieldCornerDownLeft { get; set; } = new Vector2(1, -5);
@@ -170,7 +198,9 @@ public class Constants
 
     public static float DelayBeforeNewTurnSeconds { get; set; } = 0.6f;
 
-    // ******* Battle *******
+    #endregion
+
+    #region Battle
     public static int MaxTurn = 20;
 
     public static string GetSentenceWhenStartBattle(string language, string leftEntityname, string rightEntityname)
@@ -356,7 +386,9 @@ public class Constants
 
     public static string HealCaption = "Heal";
 
-    // ******* Reward *******
+    #endregion
+
+    #region Reward
     public static string GetStatusRewardTitle(Language language)
     {
         switch (language)
@@ -370,7 +402,9 @@ public class Constants
         }
     }
 
-    // ******* Result *******
+    #endregion
+
+    #region Result
     public static string GetResultMessageWin(Language language, string winnerName)
     {
         switch (language)
@@ -413,7 +447,9 @@ public class Constants
     public static float ResultFadeAlpha { get; set; } = 0.8f;
     public static float ResultFadeDuration { get; set; } = 1.5f;
 
-    // ******* AbnormalCondition *******
+    #endregion
+
+    #region AbnormalCondition
     public static int FireDamage { get; set; } = 2;
     public static int FireDamageOffsetPercent { get; set; } = 50;
     public static float PoisonDamageRateOfHitPoint { get; set; } = 0.2f;
@@ -481,7 +517,9 @@ public class Constants
         }
     }
 
-    // ****** ImageEffectKey *******
+    #endregion
+
+    #region ImageEffectKey
     public static string ImageAnimationKeySlash = "SlashAnimationEffect";
     public static string ImageAnimationKeyHeal = "HealAnimationEffect";
     public static string ImageAnimationKeyBite = "BiteAnimationEffect";
@@ -493,4 +531,6 @@ public class Constants
     public static string ImageAnimationKeyTraining = "TrainingAnimationEffect";
     public static string ImageAnimationKeyStrike = "StrikeAnimationEffect";
     public static string ImageAnimationKeyPoisonMushroom = "PoisonMushroomAnimationEffect";
+
+    #endregion
 }
