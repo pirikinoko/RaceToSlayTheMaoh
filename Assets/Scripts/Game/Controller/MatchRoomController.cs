@@ -1,156 +1,175 @@
-using UnityEngine;
 using UnityEngine.UIElements;
-using Cysharp.Threading.Tasks;
 using VContainer;
 using Fusion;
+using System.Collections.Generic;
+using UIToolkit;
 
-public class MatchRoomController : MonoBehaviour
+public class MatchRoomController : NetworkBehaviour
 {
-    // private MainController _mainController;
-    // private StateController _stateContoller;
-    // private NetworkManager _networkManager;
-    // private TitleTextData _titleTextData;
+    private MainController _mainController;
+    private NetworkManager _networkManager;
 
-    // private Button _buttonStartGame;
-    // private Button _buttonLeaveRoom;
+    private Button _buttonStartGame;
+    private Button _buttonLeaveRoom;
 
-    // private Label _roomNameLabel;
-    // private Label[] _playerNameLabels = new Label[Constants.MaxPlayerCount];
-    // private TextField _chatInputField;
+    private Label _roomNameLabel;
+    private ListView _playerListView;
+    private List<string> _playerNames = new List<string>();
 
-    // private bool _whileMatching = false;
+    private ChatWindow _chatWindow;
 
-    // [Inject]
-    // public void Construct(MainController mainController, StateController stateController, TitleTextData titleTextData)
-    // {
-    //     _mainController = mainController;
-    //     _stateContoller = stateController;
-    //     _titleTextData = titleTextData;
-    //     _networkManager = NetworkManager.Instance;
-    // }
+    private class ClassNames
+    {
+        public const string PlayerNameLabel = "player-name-label";
+    }
 
-    // private void Start()
-    // {
-    //     var root = GetComponent<UIDocument>().rootVisualElement;
 
-    //     _buttonStartLocal = root.Q<Button>("Button-Start-Local");
-    //     _buttonStartLocal.clicked += StartLocalGame;
-    //     _buttonStartMatchMaking = root.Q<Button>("Button-Start-Matchmaking");
-    //     _buttonStartMatchMaking.clicked += StartMatchmaking;
-    //     _roomNameLabel = root.Q<Toggle>("Toggle-Room-Name-Input");
-    //     _roomNameInputField = root.Q<TextField>("Input-Room-Name");
-    //     _roomNameLabel.RegisterValueChangedCallback(OnRoomNameToggleChanged);
-    //     root.Q<Button>("ArrowLeft").clicked += () => ChangePlayerCount(_mainController.PlayerCount - 1);
-    //     root.Q<Button>("ArrowRight").clicked += () => ChangePlayerCount(_mainController.PlayerCount + 1);
+    [Inject]
+    public void Construct(MainController mainController)
+    {
+        _mainController = mainController;
+        _networkManager = NetworkManager.Instance;
+    }
 
-    //     _titleTextData.LocalPlayButtonText = Constants.GetSentenceForLocalPlayButton(Settings.Language, _mainController.PlayerCount);
-    //     _titleTextData.MatchmakingButtonText = Constants.GetSentenceForOnlinePlayButton(Settings.Language);
-    //     _buttonStartLocal.text = _titleTextData.LocalPlayButtonText;
-    //     _buttonStartMatchMaking.text = _titleTextData.MatchmakingButtonText;
-    // }
+    private void Start()
+    {
+        InitializeUI();
+        SubscribeToNetworkEvents();
+    }
 
-    // private void Update()
-    // {
-    //     // ランダムマッチの処理
-    //     if (_whileMatching && _roomNameLabel.value == false)
-    //     {
-    //         bool isMatchComplete = _networkManager.GetNetworkRunner().SessionInfo.PlayerCount ==
-    //         _networkManager.GetNetworkRunner().SessionInfo.MaxPlayers;
-    //         if (isMatchComplete)
-    //         {
-    //             StartOnlineGame();
-    //             _whileMatching = false;
-    //         }
-    //     }
-    // }
+    private void SubscribeToNetworkEvents()
+    {
+        if (_networkManager != null)
+        {
+            _networkManager.OnPlayerListChanged += UpdatePlayerList;
+            _networkManager.OnChatHistoryUpdated += UpdateChatHistory;
+            // 初期プレイヤーリストの設定
+            UpdatePlayerList(_networkManager.GetCurrentPlayerNames());
+            // 初期チャット履歴の設定
+            UpdateChatHistory(_networkManager.GetChatHistory());
+        }
+    }
 
-    // private void StartLocalGame()
-    // {
-    //     _mainController.GameMode = GameMode.Local;
-    //     _networkManager.CraeateLocalGameAsync().Forget();
-    //     _stateContoller.ChangeState(State.Field);
-    // }
+    private void InitializeUI()
+    {
+        var root = GetComponent<UIDocument>().rootVisualElement;
 
-    // private void StartOnlineGame()
-    // {
-    //     _mainController.GameMode = GameMode.Online;
-    //     _stateContoller.ChangeState(State.Field);
-    // }
+        _buttonStartGame = root.Q<Button>("Button-Start");
+        _buttonLeaveRoom = root.Q<Button>("Button-Leave");
 
-    // private void StartMatchmaking()
-    // {
-    //     if (_networkManager.GetNetworkRunner() != null && _networkManager.GetNetworkRunner().IsRunning)
-    //     {
-    //         return;
-    //     }
-    //     MatchmakingProcessAsync().Forget();
-    // }
+        _roomNameLabel = root.Q<Label>("Label-RoomName");
+        _playerListView = root.Q<ListView>("ListView-PlayerList");
 
-    // private async UniTask MatchmakingProcessAsync()
-    // {
-    //     _whileMatching = true;
-    //     _titleTextData.MatchmakingButtonText = Constants.GetSentenceForMatchingButton(Settings.Language);
-    //     _buttonStartMatchMaking.clicked += StopMatchmaking;
-    //     _roomNameLabel.style.display = DisplayStyle.None;
+        // ListViewの初期設定
+        _playerListView.itemsSource = _playerNames;
+        _playerListView.makeItem = () => new Label();
+        _playerListView.bindItem = (element, index) =>
+        {
+            var label = element as Label;
+            label.text = _playerNames[index];
+            label.AddToClassList(ClassNames.PlayerNameLabel);
+        };
 
-    //     StartGameResult result = null;
-    //     if (_roomNameLabel.value == true)
-    //     {
-    //         result = await _networkManager.JoinOrCreateRoomByNameAsync(_roomNameInputField.value);
-    //         Debug.Log($"Matchmaking result: {result}");
-    //     }
-    //     else
-    //     {
-    //         result = await _networkManager.JoinOrCreateOldestRoomAsync();
-    //         Debug.Log($"Matchmaking result: {result}");
-    //     }
+        _buttonStartGame.clicked += () =>
+        {
+            if (HasStateAuthority)
+            {
+                _networkManager.DisableJoin();
+            }
+            StartGameRPC();
+        };
+        _buttonLeaveRoom.clicked += LeaveRoom;
 
-    //     if (!result.Ok)
-    //     {
-    //         Debug.LogError($"Failed to start matchmaking: {result.ErrorMessage}");
+        _chatWindow = root.Q<ChatWindow>("ChatWindow");
 
-    //         _whileMatching = false;
-    //         SetUiPreMatchmakingState();
-    //     }
-    // }
+        // ChatWindowのメッセージ送信イベントにRPCを登録
+        if (_chatWindow != null)
+        {
+            _chatWindow.OnMessageSent += OnChatMessageSent;
+        }
+    }
 
-    // private void StopMatchmaking()
-    // {
-    //     _whileMatching = false;
-    //     SetUiPreMatchmakingState();
+    private void OnDestroy()
+    {
+        // イベントの購読解除
+        if (_networkManager != null)
+        {
+            _networkManager.OnPlayerListChanged -= UpdatePlayerList;
+            _networkManager.OnChatHistoryUpdated -= UpdateChatHistory;
+        }
 
-    //     if (_networkManager.GetNetworkRunner() != null && _networkManager.GetNetworkRunner().IsRunning)
-    //     {
-    //         _networkManager.GetNetworkRunner().Disconnect(_networkManager.GetNetworkRunner().LocalPlayer);
-    //     }
-    // }
+        // ChatWindowのイベント購読解除
+        if (_chatWindow != null)
+        {
+            _chatWindow.OnMessageSent -= OnChatMessageSent;
+        }
+    }
 
-    // private void SetUiPreMatchmakingState()
-    // {
-    //     _titleTextData.MatchmakingButtonText = Constants.GetSentenceForOnlinePlayButton(Settings.Language);
-    //     _buttonStartMatchMaking.clicked -= StopMatchmaking;
-    //     _buttonStartMatchMaking.clicked += StartMatchmaking;
-    //     _roomNameLabel.style.display = DisplayStyle.Flex;
-    // }
+    private void UpdateChatHistory(List<string> chatHistory)
+    {
+        _chatWindow.ClearMessages();
+        foreach (var message in chatHistory)
+        {
+            _chatWindow.AddMessage(message);
+        }
+    }
 
-    // private void ChangePlayerCount(int playerCount)
-    // {
-    //     if (playerCount < 1) playerCount = 1;
-    //     if (playerCount > Constants.MaxPlayerCount) playerCount = Constants.MaxPlayerCount;
+    private void OnChatMessageSent(string message)
+    {
+        // 自分のメッセージを自分のチャットに表示（名前付き）
+        var myName = _networkManager.GetPlayerName(Runner.LocalPlayer);
+        var formattedMessage = $"{myName}: {message}";
+        _chatWindow.AddMessage(formattedMessage);
 
-    //     _titleTextData.LocalPlayButtonText = Constants.GetSentenceForLocalPlayButton(Settings.Language, playerCount);
-    //     _mainController.PlayerCount = playerCount;
-    // }
+        // チャット履歴にメッセージを追加（マスタークライアントが管理）
+        _networkManager.AddChatMessage(formattedMessage);
 
-    // private void OnRoomNameToggleChanged(ChangeEvent<bool> evt)
-    // {
-    //     if (evt.newValue == true)
-    //     {
-    //         _roomNameInputField.style.display = DisplayStyle.Flex;
-    //     }
-    //     else
-    //     {
-    //         _roomNameInputField.style.display = DisplayStyle.None;
-    //     }
-    // }
+        // メッセージをRPCで他のプレイヤーに送信
+        if (Runner != null && Runner.IsConnectedToServer)
+        {
+            BroadcastChatMessageRPC(formattedMessage, Runner.LocalPlayer);
+        }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    private void BroadcastChatMessageRPC(string formattedMessage, PlayerRef sender)
+    {
+        // 送信者以外のプレイヤーのチャットウィンドウにメッセージを追加
+        if (sender != Runner.LocalPlayer)
+        {
+            _chatWindow.AddMessage(formattedMessage);
+        }
+    }
+
+    private void UpdatePlayerList(List<string> playerNames)
+    {
+        // 新しいリストで置き換える（Clearを使わない）
+        _playerNames = new List<string>(playerNames);
+        _playerListView.itemsSource = _playerNames;
+        _playerListView?.Rebuild();
+    }
+
+    public void OnEnterRoom(string roomName, List<string> playerNames)
+    {
+        _roomNameLabel.text = roomName;
+
+        // プレイヤーリストの更新
+        _playerNames = playerNames;
+        _playerListView.itemsSource = _playerNames;
+        _playerListView.Rebuild();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void StartGameRPC()
+    {
+        _mainController.StartGame();
+    }
+
+    private void LeaveRoom()
+    {
+        if (Runner != null)
+        {
+            Runner.Shutdown();
+        }
+    }
 }

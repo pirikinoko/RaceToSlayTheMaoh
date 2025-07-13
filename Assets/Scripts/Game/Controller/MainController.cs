@@ -84,6 +84,11 @@ public class MainController : NetworkBehaviour
         _enemyController = enemyController;
     }
 
+    public void StartGame()
+    {
+        _stateController.ChangeState(State.Field);
+    }
+
     public async UniTask InitializeGame()
     {
         if (_gameMode == GameMode.Online && _networkManager.GetNetworkRunner().IsSharedModeMasterClient)

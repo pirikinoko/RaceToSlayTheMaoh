@@ -104,7 +104,7 @@ namespace UIToolkit
             string message = _inputField.value?.Trim();
             if (!string.IsNullOrEmpty(message))
             {
-                AddMessage(message);
+                // 名前付きメッセージはOnMessageSentイベントで外部から設定してもらう
                 OnMessageSent?.Invoke(message);
                 _inputField.value = string.Empty;
                 _inputField.Focus();

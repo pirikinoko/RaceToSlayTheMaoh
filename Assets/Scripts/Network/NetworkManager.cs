@@ -12,11 +12,23 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     [Networked]
     public NetworkDictionary<PlayerRef, int> PlayerIdMap { get; set; }
 
-    [SerializeField]
-    private NetworkRunner networkRunnerPrefab;
+    [Networked]
+    public NetworkDictionary<PlayerRef, NetworkString<_32>> PlayerNameMap { get; set; }
+
+    [Networked, Capacity(50)]
+    public NetworkArray<NetworkString<_128>> ChatHistory { get; }
+
+    [Networked]
+    public int ChatHistoryCount { get; set; }
+
+    // プレイヤー情報変更イベント
+    public event Action<List<string>> OnPlayerListChanged;
+
+    // チャット履歴更新イベント
+    public event Action<List<string>> OnChatHistoryUpdated;
 
     [SerializeField]
-    private UserController _userController;
+    private NetworkRunner networkRunnerPrefab;
 
     private NetworkRunner _networkRunner;
 
@@ -81,10 +93,20 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         return result;
     }
 
-    public void StartGame()
+    /// <summary>
+    /// ルームに参加可能になる
+    /// </summary>
+    public void EnableJoin()
+    {
+        _networkRunner.SessionInfo.IsOpen = true;
+    }
+
+    /// <summary>
+    /// ルームに参加不可能になる
+    /// </summary>
+    public void DisableJoin()
     {
         _networkRunner.SessionInfo.IsOpen = false;
-        _networkRunner.SessionInfo.IsVisible = false;
     }
 
     public NetworkObject SpawnPlayer(GameObject playerPrefab, Vector3 spawnPosition, Transform parentTransform)
@@ -113,17 +135,122 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         return -1;
     }
 
+    public string GetPlayerName(PlayerRef playerRef)
+    {
+        if (PlayerNameMap.ContainsKey(playerRef))
+        {
+            return PlayerNameMap[playerRef].ToString();
+        }
+        return $"Player {GetPlayerId(playerRef)}"; // フォールバック
+    }
+
+    private void SetPlayerName(PlayerRef playerRef, string playerName)
+    {
+        // マスタークライアントのみが実行可能
+        if (!_networkRunner.IsSharedModeMasterClient)
+            return;
+
+        if (PlayerNameMap.ContainsKey(playerRef))
+        {
+            PlayerNameMap.Set(playerRef, playerName);
+        }
+        else
+        {
+            PlayerNameMap.Add(playerRef, playerName);
+        }
+        NotifyPlayerListChanged();
+    }
+
+    public void AddChatMessage(string message)
+    {
+        // マスタークライアントのみが実行可能
+        if (!_networkRunner.IsSharedModeMasterClient)
+            return;
+
+        if (ChatHistoryCount < ChatHistory.Length)
+        {
+            // 配列に空きがある場合は末尾に追加
+            ChatHistory.Set(ChatHistoryCount, message);
+            ChatHistoryCount++;
+        }
+        else
+        {
+            // 配列が満杯の場合は古いメッセージを削除して新しいメッセージを追加
+            ShiftChatHistoryAndAdd(message);
+        }
+        NotifyChatHistoryUpdated();
+    }
+
+    private void ShiftChatHistoryAndAdd(string newMessage)
+    {
+        // 古いメッセージを1つずつ前にシフト（最古のメッセージ[0]が削除される）
+        for (int i = 0; i < ChatHistory.Length - 1; i++)
+        {
+            ChatHistory.Set(i, ChatHistory[i + 1]);
+        }
+
+        // 最後の位置に新しいメッセージを追加
+        ChatHistory.Set(ChatHistory.Length - 1, newMessage);
+        // カウントは最大値を維持
+        ChatHistoryCount = ChatHistory.Length;
+    }
+
+    public List<string> GetChatHistory()
+    {
+        var history = new List<string>();
+        for (int i = 0; i < ChatHistoryCount; i++)
+        {
+            history.Add(ChatHistory[i].ToString());
+        }
+        return history;
+    }
+
+    private void NotifyChatHistoryUpdated()
+    {
+        OnChatHistoryUpdated?.Invoke(GetChatHistory());
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RpcRequestSetPlayerName(PlayerRef playerRef, string playerName)
+    {
+        SetPlayerName(playerRef, playerName);
+    }
+
     void INetworkRunnerCallbacks.OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
     void INetworkRunnerCallbacks.OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
     void INetworkRunnerCallbacks.OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        // マスタークライアントがIDの割り当てを行う
+        // マスタークライアントがIDと名前の割り当てを行う
         if (runner.IsSharedModeMasterClient)
         {
             if (!PlayerIdMap.ContainsKey(player))
             {
-                PlayerIdMap.Add(player, GetNetworkRunner().SessionInfo.PlayerCount);
+                var playerId = GetNetworkRunner().SessionInfo.PlayerCount;
+                PlayerIdMap.Add(player, playerId);
+
+                // デフォルト名を設定
+                var defaultName = $"Player {playerId}";
+                PlayerNameMap.Add(player, defaultName);
             }
+        }
+
+        // プレイヤーリスト更新イベントを発火
+        NotifyPlayerListChanged();
+
+        // 新規参加プレイヤーにチャット履歴を送信
+        if (runner.IsSharedModeMasterClient)
+        {
+            SendChatHistoryToPlayerRPC(player);
+        }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void SendChatHistoryToPlayerRPC(PlayerRef targetPlayer)
+    {
+        // 指定されたプレイヤーのみがチャット履歴を受信
+        if (targetPlayer == _networkRunner.LocalPlayer)
+        {
+            NotifyChatHistoryUpdated();
         }
     }
 
@@ -132,12 +259,45 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsSharedModeMasterClient)
         {
             PlayerIdMap.Remove(player);
+            PlayerNameMap.Remove(player);
+
+            // IDを再割り当て
             int i = 1;
+            var playerRefs = new List<PlayerRef>();
             foreach (var kvp in PlayerIdMap)
             {
-                PlayerIdMap.Set(kvp.Key, i++);
+                playerRefs.Add(kvp.Key);
+            }
+
+            foreach (var playerRef in playerRefs)
+            {
+                PlayerIdMap.Set(playerRef, i);
+                i++;
             }
         }
+
+        // プレイヤーリスト更新イベントを発火
+        NotifyPlayerListChanged();
+    }
+
+    private void NotifyPlayerListChanged()
+    {
+        var playerNames = new List<string>();
+        foreach (var kvp in PlayerNameMap)
+        {
+            playerNames.Add(kvp.Value.ToString());
+        }
+        OnPlayerListChanged?.Invoke(playerNames);
+    }
+
+    public List<string> GetCurrentPlayerNames()
+    {
+        var playerNames = new List<string>();
+        foreach (var kvp in PlayerNameMap)
+        {
+            playerNames.Add(kvp.Value.ToString());
+        }
+        return playerNames;
     }
 
     void INetworkRunnerCallbacks.OnInput(NetworkRunner runner, NetworkInput input) { }
