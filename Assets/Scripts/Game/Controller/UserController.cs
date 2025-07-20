@@ -1,35 +1,37 @@
+using BossSlayingTourney.Core;
+using BossSlayingTourney.Network;
 using R3;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-public class UserController : MonoBehaviour
+namespace BossSlayingTourney.Game.Controllers
 {
-    private NetworkManager _networkManager;
-    private PlayerController _playerController;
 
-    public int Id;
-
-    public Entity MyEntity;
-
-    void Start()
+    public class UserController : MonoBehaviour
     {
-        _playerController.OnPlayersInitialized.Subscribe(playerList =>
+        private NetworkManager _networkManager;
+        private PlayerController _playerController;
+
+        public int Id;
+
+        public Entity MyEntity;
+
+        void Start()
         {
-            GetMyEntity(playerList);
-        });
-    }
+            _playerController.OnPlayersInitialized.Subscribe(playerList =>
+            {
+                MyEntity = playerList.Find(p => p.Id == Id);
+            });
+        }
 
-    [Inject]
-    public void Construct(PlayerController playerController)
-    {
-        _playerController = playerController;
-        _networkManager = NetworkManager.Instance;
-        Id = _networkManager.GetPlayerId(_networkManager.GetNetworkRunner().LocalPlayer);
-    }
-
-    private void GetMyEntity(List<Entity> playerList)
-    {
-        MyEntity = playerList.Find(p => p.Id == Id);
+        [Inject]
+        public void Construct(PlayerController playerController)
+        {
+            _playerController = playerController;
+            _networkManager = NetworkManager.Instance;
+            Id = _networkManager.GetPlayerId(_networkManager.GetNetworkRunner().LocalPlayer);
+        }
     }
 }

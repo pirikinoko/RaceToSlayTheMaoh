@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace BossSlayingTourney.Game.Effects
+{
+
 public class NumberEffectPool : MonoBehaviour
 {
     public static NumberEffectPool Instance;
@@ -74,4 +77,5 @@ public class NumberEffectPool : MonoBehaviour
         obj.SetActive(false);
         pools[prefabName].Enqueue(obj);
     }
+}
 }

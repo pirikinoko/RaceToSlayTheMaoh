@@ -1,11 +1,14 @@
-public enum BattleStatus
+namespace BossSlayingTourney.Game.Battle
 {
-    BeforeAction,
-    AfterAction,
-    CheckAbnormalCondition,
-    LeftWin,
-    RightWin,
-    SelectReward,
-    BattleEnding,
-    GameClear,
+    public enum BattleStatus
+    {
+        BeforeAction,
+        AfterAction,
+        CheckAbnormalCondition,
+        LeftWin,
+        RightWin,
+        SelectReward,
+        BattleEnding,
+        GameClear,
+    }
 }

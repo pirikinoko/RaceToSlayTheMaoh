@@ -1,3 +1,5 @@
+using BossSlayingTourney.Core;
+using BossSlayingTourney.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;

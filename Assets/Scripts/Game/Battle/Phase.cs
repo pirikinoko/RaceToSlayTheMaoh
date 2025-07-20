@@ -1,3 +1,6 @@
+
+namespace BossSlayingTourney.Game.Battle
+{
 public enum Phase
 {
     WaitForAction,
@@ -5,4 +8,5 @@ public enum Phase
     AbnormalStatusResult,
     TurnEnd,
     BattleEnd
+}
 }

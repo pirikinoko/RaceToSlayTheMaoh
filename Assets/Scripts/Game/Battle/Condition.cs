@@ -1,8 +1,11 @@
-public enum Condition
+namespace BossSlayingTourney.Game.Battle
 {
-    None,
-    Regen,
-    Poison,
-    Stun,
-    Fire,
+    public enum Condition
+    {
+        None,
+        Regen,
+        Poison,
+        Stun,
+        Fire,
+    }
 }

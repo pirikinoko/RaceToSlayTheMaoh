@@ -4,6 +4,9 @@ using UnityEngine.AddressableAssets;
 #if UNITY_EDITOR
 using UnityEditor;
 
+namespace BossSlayingTourney.Core
+{
+
 
 [RequireComponent(typeof(Entity))]
 public class SetEnemyPreferenceTheEditor : MonoBehaviour
@@ -52,4 +55,4 @@ public class SetEnemyPreferenceTheEditor : MonoBehaviour
     }
 }
 #endif
-
+}

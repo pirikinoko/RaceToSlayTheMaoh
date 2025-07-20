@@ -1,58 +1,63 @@
 using System.Collections.Generic;
+using BossSlayingTourney.Core;
 using UnityEngine;
 
-public class Reward
+namespace BossSlayingTourney.Game.Battle
 {
-    public string Description { get; private set; }
 
-    public delegate string StatusReword(Entity target);
-
-    public StatusReword StatusRewordAction { get; private set; }
-
-    public Reward()
+    public class Reward
     {
-        SetRandomReword();
-    }
+        public string Description { get; private set; }
 
-    public class RewardParameter
-    {
-        public static int HpGain = 10;
-        public static int MpGain = 5;
-    }
+        public delegate string StatusReword(Entity target);
 
-    private void SetRandomReword()
-    {
-        // 報酬の候補となるアクションと説明をリストにまとめる
-        List<(StatusReword action, string description)> rewordActions = new List<(StatusReword, string)>
+        public StatusReword StatusRewordAction { get; private set; }
+
+        public Reward()
+        {
+            SetRandomReword();
+        }
+
+        public class RewardParameter
+        {
+            public static int HpGain = 10;
+            public static int MpGain = 5;
+        }
+
+        private void SetRandomReword()
+        {
+            // 報酬の候補となるアクションと説明をリストにまとめる
+            List<(StatusReword action, string description)> rewordActions = new List<(StatusReword, string)>
         {
             (IncreaseHealth, $"HPが{RewardParameter.HpGain}ポイント回復する"),
             (IncreaseMana, $"MPが{RewardParameter.MpGain}ポイント回復する"),
         };
 
-        // ランダムにインデックスを選択
-        int index = Random.Range(0, rewordActions.Count);
+            // ランダムにインデックスを選択
+            int index = Random.Range(0, rewordActions.Count);
 
-        // 選択した報酬をセット
-        StatusRewordAction = rewordActions[index].action;
-        Description = rewordActions[index].description;
-    }
+            // 選択した報酬をセット
+            StatusRewordAction = rewordActions[index].action;
+            Description = rewordActions[index].description;
+        }
 
-    private string IncreaseHealth(Entity target)
-    {
-        int newHp = target.Hp + RewardParameter.HpGain;
-        target.SetHitPoint(newHp);
-        return $"{target.name}のHPが{RewardParameter.HpGain}ポイント回復した！";
-    }
+        private string IncreaseHealth(Entity target)
+        {
+            int newHp = target.Hp + RewardParameter.HpGain;
+            target.SetHitPoint(newHp);
+            return $"{target.name}のHPが{RewardParameter.HpGain}ポイント回復した！";
+        }
 
-    private string IncreaseMana(Entity target)
-    {
-        int newMp = target.Mp + RewardParameter.MpGain;
-        target.SetManaPoint(newMp);
-        return $"{target.name}のMPが{RewardParameter.MpGain}ポイント回復した！";
-    }
+        private string IncreaseMana(Entity target)
+        {
+            int newMp = target.Mp + RewardParameter.MpGain;
+            target.SetManaPoint(newMp);
+            return $"{target.name}のMPが{RewardParameter.MpGain}ポイント回復した！";
+        }
 
-    public string Execute(Entity target)
-    {
-        return StatusRewordAction?.Invoke(target);
+        public string Execute(Entity target)
+        {
+            return StatusRewordAction?.Invoke(target);
+        }
     }
 }

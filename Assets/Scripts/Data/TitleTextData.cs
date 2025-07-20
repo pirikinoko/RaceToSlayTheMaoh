@@ -3,9 +3,16 @@ using UnityEngine.UIElements;
 using System;
 using System.Runtime.CompilerServices;
 
+namespace BossSlayingTourney.Data
+{
+
 public class TitleTextData : INotifyBindablePropertyChanged
 {
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
+
+    // バッキングフィールド
+    private string _localPlayButtonText;
+    private string _matchmakingButtonText;
 
     // propertyChanged イベントを発行するメソッド
     private void Notify([CallerMemberName] string propertyName = null)
@@ -16,14 +23,29 @@ public class TitleTextData : INotifyBindablePropertyChanged
     [CreateProperty]
     public string LocalPlayButtonText
     {
-        get => LocalPlayButtonText;
-        set { LocalPlayButtonText = value; Notify(); }
+        get => _localPlayButtonText;
+        set
+        {
+            if (_localPlayButtonText != value)
+            {
+                _localPlayButtonText = value;
+                Notify();
+            }
+        }
     }
 
     [CreateProperty]
     public string MatchmakingButtonText
     {
-        get => MatchmakingButtonText;
-        set { MatchmakingButtonText = value; Notify(); }
+        get => _matchmakingButtonText;
+        set
+        {
+            if (_matchmakingButtonText != value)
+            {
+                _matchmakingButtonText = value;
+                Notify();
+            }
+        }
     }
+}
 }

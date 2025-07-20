@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+namespace BossSlayingTourney.Game.Field
+{
+
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Collider2D))]
 public class MoveHighlight : MonoBehaviour
@@ -61,4 +64,5 @@ public class MoveHighlight : MonoBehaviour
             renderer.color = _defaultColor;
         }
     }
+}
 }

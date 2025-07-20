@@ -1,5 +1,8 @@
 using UnityEngine;
 
+namespace BossSlayingTourney.Core
+{
+
 public class Constants
 {
     #region AssetReference
@@ -533,4 +536,5 @@ public class Constants
     public static string ImageAnimationKeyPoisonMushroom = "PoisonMushroomAnimationEffect";
 
     #endregion
+}
 }

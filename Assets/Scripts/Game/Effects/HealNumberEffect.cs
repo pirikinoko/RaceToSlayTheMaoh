@@ -3,6 +3,9 @@ using TMPro;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 
+namespace BossSlayingTourney.Game.Effects
+{
+
 public class HealNumberEffect : NumberEffect
 {
     private const float moveUpHeight = 120f;
@@ -38,4 +41,5 @@ public class HealNumberEffect : NumberEffect
 
         await jumpSequence.Play().ToUniTask();
     }
+}
 }

@@ -1,7 +1,10 @@
-public enum State
+namespace BossSlayingTourney.Core
 {
-    Title,
-    Field,
-    Battle,
-    Result
+    public enum State
+    {
+        Title,
+        Field,
+        Battle,
+        Result
+    }
 }

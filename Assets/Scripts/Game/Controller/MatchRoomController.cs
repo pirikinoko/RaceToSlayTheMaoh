@@ -3,173 +3,127 @@ using VContainer;
 using Fusion;
 using System.Collections.Generic;
 using UIToolkit;
+using BossSlayingTourney.Network;
 
-public class MatchRoomController : NetworkBehaviour
+namespace BossSlayingTourney.Game.Controllers
 {
-    private MainController _mainController;
-    private NetworkManager _networkManager;
 
-    private Button _buttonStartGame;
-    private Button _buttonLeaveRoom;
-
-    private Label _roomNameLabel;
-    private ListView _playerListView;
-    private List<string> _playerNames = new List<string>();
-
-    private ChatWindow _chatWindow;
-
-    private class ClassNames
+    public class MatchRoomController : NetworkBehaviour
     {
-        public const string PlayerNameLabel = "player-name-label";
-    }
+        private MainController _mainController;
+        private NetworkManager _networkManager;
 
+        private Button _buttonStartGame;
+        private Button _buttonLeaveRoom;
 
-    [Inject]
-    public void Construct(MainController mainController)
-    {
-        _mainController = mainController;
-        _networkManager = NetworkManager.Instance;
-    }
+        private Label _roomNameLabel;
+        private ListView _playerListView;
+        private List<string> _playerNames = new();
 
-    private void Start()
-    {
-        InitializeUI();
-        SubscribeToNetworkEvents();
-    }
+        private ChatWindow _chatWindow;
 
-    private void SubscribeToNetworkEvents()
-    {
-        if (_networkManager != null)
+        private class ClassNames
         {
-            _networkManager.OnPlayerListChanged += UpdatePlayerList;
-            _networkManager.OnChatHistoryUpdated += UpdateChatHistory;
-            // 初期プレイヤーリストの設定
-            UpdatePlayerList(_networkManager.GetCurrentPlayerNames());
-            // 初期チャット履歴の設定
-            UpdateChatHistory(_networkManager.GetChatHistory());
+            public const string PlayerNameLabel = "player-name-label";
         }
-    }
 
-    private void InitializeUI()
-    {
-        var root = GetComponent<UIDocument>().rootVisualElement;
-
-        _buttonStartGame = root.Q<Button>("Button-Start");
-        _buttonLeaveRoom = root.Q<Button>("Button-Leave");
-
-        _roomNameLabel = root.Q<Label>("Label-RoomName");
-        _playerListView = root.Q<ListView>("ListView-PlayerList");
-
-        // ListViewの初期設定
-        _playerListView.itemsSource = _playerNames;
-        _playerListView.makeItem = () => new Label();
-        _playerListView.bindItem = (element, index) =>
+        [Inject]
+        public void Construct(MainController mainController)
         {
-            var label = element as Label;
-            label.text = _playerNames[index];
-            label.AddToClassList(ClassNames.PlayerNameLabel);
-        };
+            _mainController = mainController;
+            _networkManager = NetworkManager.Instance;
+        }
 
-        _buttonStartGame.clicked += () =>
+        private void Start()
         {
-            if (HasStateAuthority)
+            InitializeUI();
+            SubscribeToNetworkEvents();
+        }
+
+        private void SubscribeToNetworkEvents()
+        {
+            if (_networkManager != null)
             {
-                _networkManager.DisableJoin();
+                _networkManager.OnPlayerListChanged += UpdatePlayerList;
+                // 初期プレイヤーリストの設定
+                UpdatePlayerList(_networkManager.GetCurrentPlayerNames());
             }
-            StartGameRPC();
-        };
-        _buttonLeaveRoom.clicked += LeaveRoom;
-
-        _chatWindow = root.Q<ChatWindow>("ChatWindow");
-
-        // ChatWindowのメッセージ送信イベントにRPCを登録
-        if (_chatWindow != null)
-        {
-            _chatWindow.OnMessageSent += OnChatMessageSent;
-        }
-    }
-
-    private void OnDestroy()
-    {
-        // イベントの購読解除
-        if (_networkManager != null)
-        {
-            _networkManager.OnPlayerListChanged -= UpdatePlayerList;
-            _networkManager.OnChatHistoryUpdated -= UpdateChatHistory;
         }
 
-        // ChatWindowのイベント購読解除
-        if (_chatWindow != null)
+        private void InitializeUI()
         {
-            _chatWindow.OnMessageSent -= OnChatMessageSent;
+            var root = GetComponent<UIDocument>().rootVisualElement;
+
+            _buttonStartGame = root.Q<Button>("Button-Start");
+            _buttonLeaveRoom = root.Q<Button>("Button-Leave");
+
+            _roomNameLabel = root.Q<Label>("Label-RoomName");
+            _playerListView = root.Q<ListView>("ListView-PlayerList");
+
+            // ListViewの初期設定
+            _playerListView.itemsSource = _playerNames;
+            _playerListView.makeItem = () => new Label();
+            _playerListView.bindItem = (element, index) =>
+            {
+                var label = element as Label;
+                label.text = _playerNames[index];
+                label.AddToClassList(ClassNames.PlayerNameLabel);
+            };
+
+            _buttonStartGame.clicked += () =>
+            {
+                if (HasStateAuthority)
+                {
+                    _networkManager.DisableJoin();
+                }
+                StartGameRPC();
+            };
+            _buttonLeaveRoom.clicked += LeaveRoom;
+
+            _chatWindow = root.Q<ChatWindow>("ChatWindow");
+            _chatWindow.Initialize(_networkManager, Runner);
         }
-    }
 
-    private void UpdateChatHistory(List<string> chatHistory)
-    {
-        _chatWindow.ClearMessages();
-        foreach (var message in chatHistory)
+        private void OnDestroy()
         {
-            _chatWindow.AddMessage(message);
+            // イベントの購読解除
+            if (_networkManager != null)
+            {
+                _networkManager.OnPlayerListChanged -= UpdatePlayerList;
+            }
         }
-    }
 
-    private void OnChatMessageSent(string message)
-    {
-        // 自分のメッセージを自分のチャットに表示（名前付き）
-        var myName = _networkManager.GetPlayerName(Runner.LocalPlayer);
-        var formattedMessage = $"{myName}: {message}";
-        _chatWindow.AddMessage(formattedMessage);
-
-        // チャット履歴にメッセージを追加（マスタークライアントが管理）
-        _networkManager.AddChatMessage(formattedMessage);
-
-        // メッセージをRPCで他のプレイヤーに送信
-        if (Runner != null && Runner.IsConnectedToServer)
+        private void UpdatePlayerList(List<string> playerNames)
         {
-            BroadcastChatMessageRPC(formattedMessage, Runner.LocalPlayer);
+            // 新しいリストで置き換える（Clearを使わない）
+            _playerNames = new List<string>(playerNames);
+            _playerListView.itemsSource = _playerNames;
+            _playerListView?.Rebuild();
         }
-    }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    private void BroadcastChatMessageRPC(string formattedMessage, PlayerRef sender)
-    {
-        // 送信者以外のプレイヤーのチャットウィンドウにメッセージを追加
-        if (sender != Runner.LocalPlayer)
+        public void OnEnterRoom(string roomName, List<string> playerNames)
         {
-            _chatWindow.AddMessage(formattedMessage);
+            _roomNameLabel.text = roomName;
+
+            // プレイヤーリストの更新
+            _playerNames = playerNames;
+            _playerListView.itemsSource = _playerNames;
+            _playerListView.Rebuild();
         }
-    }
 
-    private void UpdatePlayerList(List<string> playerNames)
-    {
-        // 新しいリストで置き換える（Clearを使わない）
-        _playerNames = new List<string>(playerNames);
-        _playerListView.itemsSource = _playerNames;
-        _playerListView?.Rebuild();
-    }
-
-    public void OnEnterRoom(string roomName, List<string> playerNames)
-    {
-        _roomNameLabel.text = roomName;
-
-        // プレイヤーリストの更新
-        _playerNames = playerNames;
-        _playerListView.itemsSource = _playerNames;
-        _playerListView.Rebuild();
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void StartGameRPC()
-    {
-        _mainController.StartGame();
-    }
-
-    private void LeaveRoom()
-    {
-        if (Runner != null)
+        [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+        private void StartGameRPC()
         {
-            Runner.Shutdown();
+            _mainController.StartGame();
+        }
+
+        private void LeaveRoom()
+        {
+            if (Runner != null)
+            {
+                Runner.Shutdown();
+                Destroy(gameObject);
+            }
         }
     }
 }

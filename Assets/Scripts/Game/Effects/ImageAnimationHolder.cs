@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace BossSlayingTourney.Game.Effects
+{
+
 public class ImageAnimationHolder : MonoBehaviour
 {
     [SerializeField] private ImageAnimationConfig[] animatorConfigs;
@@ -47,4 +50,5 @@ public class ImageAnimationHolder : MonoBehaviour
             return null;
         }
     }
+}
 }

@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace BossSlayingTourney.Game.Effects
+{
+
 public class ImageAnimationPool : MonoBehaviour
 {
     public static ImageAnimationPool Instance;
@@ -72,4 +75,5 @@ public class ImageAnimationPool : MonoBehaviour
         obj.SetActive(false);
         pools[prefabName].Enqueue(obj);
     }
+}
 }

@@ -4,6 +4,9 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
+namespace BossSlayingTourney.Game.Effects
+{
+
 public class ImageAnimation : MonoBehaviour
 {
     [SerializeField] private Image targetImage;
@@ -77,4 +80,5 @@ public class ImageAnimation : MonoBehaviour
     {
         return isPlaying;
     }
+}
 }

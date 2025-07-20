@@ -1,13 +1,16 @@
-public enum EntityType
+namespace BossSlayingTourney.Core
 {
-    Player,
-    Slime,
-    Bat,
-    Mushroom,
-    AxeMan,
-    SwordMan,
-    ShieldMan,
-    Magician,
-    Dullahan,
-    Satan,
+    public enum EntityType
+    {
+        Player,
+        Slime,
+        Bat,
+        Mushroom,
+        AxeMan,
+        SwordMan,
+        ShieldMan,
+        Magician,
+        Dullahan,
+        Satan,
+    }
 }

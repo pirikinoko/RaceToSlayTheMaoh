@@ -4,7 +4,9 @@ using R3;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using VContainer;
+
+namespace BossSlayingTourney.Game.Controllers
+{
 
 public class BattleLogController : NetworkBehaviour
 {
@@ -15,15 +17,43 @@ public class BattleLogController : NetworkBehaviour
     private Queue<string> _logs = new Queue<string>();
     private Label _label;
 
+    // ネットワークスポーン状態を追跡
+    private bool _isNetworkSpawned = false;
+
+    // スポーン前にキューイングされた操作
+    private Queue<System.Action> _pendingOperations = new Queue<System.Action>();
+
     [Networked]
     private bool _isFlipable { get; set; }
 
     [Networked, OnChangedRender(nameof(UpdateLabel))]
     private NetworkString<_64> SyncedLog { get; set; }
 
+    // Fusionライフサイクル
+    public override void Spawned()
+    {
+        _isNetworkSpawned = true;
+
+        // スポーン前にキューイングされた操作を実行
+        while (_pendingOperations.Count > 0)
+        {
+            var operation = _pendingOperations.Dequeue();
+            operation?.Invoke();
+        }
+    }
+
+    public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+        _isNetworkSpawned = false;
+        _pendingOperations.Clear();
+    }
+
     private void UpdateLabel()
     {
-        _label.text = SyncedLog.Value;
+        if (_label != null)
+        {
+            _label.text = SyncedLog.Value;
+        }
     }
 
     public void Initialize(Label logLabel)
@@ -33,7 +63,7 @@ public class BattleLogController : NetworkBehaviour
 
     private void Update()
     {
-        if (!_isFlipable)
+        if (!_isNetworkSpawned || !_isFlipable)
         {
             return;
         }
@@ -46,13 +76,30 @@ public class BattleLogController : NetworkBehaviour
 
     public void SetText(string text)
     {
-        SyncedLog = text;
+        if (_isNetworkSpawned)
+        {
+            SyncedLog = text;
+        }
+        else
+        {
+            // スポーン前の場合は操作をキューイング
+            _pendingOperations.Enqueue(() => SyncedLog = text);
+        }
     }
 
     public void AddLog(string log)
     {
         _logs.Enqueue(log);
-        SyncedLog = _logs.Peek();
+
+        if (_isNetworkSpawned)
+        {
+            SyncedLog = _logs.Peek();
+        }
+        else
+        {
+            // スポーン前の場合は操作をキューイング
+            _pendingOperations.Enqueue(() => SyncedLog = _logs.Peek());
+        }
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -63,6 +110,12 @@ public class BattleLogController : NetworkBehaviour
 
     public void FlipLog()
     {
+        if (!_isNetworkSpawned)
+        {
+            _pendingOperations.Enqueue(() => FlipLog());
+            return;
+        }
+
         _logs.Dequeue();
         if (_logs.Count == 0)
         {
@@ -76,12 +129,32 @@ public class BattleLogController : NetworkBehaviour
     public void ClearLogs()
     {
         _logs.Clear();
-        SyncedLog = string.Empty;
-        _isFlipable = false;
+
+        if (_isNetworkSpawned)
+        {
+            SyncedLog = string.Empty;
+            _isFlipable = false;
+        }
+        else
+        {
+            _pendingOperations.Enqueue(() =>
+            {
+                SyncedLog = string.Empty;
+                _isFlipable = false;
+            });
+        }
     }
 
     public void EnableFlip()
     {
-        _isFlipable = true;
+        if (_isNetworkSpawned)
+        {
+            _isFlipable = true;
+        }
+        else
+        {
+            _pendingOperations.Enqueue(() => _isFlipable = true);
+        }
     }
+}
 }
