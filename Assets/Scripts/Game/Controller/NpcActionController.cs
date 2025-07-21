@@ -2,8 +2,6 @@ using Cysharp.Threading.Tasks;
 using System.Linq;
 using UIToolkit;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.UIElements;
 using BossSlayingTourney.Core;
 using BossSlayingTourney.Game.Battle;
 using BossSlayingTourney.Game.Field;
@@ -13,7 +11,7 @@ namespace BossSlayingTourney.Game.Controllers
 {
     public static class NpcActionController
     {
-        public static async UniTask ActAsync(BattleController battleController, Entity acter, Entity target)
+        public static void ActAsync(BattleController battleController, Entity acter, Entity target)
         {
             // 攻撃かスキルを使用するかをランダムで決定
             int action = Random.Range(0, 2);
@@ -104,7 +102,10 @@ namespace BossSlayingTourney.Game.Controllers
             acter.MoveNpc(includePlayersAsTarget);
         }
 
-        public static async UniTask SelectReward(BattleController battleController, BattleLogController battleLogController)
+        /// <summary>
+        /// ランダムに報酬を選択する
+        /// </summary>
+        public static async UniTask SelectReward(BattleController battleController)
         {
             await UniTask.Delay(1000);
 

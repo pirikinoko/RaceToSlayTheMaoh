@@ -15,11 +15,12 @@ namespace BossSlayingTourney.Game.Controllers
         private MainController _mainController;
         private FieldController _fieldController;
         private CameraController _cameraController;
-        private UIDocument _overAllUi;
-        private UIDocument _titleUi;
-        private UIDocument _fieldUi;
-        private UIDocument _battleUi;
-        private UIDocument _resultUi;
+
+        [SerializeField] private UIDocument _overAllUi;
+        [SerializeField] private UIDocument _titleUi;
+        [SerializeField] private UIDocument _fieldUi;
+        [SerializeField] private UIDocument _battleUi;
+        [SerializeField] private UIDocument _resultUi;
 
         private VisualElement _overAllroot;
         private VisualElement _titleRoot;
@@ -32,21 +33,15 @@ namespace BossSlayingTourney.Game.Controllers
         private VisualElement _colorEffectPanel;
 
         [Inject]
-        public void Construct(MainController mainController, FieldController fieldController, CameraController cameraController, UIDocument overAllUi, UIDocument titleUi, UIDocument fieldUi, UIDocument battleUi, UIDocument resultUi)
+        public void Construct(MainController mainController, FieldController fieldController, CameraController cameraController)
         {
             _mainController = mainController;
             _fieldController = fieldController;
             _cameraController = cameraController;
-            _overAllUi = overAllUi;
-            _titleUi = titleUi;
-            _fieldUi = fieldUi;
-            _battleUi = battleUi;
-            _resultUi = resultUi;
         }
 
         private void Start()
         {
-            _overAllroot = _overAllUi.rootVisualElement;
             _titleRoot = _titleUi.rootVisualElement;
             _fieldRoot = _fieldUi.rootVisualElement;
             _battleRoot = _battleUi.rootVisualElement;

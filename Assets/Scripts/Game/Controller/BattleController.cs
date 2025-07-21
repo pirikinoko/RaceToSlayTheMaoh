@@ -72,17 +72,6 @@ namespace BossSlayingTourney.Game.Controllers
             }
         }
 
-        private void Start()
-        {
-            InitializeBattleUIController();
-            InitializeBattleAnimationManager();
-            InitializeBattleStatusManager();
-            InitializeBattleNetworkHandler();
-            InitializeBattleTurnManager();
-            InitializeBattleLogController();
-            InitializeRewardSelecter();
-        }
-
         [Inject]
         public void Construct(
             StateController stateController,
@@ -241,6 +230,14 @@ namespace BossSlayingTourney.Game.Controllers
             _battleLogController.ClearLogs();
             _battleLogController.AddLog(Constants.GetSentenceWhenStartBattle(Settings.Language.ToString(), _leftEntity.name, _rightEntity.name));
             _battleLogController.EnableFlip();
+
+            InitializeBattleUIController();
+            InitializeBattleAnimationManager();
+            InitializeBattleStatusManager();
+            InitializeBattleNetworkHandler();
+            InitializeBattleTurnManager();
+            InitializeBattleLogController();
+            InitializeRewardSelecter();
         }
         private void StartNewTurn()
         {
@@ -259,7 +256,6 @@ namespace BossSlayingTourney.Game.Controllers
             HandleDiedEntity(_loserEntity);
             _stateController.ChangeState(State.Field);
         }
-
 
         [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
         private void Rpc_GoToResult()
@@ -447,7 +443,7 @@ namespace BossSlayingTourney.Game.Controllers
                         _battleStatus = BattleStatus.SelectReward;
                         if (_winnerEntity.IsNpc)
                         {
-                            NpcActionController.SelectReward(this, _battleLogController).Forget();
+                            NpcActionController.SelectReward(this).Forget();
                         }
                     }
                     else

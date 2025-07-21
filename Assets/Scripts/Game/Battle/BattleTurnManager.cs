@@ -90,7 +90,7 @@ namespace BossSlayingTourney.Game.Battle
             // NPCのターンの場合は行動を実行する
             if (_currentTurnEntity.IsNpc)
             {
-                NpcActionController.ActAsync(null, _currentTurnEntity, _waitingTurnEntity).Forget();
+                NpcActionController.ActAsync(null, _currentTurnEntity, _waitingTurnEntity);
             }
             // プレイヤーのターンの場合は待機ログを出す
             else

@@ -38,6 +38,8 @@ namespace BossSlayingTourney.Network
 
         private void Awake()
         {
+            _networkRunner = Instantiate(networkRunnerPrefab);
+            _networkRunner.AddCallbacks(this);
             if (Instance == null)
             {
                 Instance = this;
@@ -46,12 +48,6 @@ namespace BossSlayingTourney.Network
             {
                 Destroy(gameObject);
             }
-        }
-
-        private async void Start()
-        {
-            _networkRunner = Instantiate(networkRunnerPrefab);
-            _networkRunner.AddCallbacks(this);
         }
 
         public async UniTask<StartGameResult> CraeateLocalGameAsync()

@@ -3,9 +3,6 @@ using UnityEngine.UIElements;
 using System;
 using System.Runtime.CompilerServices;
 
-namespace BossSlayingTourney.Data
-{
-
 public class TitleTextData : INotifyBindablePropertyChanged
 {
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
@@ -47,5 +44,4 @@ public class TitleTextData : INotifyBindablePropertyChanged
             }
         }
     }
-}
 }

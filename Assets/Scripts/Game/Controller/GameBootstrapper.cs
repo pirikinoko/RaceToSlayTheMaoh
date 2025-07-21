@@ -1,4 +1,4 @@
-using BossSlayingTourney.Data;
+
 using BossSlayingTourney.Game.Battle;
 using BossSlayingTourney.Game.Effects;
 using UnityEngine;
@@ -8,7 +8,6 @@ using VContainer.Unity;
 
 namespace BossSlayingTourney.Game.Controllers
 {
-
     public class GameBootstrapper : LifetimeScope
     {
         #region Fields - Controllers
@@ -26,11 +25,6 @@ namespace BossSlayingTourney.Game.Controllers
 
         #region Fields - Data & UI
         [SerializeField] private ImageAnimationHolder _imageAnimationHolder;
-        [SerializeField] private UIDocument _overAllUi;
-        [SerializeField] private UIDocument _titleUi;
-        [SerializeField] private UIDocument _fieldUi;
-        [SerializeField] private UIDocument _battleUi;
-        [SerializeField] private UIDocument _resultUi;
         #endregion
 
         protected override void Configure(IContainerBuilder builder)
@@ -58,15 +52,6 @@ namespace BossSlayingTourney.Game.Controllers
         private void RegisterDataAndUI(IContainerBuilder builder)
         {
             builder.RegisterInstance(_imageAnimationHolder);
-
-            // TitleTextDataは新しいインスタンスとして登録
-            builder.Register<TitleTextData>(Lifetime.Singleton);
-
-            builder.RegisterInstance(_overAllUi);
-            builder.RegisterInstance(_titleUi);
-            builder.RegisterInstance(_fieldUi);
-            builder.RegisterInstance(_battleUi);
-            builder.RegisterInstance(_resultUi);
         }
 
         private void RegisterUtilities(IContainerBuilder builder)
